@@ -1,12 +1,12 @@
 package st2
 
 var (
-	NullVal   Type = &NullType{}
-	BoolVal   Type = &BoolType{}
-	NumberVal Type = &NumberType{}
-	StringVal Type = &StringType{}
-	ArrayVal  Type = &ArrayType{}
-	StructVal Type = &StructType{}
+	NullVal    Type = &NullType{}
+	BoolVal    Type = &BoolType{}
+	Float64Val Type = &Float64Type{}
+	StringVal  Type = &StringType{}
+	ArrayVal   Type = &ArrayType{}
+	StructVal  Type = &StructType{}
 )
 
 type Type interface {
@@ -30,12 +30,12 @@ func (v BoolType) Go() string       { return "bool" }
 func (v BoolType) Protobuf() string { return "bool" }
 func (v BoolType) Thrift() string   { return "bool" }
 
-type NumberType struct{}
+type Float64Type struct{}
 
-func (v NumberType) Json() string     { return "number" }
-func (v NumberType) Go() string       { return "float64" }
-func (v NumberType) Protobuf() string { return "double" }
-func (v NumberType) Thrift() string   { return "double" }
+func (v Float64Type) Json() string     { return "number" }
+func (v Float64Type) Go() string       { return "float64" }
+func (v Float64Type) Protobuf() string { return "double" }
+func (v Float64Type) Thrift() string   { return "double" }
 
 type StringType struct{}
 

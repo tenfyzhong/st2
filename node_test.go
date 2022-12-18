@@ -28,7 +28,7 @@ func TestNode_Fingerprint(t *testing.T) {
 			init: func(t *testing.T) *Node {
 				return &Node{
 					Field: "number1",
-					Type:  NumberVal,
+					Type:  Float64Val,
 				}
 			},
 			want1: "number",
@@ -72,7 +72,7 @@ func TestNode_Fingerprint(t *testing.T) {
 							Children: []*Node{
 								{
 									Field: "third",
-									Type:  NumberVal,
+									Type:  Float64Val,
 								},
 							},
 						},
@@ -94,7 +94,7 @@ func TestNode_Fingerprint(t *testing.T) {
 							Children: []*Node{
 								{
 									Field: "b1",
-									Type:  NumberVal,
+									Type:  Float64Val,
 								},
 							},
 						},

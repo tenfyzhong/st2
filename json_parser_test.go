@@ -67,7 +67,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "a",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 1,
 						},
 					},
@@ -121,7 +121,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 1,
 						},
 						{
@@ -138,12 +138,12 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 1,
 						},
 						{
 							Field: "c",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 2,
 						},
 					},
@@ -198,7 +198,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "ggg",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 1,
 						},
 					},
@@ -315,7 +315,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 1,
 						},
 						{
@@ -332,12 +332,12 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 1,
 						},
 						{
 							Field: "c",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 2,
 						},
 					},
@@ -392,7 +392,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "ggg",
-							Type:  NumberVal,
+							Type:  Float64Val,
 							Index: 1,
 						},
 					},

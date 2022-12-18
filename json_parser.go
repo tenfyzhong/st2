@@ -71,7 +71,7 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 	}
 
 	switch root.Type {
-	case NullVal, BoolVal, NumberVal, StringVal:
+	case NullVal, BoolVal, Float64Val, StringVal:
 		return &Member{
 			Field: root.Field,
 			Type:  root.Type,
@@ -145,7 +145,7 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 	case bool:
 		node.Type = BoolVal
 	case float64:
-		node.Type = NumberVal
+		node.Type = Float64Val
 	case string:
 		node.Type = StringVal
 	case map[string]interface{}:
