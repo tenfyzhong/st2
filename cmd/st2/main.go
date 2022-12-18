@@ -197,8 +197,10 @@ func main() {
 		},
 		Copyright: "Copyright (c) 2022 tenfy",
 		ExitErrHandler: func(ctx *cli.Context, err error) {
-			cli.ErrWriter.Write([]byte(err.Error() + "\n\n"))
-			cli.ShowAppHelp(ctx)
+			if err != nil {
+				cli.ErrWriter.Write([]byte(err.Error() + "\n\n"))
+				cli.ShowAppHelp(ctx)
+			}
 		},
 		UseShortOptionHandling: true,
 		Suggest:                true,
