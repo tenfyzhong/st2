@@ -5,10 +5,10 @@ const Go = `
 	{{.FieldCamel}} {{.Go}}` + " `json:\"{{.Field}}\"`" + `{{- end -}}
 
 {{- define "STRUCT" }}
-type {{ .Type.GoStruct }} struct {
+type {{ .Type.StructName }} struct {
 {{- range $member := .Members }}    
 {{- template "MEMBER" $member }}
-{{- end}}
+{{- end }}
 }
 {{- end }}
 

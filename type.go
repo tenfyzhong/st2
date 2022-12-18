@@ -57,11 +57,8 @@ type StructType struct {
 	Name string
 }
 
-func (v StructType) Json() string           { return v.Name }
-func (v StructType) Go() string             { return "*" + v.Name }
-func (v StructType) Protobuf() string       { return v.Name }
-func (v StructType) Thrift() string         { return v.Name }
-func (v StructType) JsonStruct() string     { return v.Name }
-func (v StructType) GoStruct() string       { return v.Name }
-func (v StructType) ProtobufStruct() string { return v.Name }
-func (v StructType) ThriftStruct() string   { return v.Name }
+func (v StructType) Json() string       { return v.Name }
+func (v StructType) Go() string         { return "*" + v.Name }
+func (v StructType) Protobuf() string   { return v.Name }
+func (v StructType) Thrift() string     { return v.Name }
+func (v StructType) StructName() string { return v.Name }
