@@ -1,5 +1,7 @@
 package st2
 
+import "io"
+
 type Parse interface {
-	Parse(data []byte) ([]*Struct, error)
+	Parse(r io.Reader) ([]*Struct, error)
 }

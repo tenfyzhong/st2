@@ -2,17 +2,11 @@ package st2
 
 import (
 	"io"
-	"io/ioutil"
 	"text/template"
 )
 
 func Convert(reader io.Reader, parse Parse, tmpl string, writer io.Writer) error {
-	data, err := ioutil.ReadAll(reader)
-	if err != nil {
-		return err
-	}
-
-	structs, err := parse.Parse(data)
+	structs, err := parse.Parse(reader)
 	if err != nil {
 		return err
 	}

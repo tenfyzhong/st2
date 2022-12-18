@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"sort"
 )
 
@@ -21,13 +23,18 @@ func NewJsonParser() *JsonParser {
 	}
 }
 
-func (p *JsonParser) Parse(data []byte) ([]*Struct, error) {
+func (p *JsonParser) Parse(reader io.Reader) ([]*Struct, error) {
+	data, err := ioutil.ReadAll(reader)
+	if err != nil {
+		return nil, errors.New("read data failed")
+	}
+
 	if len(data) == 0 {
 		return nil, nil
 	}
 
 	var v interface{}
-	err := json.Unmarshal(data, &v)
+	err = json.Unmarshal(data, &v)
 	if err != nil {
 		return nil, errors.New("Unmarshal failed")
 	}

@@ -1,6 +1,8 @@
 package st2
 
 import (
+	"bytes"
+	"io"
 	"reflect"
 	"testing"
 
@@ -9,7 +11,7 @@ import (
 
 func TestJsonParser_Parse(t *testing.T) {
 	type args struct {
-		data []byte
+		reader io.Reader
 	}
 	tests := []struct {
 		name    string
@@ -29,7 +31,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			args: func(t *testing.T) args {
 				return args{
-					data: []byte(""),
+					reader: bytes.NewReader([]byte("")),
 				}
 			},
 			want1:   nil,
@@ -42,7 +44,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			args: func(t *testing.T) args {
 				return args{
-					data: []byte("a"),
+					reader: bytes.NewReader([]byte("a")),
 				}
 			},
 			wantErr: true,
@@ -57,7 +59,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			args: func(t *testing.T) args {
 				return args{
-					data: []byte(`{"a":1}`),
+					reader: bytes.NewReader([]byte(`{"a":1}`)),
 				}
 			},
 			want1: []*Struct{
@@ -84,7 +86,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			args: func(t *testing.T) args {
 				return args{
-					data: []byte(`
+					reader: bytes.NewReader([]byte(`
 {
 	"a": {
 		"b": 1,
@@ -111,7 +113,7 @@ func TestJsonParser_Parse(t *testing.T) {
 	"ggg": [[{
 		"ggg": 1
 	}]]
-}`),
+}`)),
 				}
 			},
 			want1: []*Struct{
@@ -277,7 +279,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			args: func(t *testing.T) args {
 				return args{
-					data: []byte(`
+					reader: bytes.NewReader([]byte(`
 [{
 	"a": {
 		"b": 1,
@@ -305,7 +307,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		"ggg": 1
 	}]],
 	"hh": []
-}]`),
+}]`)),
 				}
 			},
 			want1: []*Struct{
@@ -471,7 +473,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			tArgs := tt.args(t)
 
 			receiver := tt.init(t)
-			got1, err := receiver.Parse(tArgs.data)
+			got1, err := receiver.Parse(tArgs.reader)
 
 			if tt.inspect != nil {
 				tt.inspect(receiver, t)
