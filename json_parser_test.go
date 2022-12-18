@@ -47,7 +47,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, "invalid character 'a' looking for beginning of value")
+				assert.EqualError(t, err, "Unmarshal failed")
 			},
 		},
 		{
