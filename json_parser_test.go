@@ -303,7 +303,8 @@ func TestJsonParser_Parse(t *testing.T) {
 	},
 	"ggg": [[{
 		"ggg": 1
-	}]]
+	}]],
+	"hh": []
 }]`),
 				}
 			},

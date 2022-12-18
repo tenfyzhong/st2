@@ -70,12 +70,15 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 		}
 	case ArrayVal:
 		if len(root.Children) == 0 {
-			return &Member{
-				Field: root.Field,
-				Type: &ArrayType{
-					ChildType: NullVal,
-				},
-			}
+			// ignore the current memeber if the array is empty
+			// the type of element is unknown
+			return nil
+			// return &Member{
+			// 	Field: root.Field,
+			// 	Type: &ArrayType{
+			// 		ChildType: NullVal,
+			// 	},
+			// }
 		}
 		root.Children[0].Field = root.Field
 		child := p.parseStructs(root.Children[0])
@@ -107,8 +110,8 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 
 		for i, child := range root.Children {
 			childMember := p.parseStructs(child)
-			childMember.Index = i + 1
 			if childMember != nil {
+				childMember.Index = i + 1
 				members = append(members, childMember)
 			}
 		}
