@@ -4,14 +4,17 @@ const Protobuf = `
 {{- define "MEMBER" }}
     {{.Protobuf}} {{.Field}} = {{.Index}};
 {{- end -}}
-{{- define "STRUCT" }}
+
+{{- define "STRUCT" -}}
 message {{ .Type.StructName }} {
 {{- range $member := .Members }}
 {{- template "MEMBER" $member }}
-{{- end}}
+{{- end }}
 }
+
 {{- end }}
 {{- range $st := . -}}
 {{- template "STRUCT" $st }}
-{{ end }}
+
+{{ end -}}
 `
