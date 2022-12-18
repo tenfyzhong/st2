@@ -2,6 +2,7 @@ package st2
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"sort"
 )
@@ -28,7 +29,7 @@ func (p *JsonParser) Parse(data []byte) ([]*Struct, error) {
 	var v interface{}
 	err := json.Unmarshal(data, &v)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("Unmarshal failed")
 	}
 
 	root := p.parseNode("root", v)
