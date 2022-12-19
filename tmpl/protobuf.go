@@ -11,10 +11,20 @@ message {{ .Type.StructName }} {
 {{- template "MEMBER" $member }}
 {{- end }}
 }
-
 {{- end }}
-{{- range $st := . -}}
-{{- template "STRUCT" $st }}
 
-{{ end -}}
-`
+{{- define "ENUM" -}}
+enum {{ .Type.StructName }} {
+{{- range $member := .Members }} 
+	{{ $member.Field }} = {{ $member.Index }} {{- end}};
+}
+{{- end }}
+
+{{- range $st := . -}}
+{{- if eq $st.Type.ProtobufStructType "enum" }}
+{{- template "ENUM" $st }}
+{{- else }}
+{{- template "STRUCT" $st }}
+{{- end }}
+
+{{ end }}`
