@@ -16,7 +16,7 @@ message {{ .Type.StructName }} {
 {{- define "ENUM" -}}
 enum {{ .Type.StructName }} {
 {{- range $member := .Members }} 
-	{{ $member.Field }} = {{ $member.Index }} {{- end}};
+	{{ $member.Field }} = {{ $member.Index }}; {{- end}}
 }
 {{- end }}
 
