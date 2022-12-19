@@ -1,18 +1,18 @@
 package tmpl
 
-const Thrift = `
+const Proto = `
 {{- define "MEMBER" }}
     {{- range $comment := .Comment.BeginningComments }}
     {{ $comment }}
     {{- end}}
-    {{.Index}}: {{.Thrift}} {{.Field}}, {{ .Comment.InlineComment }}
+    {{.Proto}} {{.Field}} = {{.Index}}; {{ .Comment.InlineComment }}
 {{- end -}}
 
 {{- define "STRUCT" -}}
 {{- range $comment := .Comment.BeginningComments -}}
 {{- $comment }}
 {{ end -}}
-{{- .Type.ThriftStructType }} {{ .Type.StructName }} { {{ .Comment.InlineComment }}
+message {{ .Type.StructName }} { {{ .Comment.InlineComment }}
 {{- range $member := .Members }}
 {{- template "MEMBER" $member }}
 {{- end }}
@@ -30,7 +30,7 @@ enum {{ .Type.StructName }} { {{ .Comment.InlineComment }}
 {{- end }}
 
 {{- range $st := . }}
-{{- if eq $st.Type.ThriftStructType "enum" }}
+{{- if eq $st.Type.ProtoStructType "enum" }}
 {{- template "ENUM" $st -}}
 {{- else -}}
 {{- template "STRUCT" $st }}

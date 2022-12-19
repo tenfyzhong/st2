@@ -1,10 +1,16 @@
 package st2
 
+type Comment struct {
+	BeginningComments []string
+	InlineComment     string
+}
+
 type Member struct {
 	Field string
 	Type
 	Index    int
 	Optional bool
+	Comment  Comment
 }
 
 func (m Member) FieldCamel() string {
@@ -20,6 +26,9 @@ func (m Member) Go() string {
 }
 
 type Struct struct {
-	Members []*Member
-	Type    Type
+	Members           []*Member
+	Type              Type
+	BeginningComments []string
+	InlineComment     string
+	Comment           Comment
 }

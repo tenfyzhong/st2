@@ -2,10 +2,16 @@ package tmpl
 
 const Go = `
 {{- define "MEMBER" }}
-	{{.FieldCamel}} {{.Go}}` + " `json:\"{{.Field}}\"`" + `{{- end -}}
+	{{- range $comment := .Comment.BeginningComments }}
+	{{ $comment }}
+	{{- end}}
+	{{.FieldCamel}} {{.Go}}` + " `json:\"{{.Field}}\"`" + ` {{ .Comment.InlineComment }} {{- end -}}
 
 {{- define "STRUCT" -}}
-type {{ .Type.StructName }} struct {
+{{- range $comment := .Comment.BeginningComments -}}
+{{- $comment }}
+{{ end -}}
+type {{ .Type.StructName }} struct { {{ .Comment.InlineComment }}
 {{- range $member := .Members }}    
 {{- template "MEMBER" $member }}
 {{- end }}
@@ -13,10 +19,14 @@ type {{ .Type.StructName }} struct {
 {{- end }}
 
 {{- define "ENUM" -}}
-type {{ .Type.StructName }} int
+{{- range $comment := .Comment.BeginningComments -}}
+{{- $comment }}
+{{ end -}}
+type {{ .Type.StructName }} int {{ .Comment.InlineComment }}
+
 const (
 {{- range $member := .Members }} 
-	{{ $member.FieldCamel }} {{ $member.Go }} = {{ $member.Index }} {{- end}}
+	{{ $member.FieldCamel }} {{ $member.Go }} = {{ $member.Index }} {{ $member.Comment.InlineComment }} {{- end}}
 )
 {{- end }}
 
