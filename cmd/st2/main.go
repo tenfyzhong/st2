@@ -55,11 +55,7 @@ func getWriter(ctx *cli.Context) (io.Writer, error) {
 	return writer, nil
 }
 
-func getParser(ctx *cli.Context) (st2.Parse, error) {
-	src := ctx.String(flagSrc)
-	if src == "" {
-		return nil, fmt.Errorf("flag: %s is required", flagSrc)
-	}
+func getParser(src string) (st2.Parse, error) {
 	switch src {
 	case jsonType:
 		return st2.NewJsonParser(), nil
@@ -69,11 +65,7 @@ func getParser(ctx *cli.Context) (st2.Parse, error) {
 	return nil, fmt.Errorf("Unsupport src: %s", src)
 }
 
-func getTmpl(ctx *cli.Context) (string, error) {
-	dst := ctx.String(flagDst)
-	if dst == "" {
-		return "", fmt.Errorf("flag: %s is required", flagDst)
-	}
+func getTmpl(dst string) (string, error) {
 	switch dst {
 	case goType:
 		return tmpl.Go, nil
@@ -86,12 +78,25 @@ func getTmpl(ctx *cli.Context) (string, error) {
 }
 
 func action(ctx *cli.Context) error {
-	parser, err := getParser(ctx)
+	src := ctx.String(flagSrc)
+	if src == "" {
+		return fmt.Errorf("flag: %s is required", flagSrc)
+	}
+	dst := ctx.String(flagDst)
+	if dst == "" {
+		return fmt.Errorf("flag: %s is required", flagDst)
+	}
+
+	if src == dst {
+		return fmt.Errorf("src equals to dst")
+	}
+
+	parser, err := getParser(src)
 	if err != nil {
 		return err
 	}
 
-	tmpl, err := getTmpl(ctx)
+	tmpl, err := getTmpl(dst)
 	if err != nil {
 		return err
 	}
