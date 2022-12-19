@@ -37,11 +37,11 @@ func (p ThriftParser) Parse(reader io.Reader) ([]*Struct, error) {
 	}
 
 	for _, s := range thrift.Structs {
-		res = append(res, p.structLike2struct(s))
+		res = append(res, p.structLike2struct(s, "struct"))
 	}
 
 	for _, u := range thrift.Unions {
-		res = append(res, p.structLike2struct(u))
+		res = append(res, p.structLike2struct(u, "union"))
 	}
 
 	return res, nil
@@ -65,10 +65,11 @@ func (p ThriftParser) enum2struct(e *parser.Enum) *Struct {
 	return s
 }
 
-func (p ThriftParser) structLike2struct(sl *parser.StructLike) *Struct {
+func (p ThriftParser) structLike2struct(sl *parser.StructLike, stType string) *Struct {
 	s := &Struct{
 		Type: &StructType{
 			Name: sl.Name,
+			Type: stType,
 		},
 	}
 

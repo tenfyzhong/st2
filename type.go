@@ -18,7 +18,6 @@ var (
 	MapVal     Type = &MapType{}
 	SetVal     Type = &SetType{}
 	EnumVal    Type = &EnumType{}
-	UnionVal   Type = &UnionType{}
 )
 
 type Type interface {
@@ -83,6 +82,7 @@ func (v ArrayType) IsBasicType() bool { return false }
 
 type StructType struct {
 	Name string
+	Type string // struct or union, default struct
 }
 
 func (v StructType) Json() string               { return v.Name }
@@ -93,7 +93,12 @@ func (v StructType) IsBasicType() bool          { return false }
 func (v StructType) StructName() string         { return v.Name }
 func (v StructType) GoStructType() string       { return "struct" }
 func (v StructType) ProtobufStructType() string { return "message" }
-func (v StructType) ThriftStructType() string   { return "struct" }
+func (v StructType) ThriftStructType() string {
+	if v.Type != "" {
+		return v.Type
+	}
+	return "struct"
+}
 
 type Int8Type struct {
 	V int8
@@ -183,20 +188,6 @@ func (v EnumType) StructName() string         { return v.Name }
 func (v EnumType) GoStructType() string       { return "enum" }
 func (v EnumType) ProtobufStructType() string { return "enum" }
 func (v EnumType) ThriftStructType() string   { return "enum" }
-
-type UnionType struct {
-	Name string
-}
-
-func (v UnionType) Json() string               { return v.Name }
-func (v UnionType) Go() string                 { return "*" + v.Name }
-func (v UnionType) Protobuf() string           { return v.Name }
-func (v UnionType) Thrift() string             { return v.Name }
-func (v UnionType) IsBasicType() bool          { return false }
-func (v UnionType) StructName() string         { return v.Name }
-func (v UnionType) GoStructType() string       { return "struct" }
-func (v UnionType) ProtobufStructType() string { return "message" }
-func (v UnionType) ThriftStructType() string   { return "union" }
 
 type RawType struct {
 	Name string

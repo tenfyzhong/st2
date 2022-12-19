@@ -6,7 +6,7 @@ const Thrift = `
 {{- end -}}
 
 {{- define "STRUCT" -}}
-struct {{ .Type.StructName }} {
+{{- .Type.ThriftStructType }} {{ .Type.StructName }} {
 {{- range $member := .Members }}
 {{- template "MEMBER" $member }}
 {{- end }}
