@@ -13,8 +13,18 @@ struct {{ .Type.StructName }} {
 }
 {{- end }}
 
-{{- range $st := . -}}
-{{- template "STRUCT" $st }}
+{{- define "ENUM" -}}
+enum {{ .Type.StructName }} {
+{{- range $member := .Members }} 
+	{{ $member.Field }} = {{ $member.Index }}; {{- end}}
+}
+{{- end }}
 
-{{ end -}}
-`
+{{- range $st := . -}}
+{{- if eq $st.Type.ThriftStructType "enum" }}
+{{- template "ENUM" $st }}
+{{- else }}
+{{- template "STRUCT" $st }}
+{{- end }}
+
+{{ end }}`
