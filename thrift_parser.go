@@ -21,6 +21,10 @@ func (p ThriftParser) Parse(reader io.Reader) ([]*Struct, error) {
 		return nil, errors.New("read data failed")
 	}
 
+	if len(data) == 0 {
+		return nil, nil
+	}
+
 	thrift, err := parser.ParseString("", string(data))
 	if err != nil {
 		return nil, errors.New("Parse thrift failed")
