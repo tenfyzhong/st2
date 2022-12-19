@@ -63,6 +63,8 @@ func getParser(ctx *cli.Context) (st2.Parse, error) {
 	switch src {
 	case jsonType:
 		return st2.NewJsonParser(), nil
+	case thriftType:
+		return st2.NewThriftParser(), nil
 	}
 	return nil, fmt.Errorf("Unsupport src: %s", src)
 }
