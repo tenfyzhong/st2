@@ -1,7 +1,10 @@
 package st2
 
-import "fmt"
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
 var (
 	NullVal    Type = &NullType{}
@@ -102,7 +105,7 @@ type StructType struct {
 }
 
 func (v StructType) Json() string            { return v.Name }
-func (v StructType) Go() string              { return "*" + v.Name }
+func (v StructType) Go() string              { return "*" + goWithPackageName(v.Name) }
 func (v StructType) Proto() string           { return v.Name }
 func (v StructType) Thrift() string          { return v.Name }
 func (v StructType) IsBasicType() bool       { return false }
@@ -254,7 +257,17 @@ type RawType struct {
 }
 
 func (v RawType) Json() string      { return v.Name }
-func (v RawType) Go() string        { return "*" + v.Name }
+func (v RawType) Go() string        { return "*" + goWithPackageName(v.Name) }
 func (v RawType) Proto() string     { return v.Name }
 func (v RawType) Thrift() string    { return v.Name }
 func (v RawType) IsBasicType() bool { return false }
+
+func goWithPackageName(name string) string {
+	// If the name of the filed is in other package,
+	// use the last part of the package name as go's package
+	names := strings.Split(name, ".")
+	if len(names) > 2 {
+		names = names[len(names)-2:]
+	}
+	return strings.Join(names, ".")
+}

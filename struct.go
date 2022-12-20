@@ -26,9 +26,7 @@ func (m Member) Go() string {
 }
 
 type Struct struct {
-	Members           []*Member
-	Type              Type
-	BeginningComments []string
-	InlineComment     string
-	Comment           Comment
+	Members []*Member
+	Type    Type
+	Comment Comment
 }
