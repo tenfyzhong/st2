@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/tenfyzhong/st2"
@@ -25,34 +26,19 @@ const (
 )
 
 func getReader(ctx *cli.Context) (*os.File, error) {
-	var reader *os.File
 	readfile := ctx.String(flagInput)
-	if readfile != "" {
-		file, err := os.Open(readfile)
-		if err != nil {
-			// ctx.App.ErrWriter.Write([]byte(err.Error()))
-			return nil, err
-		}
-		reader = file
-	} else {
-		reader = os.Stdin
+	if readfile == "" {
+		return os.Stdin, nil
 	}
-	return reader, nil
+	return os.Open(readfile)
 }
 
 func getWriter(ctx *cli.Context) (*os.File, error) {
-	var writer *os.File
 	writefile := ctx.String(flagOutput)
-	if writefile != "" {
-		file, err := os.Create(writefile)
-		if err != nil {
-			return nil, err
-		}
-		writer = file
-	} else {
-		writer = os.Stdout
+	if writefile == "" {
+		return os.Stdout, nil
 	}
-	return writer, nil
+	return os.Create(writefile)
 }
 
 func getParser(src string) (st2.Parse, error) {
@@ -80,11 +66,11 @@ func getTmpl(dst string) (string, error) {
 }
 
 func action(ctx *cli.Context) error {
-	src := ctx.String(flagSrc)
+	src := getSrc(ctx)
 	if src == "" {
 		return fmt.Errorf("flag: %s is required", flagSrc)
 	}
-	dst := ctx.String(flagDst)
+	dst := getDst(ctx)
 	if dst == "" {
 		return fmt.Errorf("flag: %s is required", flagDst)
 	}
@@ -171,13 +157,13 @@ func main() {
 			&cli.StringFlag{
 				Name:     flagSrc,
 				Aliases:  []string{"s"},
-				Required: true,
+				Required: false,
 				Usage:    "The source data type, available value: [json,go,proto,thrift]",
 			},
 			&cli.StringFlag{
 				Name:     flagDst,
 				Aliases:  []string{"d"},
-				Required: true,
+				Required: false,
 				Usage:    "The dst data type, available value: [go,proto,thrift]",
 			},
 			&cli.StringFlag{
@@ -224,4 +210,38 @@ func main() {
 	}
 
 	app.Run(os.Args)
+}
+
+func fileTypeFromName(name string) string {
+	if strings.HasSuffix(name, ".go") {
+		return goType
+	}
+	if strings.HasSuffix(name, ".json") {
+		return jsonType
+	}
+	if strings.HasSuffix(name, ".proto") {
+		return protoType
+	}
+	if strings.HasSuffix(name, ".thrift") {
+		return thriftType
+	}
+	return ""
+}
+
+func getSrc(ctx *cli.Context) string {
+	input := ctx.String(flagInput)
+	src := fileTypeFromName(input)
+	if src == "" {
+		return ctx.String(flagSrc)
+	}
+	return src
+}
+
+func getDst(ctx *cli.Context) string {
+	output := ctx.String(flagOutput)
+	dst := fileTypeFromName(output)
+	if dst == "" {
+		return ctx.String(flagDst)
+	}
+	return dst
 }
