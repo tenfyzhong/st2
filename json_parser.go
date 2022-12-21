@@ -36,7 +36,7 @@ func (p *JsonParser) Parse(reader io.Reader) ([]*Struct, error) {
 	var v interface{}
 	err = json.Unmarshal(data, &v)
 	if err != nil {
-		return nil, errors.New("Unmarshal failed")
+		return nil, err
 	}
 
 	root := p.parseNode("root", v)

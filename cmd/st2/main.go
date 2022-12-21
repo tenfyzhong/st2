@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"sort"
 	"time"
@@ -13,10 +12,11 @@ import (
 )
 
 const (
-	flagSrc   = "src"
-	flagDst   = "dst"
-	flagRead  = "read"
-	flagWrite = "write"
+	flagSrc        = "src"
+	flagDst        = "dst"
+	flagInput      = "input"
+	flagOutput     = "output"
+	flagGoFieldTag = "tag"
 
 	jsonType   = "json"
 	goType     = "go"
@@ -24,9 +24,9 @@ const (
 	thriftType = "thrift"
 )
 
-func getReader(ctx *cli.Context) (io.Reader, error) {
-	var reader io.Reader
-	readfile := ctx.String(flagRead)
+func getReader(ctx *cli.Context) (*os.File, error) {
+	var reader *os.File
+	readfile := ctx.String(flagInput)
 	if readfile != "" {
 		file, err := os.Open(readfile)
 		if err != nil {
@@ -40,9 +40,9 @@ func getReader(ctx *cli.Context) (io.Reader, error) {
 	return reader, nil
 }
 
-func getWriter(ctx *cli.Context) (io.Writer, error) {
-	var writer io.Writer
-	writefile := ctx.String(flagWrite)
+func getWriter(ctx *cli.Context) (*os.File, error) {
+	var writer *os.File
+	writefile := ctx.String(flagOutput)
 	if writefile != "" {
 		file, err := os.Create(writefile)
 		if err != nil {
@@ -61,6 +61,8 @@ func getParser(src string) (st2.Parse, error) {
 		return st2.NewJsonParser(), nil
 	case thriftType:
 		return st2.NewThriftParser(), nil
+	case protoType:
+		return st2.NewProtoParser(), nil
 	}
 	return nil, fmt.Errorf("Unsupport src: %s", src)
 }
@@ -70,7 +72,7 @@ func getTmpl(dst string) (string, error) {
 	case goType:
 		return tmpl.Go, nil
 	case protoType:
-		return tmpl.Protobuf, nil
+		return tmpl.Proto, nil
 	case thriftType:
 		return tmpl.Thrift, nil
 	}
@@ -105,11 +107,13 @@ func action(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
+	defer reader.Close()
 
 	writer, err := getWriter(ctx)
 	if err != nil {
 		return err
 	}
+	defer writer.Close()
 
 	return st2.Convert(reader, parser, tmpl, writer)
 }
@@ -177,16 +181,22 @@ func main() {
 				Usage:    "The dst data type, available value: [go,proto,thrift]",
 			},
 			&cli.StringFlag{
-				Name:     flagRead,
-				Aliases:  []string{"r"},
+				Name:     flagInput,
+				Aliases:  []string{"i"},
 				Required: false,
-				Usage:    "The source data file to read, if not set, it will read from stdio",
+				Usage:    "Input file, if not set, it will read from stdio",
 			},
 			&cli.StringFlag{
-				Name:     flagWrite,
-				Aliases:  []string{"w"},
+				Name:     flagOutput,
+				Aliases:  []string{"o"},
 				Required: false,
-				Usage:    "the file to write to, if not set, it will write to stdout",
+				Usage:    "Output file, if not set, it will write to stdout",
+			},
+			&cli.StringFlag{
+				Name:     flagGoFieldTag,
+				Aliases:  []string{"t"},
+				Required: false,
+				Usage:    "The type of golang struct field, for example `json`",
 			},
 		},
 		EnableBashCompletion: true,
@@ -205,7 +215,7 @@ func main() {
 		Copyright: "Copyright (c) 2022 tenfy",
 		ExitErrHandler: func(ctx *cli.Context, err error) {
 			if err != nil {
-				cli.ErrWriter.Write([]byte(err.Error() + "\n\n"))
+				cli.ErrWriter.Write([]byte(err.Error()))
 				cli.ShowAppHelp(ctx)
 			}
 		},
