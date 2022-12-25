@@ -1,0 +1,51 @@
+syntax = "proto2";
+
+option go_package="tenfyzhong/st2";
+
+// EEEE
+enum Eeee { // EEEE 
+    // A
+    A = 0; // a
+}
+
+// haha
+message Aaa { // aaa
+    // a
+    required int32 a = 1; // a
+    required int64 b = 2;
+    required string c = 3;
+}
+
+message BbbBB {
+    required int32 a = 1;
+    required int64 b = 2;
+    required string c = 3;
+}
+
+message Ccc {
+    required int32 a = 1;
+    optional int64 b = 2;
+    optional string c = 3;
+    extensions 100 to 200;
+    extensions 300 to 400;
+}
+
+extend Ccc {
+    optional sint32 c1 = 101;
+    optional sint64 c2 = 102;
+    optional uint32 c3 = 103;
+}
+
+extend Ccc {
+    optional sint32 c4 = 301;
+    optional sint64 c5 = 302;
+    optional uint32 c6 = 303;
+}
+
+message SearchResponse {
+  repeated group Result = 1 {
+    required string url = 2;
+    optional string title = 3;
+    repeated string snippets = 4;
+  }
+}

@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+option go_package="tenfyzhong/st2";
+
+// EEEE
+enum Eeee { // EEEE 
+    // A
+    A = 0; // a
+}
+
+// haha
+message Aaa { // aaa
+    // a
+    int32 a = 1; // a
+    int64 b = 2;
+    string c = 3;
+}
+
+message BbbBB {
+    int32 a = 1;
+    int64 b = 2;
+    string c = 3;
+}
+
+message Ccc {
+    int32 a = 1;
+    int64 b = 2;
+    string c = 3;
+    Aaa aaa = 4;
+}
+
+message ErrorStatus {
+  string message = 1;
+  repeated google.protobuf.Any details = 2;
+}
+
+message SampleMessage {
+  oneof test_oneof {
+    string name = 4;
+    ErrorStatus sub_message = 9;
+  }
+}
