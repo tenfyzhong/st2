@@ -7,6 +7,14 @@ import (
 )
 
 func Convert(ctx Context, reader io.Reader, writer io.Writer) error {
+	if reader == nil {
+		return errors.New("reader is nil")
+	}
+
+	if writer == nil {
+		return errors.New("writer is nil")
+	}
+
 	parse := CreateParser(ctx)
 	if parse == nil {
 		return errors.New("Can not found parser")
