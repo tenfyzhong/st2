@@ -5,14 +5,13 @@ const Thrift = `
     {{- range $comment := .Comment.BeginningComments }}
     {{ $comment }}
     {{- end}}
-    {{.Index}}: {{.Thrift}} {{.Field}}, {{ .Comment.InlineComment }}
-{{- end -}}
+    {{.Index}}: {{.Thrift}} {{.Field}}, {{ .Comment.InlineComment }} {{- end -}}
 
 {{- define "STRUCT" -}}
 {{- range $comment := .Comment.BeginningComments -}}
 {{- $comment }}
 {{ end -}}
-{{- .Type.ThriftStructType }} {{ .Type.StructName }} { {{ .Comment.InlineComment }}
+{{- .Type.ThriftStructType }} {{ .Type.StructName }} { {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
 {{- range $member := .Members }}
 {{- template "MEMBER" $member }}
 {{- end }}
@@ -23,7 +22,7 @@ const Thrift = `
 {{- range $comment := .Comment.BeginningComments -}}
 {{ $comment }}
 {{- end }}
-enum {{ .Type.StructName }} { {{ .Comment.InlineComment }}
+enum {{ .Type.StructName }} { {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
 {{- range $member := .Members }} 
     {{ $member.Field }} = {{ $member.Index }}; {{ $member.Comment.InlineComment}} {{- end}}
 }

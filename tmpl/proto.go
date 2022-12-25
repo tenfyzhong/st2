@@ -5,14 +5,13 @@ const Proto = `
     {{- range $comment := .Comment.BeginningComments }}
     {{ $comment }}
     {{- end}}
-    {{.Proto}} {{.Field}} = {{.Index}}; {{ .Comment.InlineComment }}
-{{- end -}}
+    {{.Proto}} {{.Field}} = {{.Index}}; {{ .Comment.InlineComment }} {{- end -}}
 
 {{- define "STRUCT" -}}
 {{- range $comment := .Comment.BeginningComments -}}
 {{- $comment }}
 {{ end -}}
-message {{ .Type.StructName }} { {{ .Comment.InlineComment }}
+message {{ .Type.StructName }} { {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
 {{- range $member := .Members }}
 {{- template "MEMBER" $member }}
 {{- end }}
@@ -23,7 +22,7 @@ message {{ .Type.StructName }} { {{ .Comment.InlineComment }}
 {{- range $comment := .Comment.BeginningComments -}}
 {{ $comment }}
 {{- end }}
-enum {{ .Type.StructName }} { {{ .Comment.InlineComment }}
+enum {{ .Type.StructName }} { {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
 {{- range $member := .Members }} 
     {{ $member.Field }} = {{ $member.Index }}; {{ $member.Comment.InlineComment}} {{- end}}
 }

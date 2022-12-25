@@ -3,26 +3,22 @@ package main
 import (
 	"fmt"
 	"os"
-	"sort"
 	"strings"
 	"time"
 
 	"github.com/tenfyzhong/st2"
-	"github.com/tenfyzhong/st2/tmpl"
 	"github.com/urfave/cli/v3"
 )
 
 const (
-	flagSrc        = "src"
-	flagDst        = "dst"
-	flagInput      = "input"
-	flagOutput     = "output"
-	flagGoFieldTag = "tag"
+	flagSrc    = "src"
+	flagDst    = "dst"
+	flagInput  = "input"
+	flagOutput = "output"
+	flagGoTag  = "tag"
 
-	jsonType   = "json"
-	goType     = "go"
-	protoType  = "proto"
-	thriftType = "thrift"
+	categoryGo      = "go"
+	categoryDefault = "default"
 )
 
 func getReader(ctx *cli.Context) (*os.File, error) {
@@ -41,52 +37,27 @@ func getWriter(ctx *cli.Context) (*os.File, error) {
 	return os.Create(writefile)
 }
 
-func getParser(src string) (st2.Parse, error) {
-	switch src {
-	case jsonType:
-		return st2.NewJsonParser(), nil
-	case thriftType:
-		return st2.NewThriftParser(), nil
-	case protoType:
-		return st2.NewProtoParser(), nil
-	}
-	return nil, fmt.Errorf("Unsupport src: %s", src)
-}
-
-func getTmpl(dst string) (string, error) {
-	switch dst {
-	case goType:
-		return tmpl.Go, nil
-	case protoType:
-		return tmpl.Proto, nil
-	case thriftType:
-		return tmpl.Thrift, nil
-	}
-	return "", fmt.Errorf("Unsupport dst: %s", dst)
-}
-
 func action(ctx *cli.Context) error {
 	src := getSrc(ctx)
 	if src == "" {
-		return fmt.Errorf("flag: %s is required", flagSrc)
+		return fmt.Errorf("flag: %s is required\n\n", flagSrc)
 	}
 	dst := getDst(ctx)
 	if dst == "" {
-		return fmt.Errorf("flag: %s is required", flagDst)
+		return fmt.Errorf("flag: %s is required\n\n", flagDst)
 	}
 
 	if src == dst {
-		return fmt.Errorf("src equals to dst")
+		return fmt.Errorf("src equals to dst\n\n")
 	}
 
-	parser, err := getParser(src)
-	if err != nil {
-		return err
-	}
+	goTag := ctx.StringSlice(flagGoTag)
+	goTag = uniqStrArray(goTag)
 
-	tmpl, err := getTmpl(dst)
-	if err != nil {
-		return err
+	st2Ctx := st2.Context{
+		GoTag: goTag,
+		Src:   src,
+		Dst:   dst,
 	}
 
 	reader, err := getReader(ctx)
@@ -101,7 +72,7 @@ func action(ctx *cli.Context) error {
 	}
 	defer writer.Close()
 
-	return st2.Convert(reader, parser, tmpl, writer)
+	return st2.Convert(st2Ctx, reader, writer)
 }
 
 type FlagList []string
@@ -122,27 +93,27 @@ func (f FlagList) Swap(i, j int) {
 	f[i], f[j] = f[j], f[i]
 }
 
-func bashComplete(ctx *cli.Context) {
-	flags := FlagList{}
-	for _, flag := range ctx.App.Flags {
-		for _, name := range flag.Names() {
-			flags = append(flags, name)
-		}
-	}
-	sort.Sort(flags)
-	for _, flag := range flags {
-		if len(flag) == 1 {
-			fmt.Printf("-%s\n", flag)
-		} else {
-			fmt.Printf("--%s\n", flag)
-		}
-	}
+// func bashComplete(ctx *cli.Context) {
+// 	flags := FlagList{}
+// 	for _, flag := range ctx.App.Flags {
+// 		for _, name := range flag.Names() {
+// 			flags = append(flags, name)
+// 		}
+// 	}
+// 	sort.Sort(flags)
+// 	for _, flag := range flags {
+// 		if len(flag) == 1 {
+// 			fmt.Printf("-%s\n", flag)
+// 		} else {
+// 			fmt.Printf("--%s\n", flag)
+// 		}
+// 	}
 
-	fmt.Printf("%s\n", jsonType)
-	fmt.Printf("%s\n", goType)
-	fmt.Printf("%s\n", protoType)
-	fmt.Printf("%s\n", thriftType)
-}
+// 	fmt.Printf("%s\n", jsonType)
+// 	fmt.Printf("%s\n", goType)
+// 	fmt.Printf("%s\n", protoType)
+// 	fmt.Printf("%s\n", thriftType)
+// }
 
 func main() {
 	app := &cli.App{
@@ -157,41 +128,45 @@ func main() {
 			&cli.StringFlag{
 				Name:     flagSrc,
 				Aliases:  []string{"s"},
+				Category: categoryDefault,
 				Required: false,
-				Usage:    "The source data type, available value: [json,go,proto,thrift]",
+				Usage:    fmt.Sprintf("The source data `type`, it will use the suffix of the input file if not set, available value: `%s`", arrayString(st2.SourceLangs)),
 			},
 			&cli.StringFlag{
 				Name:     flagDst,
 				Aliases:  []string{"d"},
+				Category: categoryDefault,
 				Required: false,
-				Usage:    "The dst data type, available value: [go,proto,thrift]",
+				Usage:    fmt.Sprintf("The destination data `type`, it will use the suffix of the output file if not set, available value: `%s`", arrayString(st2.DestinationLangs)),
 			},
 			&cli.StringFlag{
 				Name:     flagInput,
 				Aliases:  []string{"i"},
+				Category: categoryDefault,
 				Required: false,
-				Usage:    "Input file, if not set, it will read from stdio",
+				Usage:    "Input `file`, if not set, it will read from stdio",
 			},
 			&cli.StringFlag{
 				Name:     flagOutput,
 				Aliases:  []string{"o"},
+				Category: categoryDefault,
 				Required: false,
-				Usage:    "Output file, if not set, it will write to stdout",
+				Usage:    "Output `file`, if not set, it will write to stdout",
 			},
-			&cli.StringFlag{
-				Name:     flagGoFieldTag,
+			&cli.StringSliceFlag{
+				Name:     flagGoTag,
 				Aliases:  []string{"t"},
-				Required: false,
-				Usage:    "The type of golang struct field, for example `json`",
+				Category: categoryGo,
+				Usage:    "Golang struct field `type`",
 			},
 		},
 		EnableBashCompletion: true,
 		HideHelp:             false,
 		HideHelpCommand:      true,
 		HideVersion:          false,
-		BashComplete:         bashComplete,
-		Action:               action,
-		Compiled:             time.Time{},
+		// BashComplete:         bashComplete,
+		Action:   action,
+		Compiled: time.Time{},
 		Authors: []*cli.Author{
 			{
 				Name:  "tenfyzhong",
@@ -212,36 +187,55 @@ func main() {
 	app.Run(os.Args)
 }
 
-func fileTypeFromName(name string) string {
-	if strings.HasSuffix(name, ".go") {
-		return goType
+func srcTypeFromName(name string) string {
+	for _, lang := range st2.SourceLangs {
+		if strings.HasSuffix(name, "."+lang) {
+			return lang
+		}
 	}
-	if strings.HasSuffix(name, ".json") {
-		return jsonType
-	}
-	if strings.HasSuffix(name, ".proto") {
-		return protoType
-	}
-	if strings.HasSuffix(name, ".thrift") {
-		return thriftType
+	return ""
+}
+
+func dstTypeFromName(name string) string {
+	for _, lang := range st2.DestinationLangs {
+		if strings.HasSuffix(name, "."+lang) {
+			return lang
+		}
 	}
 	return ""
 }
 
 func getSrc(ctx *cli.Context) string {
-	input := ctx.String(flagInput)
-	src := fileTypeFromName(input)
-	if src == "" {
-		return ctx.String(flagSrc)
+	src := ctx.String(flagSrc)
+	if src != "" {
+		return src
 	}
-	return src
+	return srcTypeFromName(ctx.String(flagInput))
 }
 
 func getDst(ctx *cli.Context) string {
-	output := ctx.String(flagOutput)
-	dst := fileTypeFromName(output)
-	if dst == "" {
-		return ctx.String(flagDst)
+	dst := ctx.String(flagDst)
+	if dst != "" {
+		return dst
 	}
-	return dst
+	return dstTypeFromName(ctx.String(flagOutput))
+}
+
+func arrayString(arr []string) string {
+	return "[" + strings.Join(arr, ",") + "]"
+}
+
+func uniqStrArray(arr []string) []string {
+	m := make(map[string]bool)
+	last := 0
+	for i := 0; i < len(arr); i++ {
+		cur := arr[i]
+		if m[cur] {
+			continue
+		}
+		arr[last] = arr[i]
+		m[cur] = true
+		last++
+	}
+	return arr[0:last]
 }

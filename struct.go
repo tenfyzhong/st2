@@ -1,5 +1,10 @@
 package st2
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Comment struct {
 	BeginningComments []string
 	InlineComment     string
@@ -11,6 +16,7 @@ type Member struct {
 	Index    int
 	Optional bool
 	Comment  Comment
+	GoTag    []string
 }
 
 func (m Member) FieldCamel() string {
@@ -23,6 +29,19 @@ func (m Member) Go() string {
 		return "*" + name
 	}
 	return name
+}
+
+func (m Member) GoTagString() string {
+	if len(m.GoTag) == 0 {
+		return ""
+	}
+
+	strs := make([]string, 0)
+	for _, tag := range m.GoTag {
+		str := fmt.Sprintf("%s:\"%s\"", tag, m.Field)
+		strs = append(strs, str)
+	}
+	return "`" + strings.Join(strs, " ") + "`"
 }
 
 type Struct struct {

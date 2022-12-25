@@ -28,7 +28,7 @@ func TestThriftParser_Parse(t *testing.T) {
 		{
 			name: "empty",
 			init: func(t *testing.T) ThriftParser {
-				return *NewThriftParser()
+				return *NewThriftParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				data := []byte("")
@@ -43,7 +43,7 @@ func TestThriftParser_Parse(t *testing.T) {
 		{
 			name: "illegal",
 			init: func(t *testing.T) ThriftParser {
-				return *NewThriftParser()
+				return *NewThriftParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				data := []byte("a")
@@ -54,13 +54,13 @@ func TestThriftParser_Parse(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, "Parse thrift failed")
+				assert.EqualError(t, err, "\nparse error near Unknown (line 1 symbol 1 - line 1 symbol 1):\n\"\"\n")
 			},
 		},
 		{
 			name: "succ",
 			init: func(t *testing.T) ThriftParser {
-				return *NewThriftParser()
+				return *NewThriftParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				data := []byte(`

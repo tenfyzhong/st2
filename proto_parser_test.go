@@ -28,7 +28,7 @@ func TestProtoParser_Parse(t *testing.T) {
 		{
 			name: "err",
 			init: func(t *testing.T) ProtoParser {
-				return *NewProtoParser()
+				return *NewProtoParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -43,7 +43,7 @@ func TestProtoParser_Parse(t *testing.T) {
 		{
 			name: "succ",
 			init: func(t *testing.T) ProtoParser {
-				return *NewProtoParser()
+				return *NewProtoParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{

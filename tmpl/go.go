@@ -5,13 +5,16 @@ const Go = `
 	{{- range $comment := .Comment.BeginningComments }}
 	{{ $comment }}
 	{{- end}}
-	{{.FieldCamel}} {{.Go}}` + " `json:\"{{.Field}}\"`" + ` {{ .Comment.InlineComment }} {{- end -}}
+	{{.FieldCamel}} {{.Go}}
+	{{- if .GoTagString }} {{ .GoTagString }}{{- end }}
+	{{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end -}}
+{{- end }}
 
 {{- define "STRUCT" -}}
 {{- range $comment := .Comment.BeginningComments -}}
 {{- $comment }}
 {{ end -}}
-type {{ .Type.StructName }} struct { {{ .Comment.InlineComment }}
+type {{ .Type.StructName }} struct { {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
 {{- range $member := .Members }}    
 {{- template "MEMBER" $member }}
 {{- end }}
@@ -22,7 +25,7 @@ type {{ .Type.StructName }} struct { {{ .Comment.InlineComment }}
 {{- range $comment := .Comment.BeginningComments -}}
 {{- $comment }}
 {{ end -}}
-type {{ .Type.StructName }} int {{ .Comment.InlineComment }}
+type {{ .Type.StructName }} int {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
 
 const (
 {{- range $member := .Members }} 

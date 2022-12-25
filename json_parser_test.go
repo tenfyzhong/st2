@@ -27,7 +27,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "empty",
 			init: func(t *testing.T) *JsonParser {
-				return NewJsonParser()
+				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -40,7 +40,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "illegal json",
 			init: func(t *testing.T) *JsonParser {
-				return NewJsonParser()
+				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -49,13 +49,13 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, "Unmarshal failed")
+				assert.EqualError(t, err, "invalid character 'a' looking for beginning of value")
 			},
 		},
 		{
 			name: "simple struct",
 			init: func(t *testing.T) *JsonParser {
-				return NewJsonParser()
+				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -82,7 +82,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "complex struct",
 			init: func(t *testing.T) *JsonParser {
-				return NewJsonParser()
+				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -275,7 +275,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "complex array struct",
 			init: func(t *testing.T) *JsonParser {
-				return NewJsonParser()
+				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{

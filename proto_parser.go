@@ -9,10 +9,13 @@ import (
 )
 
 type ProtoParser struct {
+	ctx Context
 }
 
-func NewProtoParser() *ProtoParser {
-	return &ProtoParser{}
+func NewProtoParser(ctx Context) *ProtoParser {
+	return &ProtoParser{
+		ctx: ctx,
+	}
 }
 
 func (p ProtoParser) Parse(reader io.Reader) ([]*Struct, error) {
@@ -23,7 +26,7 @@ func (p ProtoParser) Parse(reader io.Reader) ([]*Struct, error) {
 
 	res := make([]*Struct, 0, len(got.ProtoBody))
 	for _, pb := range got.ProtoBody {
-		v := NewProtoVisitor()
+		v := NewProtoVisitor(p.ctx)
 		pb.Accept(v)
 		if v.Struct != nil {
 			res = append(res, v.Struct)
@@ -34,11 +37,13 @@ func (p ProtoParser) Parse(reader io.Reader) ([]*Struct, error) {
 
 type ProtoVisitor struct {
 	Struct *Struct
-	OneOf  *Struct
+	ctx    Context
 }
 
-func NewProtoVisitor() *ProtoVisitor {
-	return &ProtoVisitor{}
+func NewProtoVisitor(ctx Context) *ProtoVisitor {
+	return &ProtoVisitor{
+		ctx: ctx,
+	}
 }
 
 func (v *ProtoVisitor) VisitComment(c *parser.Comment) {
@@ -92,6 +97,7 @@ func (v *ProtoVisitor) VisitField(f *parser.Field) bool {
 		Index:    int(fieldNumber),
 		Optional: f.IsOptional,
 		Comment:  v.comment2Comment(f.Comments, f.InlineComment),
+		GoTag:    v.ctx.GoTag,
 	})
 	return true
 }
@@ -115,6 +121,7 @@ func (v *ProtoVisitor) VisitMapField(f *parser.MapField) bool {
 		},
 		Index:   int(fieldNumber),
 		Comment: v.comment2Comment(f.Comments, f.InlineComment),
+		GoTag:   v.ctx.GoTag,
 	})
 	return true
 }

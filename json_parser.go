@@ -14,12 +14,15 @@ type JsonParser struct {
 	nameMap   map[string]bool
 
 	structs []*Struct
+
+	ctx Context
 }
 
-func NewJsonParser() *JsonParser {
+func NewJsonParser(ctx Context) *JsonParser {
 	return &JsonParser{
 		fingerMap: make(map[string]*Struct),
 		nameMap:   make(map[string]bool),
+		ctx:       ctx,
 	}
 }
 
@@ -70,12 +73,14 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 		return nil
 	}
 
+	member := &Member{
+		Field: root.Field,
+		GoTag: p.ctx.GoTag,
+	}
+
 	switch root.Type {
 	case NullVal, BoolVal, Float64Val, StringVal:
-		return &Member{
-			Field: root.Field,
-			Type:  root.Type,
-		}
+		member.Type = root.Type
 	case ArrayVal:
 		if len(root.Children) == 0 {
 			// ignore the current memeber if the array is empty
@@ -84,25 +89,21 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 		}
 		root.Children[0].Field = root.Field
 		child := p.parseStructs(root.Children[0])
-		member := &Member{
-			Field: root.Field,
-			Type: &ArrayType{
+		if child == nil {
+			member.Type = &ArrayType{
 				ChildType: NullVal,
-			},
-		}
-		if child != nil {
+			}
+		} else {
 			member.Type = &ArrayType{
 				ChildType: child.Type,
 			}
 		}
-		return member
 	case StructVal:
 		finger := root.Fingerprint()
 		if st, ok := p.fingerMap[finger]; ok {
-			return &Member{
-				Field: root.Field,
-				Type:  st.Type,
-			}
+			member.Field = root.Field
+			member.Type = st.Type
+			return member
 		}
 
 		name := p.genUniqName(root.FieldCamel())
@@ -128,13 +129,12 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 		p.structs = append(p.structs, st)
 		p.fingerMap[finger] = st
 
-		return &Member{
-			Field: root.Field,
-			Type:  st.Type,
-		}
+		member.Type = st.Type
+	default:
+		return nil
 	}
 
-	return nil
+	return member
 }
 
 func (p *JsonParser) parseNode(tag string, v interface{}) *Node {

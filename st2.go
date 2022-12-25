@@ -1,11 +1,22 @@
 package st2
 
 import (
+	"errors"
 	"io"
 	"text/template"
 )
 
-func Convert(reader io.Reader, parse Parse, tmpl string, writer io.Writer) error {
+func Convert(ctx Context, reader io.Reader, writer io.Writer) error {
+	parse := CreateParser(ctx)
+	if parse == nil {
+		return errors.New("Can not found parser")
+	}
+
+	tmpl := CreateTmpl(ctx)
+	if tmpl == "" {
+		return errors.New("Can not found template")
+	}
+
 	structs, err := parse.Parse(reader)
 	if err != nil {
 		return err
