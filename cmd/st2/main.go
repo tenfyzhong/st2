@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -26,7 +27,11 @@ func getReader(ctx *cli.Context) (*os.File, error) {
 	if readfile == "" {
 		return os.Stdin, nil
 	}
-	return os.Open(readfile)
+	file, err := os.Open(readfile)
+	if err != nil {
+		return nil, errors.New(err.Error() + "\n\n")
+	}
+	return file, nil
 }
 
 func getWriter(ctx *cli.Context) (*os.File, error) {
@@ -34,7 +39,11 @@ func getWriter(ctx *cli.Context) (*os.File, error) {
 	if writefile == "" {
 		return os.Stdout, nil
 	}
-	return os.Create(writefile)
+	file, err := os.Create(writefile)
+	if err != nil {
+		return nil, errors.New(err.Error() + "\n\n")
+	}
+	return file, nil
 }
 
 func action(ctx *cli.Context) error {
