@@ -5,6 +5,7 @@ import "github.com/tenfyzhong/st2/tmpl"
 func CreateParser(ctx Context) Parse {
 	switch ctx.Src {
 	case LangGo:
+		return NewGoParser(ctx)
 	case LangJson:
 		return NewJsonParser(ctx)
 	case LangProto:
