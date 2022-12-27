@@ -710,6 +710,220 @@ message UUU {
 `),
 			wantErr: false,
 		},
+		{
+			name: "go to proto",
+			args: func(t *testing.T) args {
+				a := args{
+					ctx: Context{
+						Src: "go",
+						Dst: "proto",
+					},
+					buffer: bytes.NewBuffer(nil),
+					reader: bytes.NewReader([]byte(`
+package main
+
+// EEEE
+type Eeee int // EEEE
+type Efff Eeee
+type IntList []int
+type StringList []string
+type IntIntMap map[int]int
+type IntStringMap map[int]string
+type IntEeeeMap map[int]Eeee
+type IntCccMap map[int]Ccc
+type IntArray [1]int
+
+const (
+	EEEA Eeee = 0 // a
+	EEEB Eeee = 1 // a
+	EEEC Eeee = 3 // a
+
+	II1 int = 1
+	II2 int = 2
+
+	IN1 = 1
+	IN2 = 2
+)
+
+// haha
+type Aaa struct { // aaa
+	// a
+	A  []int32 // a
+	B  int64   
+	C  *string 
+	MM map[int]string
+}
+
+type BbbBB struct {
+	A int32
+	B int64
+	C string
+}
+
+type Ccc struct {
+	A   int32
+	B   int64
+	C   string
+	Aaa *Aaa
+}
+
+type ErrorStatus struct {
+	Message string
+	Details []*protobuf.Any
+}
+
+type SampleMessage struct {
+}
+					`)),
+				}
+				a.writer = a.buffer
+				return a
+			},
+			wantData: []byte(`
+enum Eeee { 
+    EEEA = 0;  
+    EEEB = 1;  
+    EEEC = 3; 
+}
+
+message Aaa {
+    repeated int32 A = 1; 
+    int64 B = 2; 
+    string C = 3; 
+    map<int64, string> MM = 4; 
+}
+
+message BbbBB {
+    int32 A = 1; 
+    int64 B = 2; 
+    string C = 3; 
+}
+
+message Ccc {
+    int32 A = 1; 
+    int64 B = 2; 
+    string C = 3; 
+    Aaa Aaa = 4; 
+}
+
+message ErrorStatus {
+    string Message = 1; 
+    repeated protobuf.Any Details = 2; 
+}
+
+message SampleMessage {
+}
+
+`),
+			wantErr: false,
+		},
+		{
+			name: "go to thrift",
+			args: func(t *testing.T) args {
+				a := args{
+					ctx: Context{
+						Src: "go",
+						Dst: "thrift",
+					},
+					buffer: bytes.NewBuffer(nil),
+					reader: bytes.NewReader([]byte(`
+package main
+
+// EEEE
+type Eeee int // EEEE
+type Efff Eeee
+type IntList []int
+type StringList []string
+type IntIntMap map[int]int
+type IntStringMap map[int]string
+type IntEeeeMap map[int]Eeee
+type IntCccMap map[int]Ccc
+type IntArray [1]int
+
+const (
+	EEEA Eeee = 0 // a
+	EEEB Eeee = 1 // a
+	EEEC Eeee = 3 // a
+
+	II1 int = 1
+	II2 int = 2
+
+	IN1 = 1
+	IN2 = 2
+)
+
+// haha
+type Aaa struct { // aaa
+	// a
+	A  []int32 // a
+	B  int64   
+	C  *string 
+	MM map[int]string
+}
+
+type BbbBB struct {
+	A int32
+	B int64
+	C string
+}
+
+type Ccc struct {
+	A   int32
+	B   int64
+	C   string
+	Aaa *Aaa
+}
+
+type ErrorStatus struct {
+	Message string
+	Details []*protobuf.Any
+}
+
+type SampleMessage struct {
+}
+					`)),
+				}
+				a.writer = a.buffer
+				return a
+			},
+			wantData: []byte(`
+enum Eeee { 
+    EEEA = 0;  
+    EEEB = 1;  
+    EEEC = 3; 
+}
+
+struct Aaa {
+    1: list<i32> A, 
+    2: i64 B, 
+    3: string C, 
+    4: map<i64, string> MM, 
+}
+
+struct BbbBB {
+    1: i32 A, 
+    2: i64 B, 
+    3: string C, 
+}
+
+struct Ccc {
+    1: i32 A, 
+    2: i64 B, 
+    3: string C, 
+    4: Aaa Aaa, 
+}
+
+struct ErrorStatus {
+    1: string Message, 
+    2: list<protobuf.Any> Details, 
+}
+
+struct SampleMessage {
+}
+
+`),
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {

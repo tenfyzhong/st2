@@ -11,10 +11,13 @@ import (
 )
 
 type GoParser struct {
+	ctx Context
 }
 
 func NewGoParser(ctx Context) *GoParser {
-	return &GoParser{}
+	return &GoParser{
+		ctx: ctx,
+	}
 }
 
 func (p GoParser) Parse(reader io.Reader) ([]*Struct, error) {
@@ -31,18 +34,12 @@ func (p GoParser) Parse(reader io.Reader) ([]*Struct, error) {
 			res = append(res, st...)
 		}
 	}
-
-	// d, _ := json.MarshalIndent(res, "", "  ")
-	// fmt.Printf("%s\n", string(d))
-
-	// return nil, nil
 	return res, nil
 }
 
 func (p GoParser) processNode(fset *token.FileSet, node ast.Decl) []*Struct {
 	switch n := node.(type) {
 	case *ast.GenDecl:
-		// ast.Print(fset, node)
 		if n.Tok == token.TYPE {
 			st := p.processType(n)
 			if st == nil {
@@ -73,6 +70,7 @@ func (p GoParser) processType(decl *ast.GenDecl) *Struct {
 	res := &Struct{
 		Type: &StructType{
 			Name: name,
+			Type: "struct",
 		},
 	}
 
@@ -235,7 +233,7 @@ func (p GoParser) type2Type(t ast.Expr) Type {
 	case *ast.SelectorExpr:
 		selector := p.type2Type(t.X)
 		sub := p.type2Type(t.Sel)
-		return &StructType{
+		return &RawType{
 			Name: strings.TrimLeft(selector.Go(), "*") + "." + strings.TrimLeft(sub.Go(), "*"),
 		}
 	}
