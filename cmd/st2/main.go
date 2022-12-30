@@ -186,7 +186,7 @@ func main() {
 		ExitErrHandler: func(ctx *cli.Context, err error) {
 			if err != nil {
 				cli.ErrWriter.Write([]byte(err.Error()))
-				cli.ShowAppHelp(ctx)
+				// cli.ShowAppHelp(ctx)
 			}
 		},
 		UseShortOptionHandling: true,
