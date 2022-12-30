@@ -12,7 +12,9 @@ type IntCccMap map[int]Ccc
 type IntArray [1]int
 
 const (
-	EEEA Eeee = 0 // a
+	// comment EEEA Eeee block
+	// comment EEEA Eeee block
+	EEEA Eeee = 0 // comment EEEA Eeee inline
 	EEEB Eeee = 1 // a
 	EEEC Eeee = 3 // a
 
@@ -23,10 +25,11 @@ const (
 	IN2 = 2
 )
 
-// haha
-type Aaa struct { // aaa
-	// a
-	A  []int32 // a
+// comment haha
+// comment hehe
+type Aaa struct { // comment aaa inline
+	// comment Aaa a
+	A  []int32 // comment Aaa a inline
 	B  int64   `json:"b,omitempty"`
 	C  *string `json:"C,omitempty" proto:"C"`
 	MM map[int]string

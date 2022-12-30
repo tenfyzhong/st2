@@ -22,7 +22,7 @@ func NewGoParser(ctx Context) *GoParser {
 
 func (p GoParser) Parse(reader io.Reader) ([]*Struct, error) {
 	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, "", reader, parser.AllErrors)
+	f, err := parser.ParseFile(fset, "", reader, parser.ParseComments)
 	if err != nil {
 		return nil, err
 	}
@@ -72,6 +72,7 @@ func (p GoParser) processType(decl *ast.GenDecl) *Struct {
 			Name: name,
 			Type: "struct",
 		},
+		Comment: p.parseComment(decl.Doc, nil),
 	}
 
 	if st.Fields != nil {
@@ -90,6 +91,7 @@ func (p GoParser) processType(decl *ast.GenDecl) *Struct {
 				Type:     t,
 				Index:    i + 1,
 				Optional: p.isOptional(field.Type),
+				Comment:  p.parseComment(field.Doc, field.Comment),
 			}
 			if field.Tag != nil {
 				member.GoTag = p.tag2GoTag(field.Tag)
@@ -172,9 +174,10 @@ func (p GoParser) processConst(decl *ast.GenDecl) []*Struct {
 		}
 
 		st.Members = append(st.Members, &Member{
-			Field: name,
-			Type:  st.Type,
-			Index: int(valueInt),
+			Field:   name,
+			Type:    st.Type,
+			Index:   int(valueInt),
+			Comment: p.parseComment(v.Doc, v.Comment),
 		})
 
 		m[typeName] = st
@@ -185,6 +188,19 @@ func (p GoParser) processConst(decl *ast.GenDecl) []*Struct {
 		res = append(res, st)
 	}
 	return res
+}
+
+func (p GoParser) parseComment(doc *ast.CommentGroup, comment *ast.CommentGroup) Comment {
+	c := Comment{}
+	if doc != nil {
+		for _, comment := range doc.List {
+			c.BeginningComments = append(c.BeginningComments, comment.Text)
+		}
+	}
+	if comment != nil && len(comment.List) > 0 {
+		c.InlineComment = comment.List[0].Text
+	}
+	return c
 }
 
 func (p GoParser) isBasicType(str string) bool {

@@ -37,7 +37,7 @@ func TestGoParser_Parse(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, "1:1: expected 'package', found a (and 2 more errors)")
+				assert.EqualError(t, err, "1:1: expected 'package', found a")
 			},
 		},
 		{
@@ -118,6 +118,9 @@ type SampleMessage struct {
 								Name: "Eeee",
 							},
 							Index: 0,
+							Comment: Comment{
+								InlineComment: "// a",
+							},
 						},
 						{
 							Field: "EEEB",
@@ -125,6 +128,9 @@ type SampleMessage struct {
 								Name: "Eeee",
 							},
 							Index: 1,
+							Comment: Comment{
+								InlineComment: "// a",
+							},
 						},
 						{
 							Field: "EEEC",
@@ -132,6 +138,9 @@ type SampleMessage struct {
 								Name: "Eeee",
 							},
 							Index: 3,
+							Comment: Comment{
+								InlineComment: "// a",
+							},
 						},
 					},
 				},
@@ -140,6 +149,9 @@ type SampleMessage struct {
 						Name: "Aaa",
 						Type: "struct",
 					},
+					Comment: Comment{
+						BeginningComments: []string{"// haha"},
+					},
 					Members: []*Member{
 						{
 							Field: "A",
@@ -147,6 +159,10 @@ type SampleMessage struct {
 								ChildType: Int32Val,
 							},
 							Index: 1,
+							Comment: Comment{
+								BeginningComments: []string{"// a"},
+								InlineComment:     "// a",
+							},
 						},
 						{
 							Field: "B",

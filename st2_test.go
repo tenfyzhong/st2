@@ -669,8 +669,7 @@ union UUU {
 				a.writer = a.buffer
 				return a
 			},
-			wantData: []byte(`
-enum EEE { 
+			wantData: []byte(`enum EEE { 
     A = 1;  
     B = 2; 
 }
@@ -734,7 +733,9 @@ type IntCccMap map[int]Ccc
 type IntArray [1]int
 
 const (
-	EEEA Eeee = 0 // a
+	// comment EEEA Eeee block
+	// comment EEEA Eeee block
+	EEEA Eeee = 0 // comment EEEA Eeee inline
 	EEEB Eeee = 1 // a
 	EEEC Eeee = 3 // a
 
@@ -745,10 +746,11 @@ const (
 	IN2 = 2
 )
 
-// haha
-type Aaa struct { // aaa
-	// a
-	A  []int32 // a
+// comment haha
+// comment hehe
+type Aaa struct { // comment aaa inline
+	// comment Aaa a
+	A  []int32 // comment Aaa a inline
 	B  int64   
 	C  *string 
 	MM map[int]string
@@ -779,15 +781,17 @@ type SampleMessage struct {
 				a.writer = a.buffer
 				return a
 			},
-			wantData: []byte(`
-enum Eeee { 
-    EEEA = 0;  
-    EEEB = 1;  
-    EEEC = 3; 
+			wantData: []byte(`enum Eeee { 
+    EEEA = 0; // comment EEEA Eeee inline 
+    EEEB = 1; // a 
+    EEEC = 3; // a
 }
 
+// comment haha
+// comment hehe
 message Aaa {
-    repeated int32 A = 1; 
+    // comment Aaa a
+    repeated int32 A = 1; // comment Aaa a inline
     int64 B = 2; 
     string C = 3; 
     map<int64, string> MM = 4; 
@@ -841,7 +845,9 @@ type IntCccMap map[int]Ccc
 type IntArray [1]int
 
 const (
-	EEEA Eeee = 0 // a
+	// comment EEEA Eeee block
+	// comment EEEA Eeee block
+	EEEA Eeee = 0 // comment EEEA Eeee inline
 	EEEB Eeee = 1 // a
 	EEEC Eeee = 3 // a
 
@@ -852,10 +858,11 @@ const (
 	IN2 = 2
 )
 
-// haha
-type Aaa struct { // aaa
-	// a
-	A  []int32 // a
+// comment haha
+// comment hehe
+type Aaa struct { // comment aaa inline
+	// comment Aaa a
+	A  []int32 // comment Aaa a inline
 	B  int64   
 	C  *string 
 	MM map[int]string
@@ -886,15 +893,17 @@ type SampleMessage struct {
 				a.writer = a.buffer
 				return a
 			},
-			wantData: []byte(`
-enum Eeee { 
-    EEEA = 0;  
-    EEEB = 1;  
-    EEEC = 3; 
+			wantData: []byte(`enum Eeee { 
+    EEEA = 0; // comment EEEA Eeee inline 
+    EEEB = 1; // a 
+    EEEC = 3; // a
 }
 
+// comment haha
+// comment hehe
 struct Aaa {
-    1: list<i32> A, 
+    // comment Aaa a
+    1: list<i32> A, // comment Aaa a inline
     2: i64 B, 
     3: string C, 
     4: map<i64, string> MM, 
@@ -942,7 +951,7 @@ struct SampleMessage {
 
 			if !tt.wantErr {
 				actual := tArgs.buffer.Bytes()
-				assert.Equal(t, tt.wantData, actual, fmt.Sprintf("[%s] should equal to [%s]", tt.wantData, actual))
+				assert.Equal(t, tt.wantData, actual, fmt.Sprintf("[%s] should equal to [%s]", string(tt.wantData), string(actual)))
 			}
 		})
 	}

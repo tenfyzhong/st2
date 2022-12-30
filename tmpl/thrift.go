@@ -20,8 +20,8 @@ const Thrift = `
 
 {{- define "ENUM" -}}
 {{- range $comment := .Comment.BeginningComments -}}
-{{ $comment }}
-{{- end }}
+{{- $comment }}
+{{ end -}}
 enum {{ .Type.StructName }} { {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
 {{- range $member := .Members }} 
     {{ $member.Field }} = {{ $member.Index }}; {{ $member.Comment.InlineComment}} {{- end}}
