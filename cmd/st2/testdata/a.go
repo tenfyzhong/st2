@@ -17,6 +17,7 @@ const (
 	EEEA Eeee = 0 // comment EEEA Eeee inline
 	EEEB Eeee = 1 // a
 	EEEC Eeee = 3 // a
+	eeeD Eeee = 4
 
 	II1 int = 1
 	II2 int = 2
@@ -32,6 +33,7 @@ type Aaa struct { // comment aaa inline
 	A  []int32 // comment Aaa a inline
 	B  int64   `json:"b,omitempty"`
 	C  *string `json:"C,omitempty" proto:"C"`
+	d  int
 	MM map[int]string
 }
 

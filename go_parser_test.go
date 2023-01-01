@@ -65,6 +65,7 @@ const (
 	EEEA Eeee = 0 // a
 	EEEB Eeee = 1 // a
 	EEEC Eeee = 3 // a
+	eeed Eeee = 4
 
 	II1 int = 1
 	II2 int = 2
@@ -79,6 +80,7 @@ type Aaa struct { // aaa
 	A  []int32 // a
 	B  int64   
 	C  *string 
+	d  int64
 	MM map[int]string
 }
 

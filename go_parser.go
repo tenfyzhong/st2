@@ -26,6 +26,7 @@ func (p GoParser) Parse(reader io.Reader) ([]*Struct, error) {
 	if err != nil {
 		return nil, err
 	}
+	ast.FileExports(f)
 
 	res := make([]*Struct, 0)
 	for _, node := range f.Decls {
@@ -81,9 +82,6 @@ func (p GoParser) processType(decl *ast.GenDecl) *Struct {
 				continue
 			}
 			fieldName := field.Names[0].Name
-			if !ast.IsExported(fieldName) {
-				continue
-			}
 
 			t := p.type2Type(field.Type)
 			member := &Member{
