@@ -30,11 +30,11 @@ const (
 // comment hehe
 type Aaa struct { // comment aaa inline
 	// comment Aaa a
-	A  []int32 // comment Aaa a inline
-	B  int64   `json:"b,omitempty"`
-	C  *string `json:"C,omitempty" proto:"C"`
-	d  int
-	MM map[int]string
+	A          []int32 // comment Aaa a inline
+	B          int64   `json:"b,omitempty"`
+	C          *string `json:"C,omitempty" proto:"C"`
+	HelloWorld int     `json:"hello_world,omitempty"`
+	MM         map[int]string
 }
 
 type BbbBB struct {

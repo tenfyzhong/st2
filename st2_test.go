@@ -791,28 +791,28 @@ type SampleMessage struct {
 // comment hehe
 message Aaa {
     // comment Aaa a
-    repeated int32 A = 1; // comment Aaa a inline
-    int64 B = 2; 
-    string C = 3; 
-    map<int64, string> MM = 4; 
+    repeated int32 a = 1; // comment Aaa a inline
+    int64 b = 2; 
+    string c = 3; 
+    map<int64, string> mm = 4; 
 }
 
 message BbbBB {
-    int32 A = 1; 
-    int64 B = 2; 
-    string C = 3; 
+    int32 a = 1; 
+    int64 b = 2; 
+    string c = 3; 
 }
 
 message Ccc {
-    int32 A = 1; 
-    int64 B = 2; 
-    string C = 3; 
-    Aaa Aaa = 4; 
+    int32 a = 1; 
+    int64 b = 2; 
+    string c = 3; 
+    Aaa aaa = 4; 
 }
 
 message ErrorStatus {
-    string Message = 1; 
-    repeated protobuf.Any Details = 2; 
+    string message = 1; 
+    repeated protobuf.Any details = 2; 
 }
 
 message SampleMessage {
@@ -903,28 +903,28 @@ type SampleMessage struct {
 // comment hehe
 struct Aaa {
     // comment Aaa a
-    1: list<i32> A, // comment Aaa a inline
-    2: i64 B, 
-    3: string C, 
-    4: map<i64, string> MM, 
+    1: list<i32> a, // comment Aaa a inline
+    2: i64 b, 
+    3: string c, 
+    4: map<i64, string> mm, 
 }
 
 struct BbbBB {
-    1: i32 A, 
-    2: i64 B, 
-    3: string C, 
+    1: i32 a, 
+    2: i64 b, 
+    3: string c, 
 }
 
 struct Ccc {
-    1: i32 A, 
-    2: i64 B, 
-    3: string C, 
-    4: Aaa Aaa, 
+    1: i32 a, 
+    2: i64 b, 
+    3: string c, 
+    4: Aaa aaa, 
 }
 
 struct ErrorStatus {
-    1: string Message, 
-    2: list<protobuf.Any> Details, 
+    1: string message, 
+    2: list<protobuf.Any> details, 
 }
 
 struct SampleMessage {

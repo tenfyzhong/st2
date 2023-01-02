@@ -5,7 +5,6 @@ import (
 	"go/parser"
 	"go/token"
 	"io"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -85,14 +84,15 @@ func (p GoParser) processType(decl *ast.GenDecl) *Struct {
 
 			t := p.type2Type(field.Type)
 			member := &Member{
-				Field:    fieldName,
+				Field:    Snake(fieldName),
 				Type:     t,
 				Index:    i + 1,
 				Optional: p.isOptional(field.Type),
 				Comment:  p.parseComment(field.Doc, field.Comment),
 			}
-			if field.Tag != nil {
-				member.GoTag = p.tag2GoTag(field.Tag)
+			if tag := p.tag2GoTag(field.Tag); tag != "" {
+				// if there any tag, use the first tag field name as the Member.Field value
+				member.Field = tag
 			}
 			res.Members = append(res.Members, member)
 		}
@@ -100,17 +100,23 @@ func (p GoParser) processType(decl *ast.GenDecl) *Struct {
 	return res
 }
 
-func (p GoParser) tag2GoTag(tag *ast.BasicLit) []string {
-	// "`json:\"C,omitempty\" proto:\"C\"`"
-	re := regexp.MustCompile(`(\w*):`)
-	items := re.FindAllStringSubmatch(tag.Value, -1)
-	res := make([]string, 0)
-	for _, item := range items {
-		if len(item) > 1 {
-			res = append(res, item[1])
-		}
+func (p GoParser) tag2GoTag(tag *ast.BasicLit) string {
+	if tag == nil {
+		return ""
 	}
-	return res
+
+	// "`json:\"hello_world,omitempty\" proto:\"hello_world\"`"
+	item := strings.Trim(tag.Value, "`") // "json:\"hello_world,omitempty\" proto:\"hello_world\""
+	item = strings.Split(item, " ")[0]   // "json:\"hello_world,omitempty\""
+	items := strings.Split(item, ":")    // ["json:", "\"hello_world,omitempty\""]
+	if len(items) < 2 {
+		return ""
+	}
+	item = items[1]                    // "\"hello_world,omitempty\""
+	item = strings.TrimSpace(item)     // "\"hello_world,omitempty\""
+	item = strings.Trim(item, "\"")    // "hello_world,omitempty"
+	item = strings.Split(item, ",")[0] // "hello_world"
+	return item
 }
 
 func (p GoParser) isOptional(field ast.Expr) bool {

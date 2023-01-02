@@ -78,6 +78,24 @@ func TestCamel(t *testing.T) {
 			},
 			want1: "HelloWorld",
 		},
+		{
+			name: "id_name",
+			args: func(t *testing.T) args {
+				return args{
+					s: "id_name",
+				}
+			},
+			want1: "IDName",
+		},
+		{
+			name: "id_url",
+			args: func(t *testing.T) args {
+				return args{
+					s: "id_url",
+				}
+			},
+			want1: "IDURL",
+		},
 	}
 
 	for _, tt := range tests {
@@ -88,6 +106,76 @@ func TestCamel(t *testing.T) {
 
 			if !reflect.DeepEqual(got1, tt.want1) {
 				t.Errorf("Camel got1 = %v, want1: %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestSnake(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args func(t *testing.T) args
+
+		want1 string
+	}{
+		{
+			name: "A",
+			args: func(t *testing.T) args {
+				return args{
+					s: "A",
+				}
+			},
+			want1: "a",
+		},
+		{
+			name: "ID",
+			args: func(t *testing.T) args {
+				return args{
+					s: "ID",
+				}
+			},
+			want1: "id",
+		},
+		{
+			name: "IDName",
+			args: func(t *testing.T) args {
+				return args{
+					s: "IDName",
+				}
+			},
+			want1: "id_name",
+		},
+		{
+			name: "IDURL",
+			args: func(t *testing.T) args {
+				return args{
+					s: "IDURL",
+				}
+			},
+			want1: "idurl",
+		},
+		{
+			name: "id_name",
+			args: func(t *testing.T) args {
+				return args{
+					s: "id_name",
+				}
+			},
+			want1: "id_name",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tArgs := tt.args(t)
+
+			got1 := Snake(tArgs.s)
+
+			if !reflect.DeepEqual(got1, tt.want1) {
+				t.Errorf("Snake got1 = %v, want1: %v", got1, tt.want1)
 			}
 		})
 	}

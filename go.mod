@@ -6,6 +6,8 @@ require (
 	github.com/cloudwego/thriftgo v0.2.4 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/gobeam/stringy v0.0.5 // indirect
+	github.com/iancoleman/strcase v0.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/samuel/go-thrift v0.0.0-20210915161234-7b67f98e972f // indirect
