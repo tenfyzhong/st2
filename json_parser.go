@@ -42,7 +42,12 @@ func (p *JsonParser) Parse(reader io.Reader) ([]*Struct, error) {
 		return nil, err
 	}
 
-	root := p.parseNode("root", v)
+	rootName := p.ctx.Root
+	if rootName == "" {
+		rootName = RootDefault
+	}
+
+	root := p.parseNode(rootName, v)
 	p.parseStructs(root)
 
 	structs := p.structs

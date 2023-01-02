@@ -4,4 +4,5 @@ type Context struct {
 	GoTag []string
 	Src   string
 	Dst   string
+	Root  string
 }

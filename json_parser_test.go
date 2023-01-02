@@ -2,6 +2,7 @@ package st2
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"reflect"
 	"testing"
@@ -55,7 +56,9 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "simple struct",
 			init: func(t *testing.T) *JsonParser {
-				return NewJsonParser(Context{})
+				return NewJsonParser(Context{
+					Root: "helloWorld",
+				})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -72,7 +75,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						},
 					},
 					Type: &StructType{
-						Name: "Root",
+						Name: "HelloWorld",
 					},
 				},
 			},
@@ -480,7 +483,9 @@ func TestJsonParser_Parse(t *testing.T) {
 			}
 
 			if !reflect.DeepEqual(got1, tt.want1) {
-				t.Errorf("JsonParser.Parse got1 = %v, want1: %v", got1, tt.want1)
+				got1json, _ := json.MarshalIndent(got1, "", "  ")
+				want1json, _ := json.MarshalIndent(tt.want1, "", "  ")
+				t.Errorf("JsonParser.Parse got1 = %v, want1: %v", string(got1json), string(want1json))
 			}
 
 			if (err != nil) != tt.wantErr {

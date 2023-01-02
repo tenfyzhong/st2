@@ -7,6 +7,8 @@ const (
 	LangJson   = "json"
 	LangProto  = "proto"
 	LangThrift = "thrift"
+
+	RootDefault = "Root"
 )
 
 var (

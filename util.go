@@ -8,7 +8,7 @@ func Camel(s string) string {
 		if len(item) == 0 {
 			continue
 		}
-		items[i] = strings.ToUpper(item[0:1]) + strings.ToLower(item[1:])
+		items[i] = strings.ToUpper(item[0:1]) + item[1:]
 	}
 	return strings.Join(items, "")
 }
