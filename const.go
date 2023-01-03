@@ -8,6 +8,8 @@ const (
 	LangProto  = "proto"
 	LangThrift = "thrift"
 	LangCsv    = "csv"
+
+	RootDefault = "Root"
 )
 
 var (

@@ -76,6 +76,33 @@ func TestCamel(t *testing.T) {
 					s: "hEllo_World",
 				}
 			},
+			want1: "HElloWorld",
+		},
+		{
+			name: "hElloWorld",
+			args: func(t *testing.T) args {
+				return args{
+					s: "hElloWorld",
+				}
+			},
+			want1: "HElloWorld",
+		},
+		{
+			name: "helloWorld",
+			args: func(t *testing.T) args {
+				return args{
+					s: "helloWorld",
+				}
+			},
+			want1: "HelloWorld",
+		},
+		{
+			name: "HelloWorld",
+			args: func(t *testing.T) args {
+				return args{
+					s: "HelloWorld",
+				}
+			},
 			want1: "HelloWorld",
 		},
 		{
@@ -85,7 +112,7 @@ func TestCamel(t *testing.T) {
 					s: "id_name",
 				}
 			},
-			want1: "IDName",
+			want1: "IdName",
 		},
 		{
 			name: "id_url",
@@ -94,7 +121,7 @@ func TestCamel(t *testing.T) {
 					s: "id_url",
 				}
 			},
-			want1: "IDURL",
+			want1: "IdUrl",
 		},
 	}
 

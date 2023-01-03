@@ -17,9 +17,12 @@ const (
 	flagInput  = "input"
 	flagOutput = "output"
 	flagGoTag  = "tag"
+	flagRoot   = "root"
 
 	categoryGo      = "go"
 	categoryDefault = "default"
+	categoryInput   = "input"
+	categoryOutput  = "output"
 )
 
 func getReader(ctx *cli.Context) (*os.File, error) {
@@ -67,6 +70,7 @@ func action(ctx *cli.Context) error {
 		GoTag: goTag,
 		Src:   src,
 		Dst:   dst,
+		Root:  ctx.String(flagRoot),
 	}
 
 	reader, err := getReader(ctx)
@@ -167,6 +171,13 @@ func main() {
 				Aliases:  []string{"t"},
 				Category: categoryGo,
 				Usage:    "Golang struct field `type`",
+			},
+			&cli.StringFlag{
+				Name:        flagRoot,
+				Aliases:     []string{"r"},
+				Category:    categoryDefault,
+				DefaultText: st2.RootDefault,
+				Usage:       "The root struct `name`",
 			},
 		},
 		EnableBashCompletion: true,
