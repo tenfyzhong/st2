@@ -69,7 +69,9 @@ func TestCsvParser_Parse(t *testing.T) {
 		{
 			name: "succ",
 			init: func(t *testing.T) CsvParser {
-				return *NewCsvParser(Context{})
+				return *NewCsvParser(Context{
+					Root: "hello",
+				})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -81,7 +83,7 @@ func TestCsvParser_Parse(t *testing.T) {
 			want1: []*Struct{
 				{
 					Type: &StructType{
-						Name: "Root",
+						Name: "Hello",
 						Type: "struct",
 					},
 					Members: []*Member{

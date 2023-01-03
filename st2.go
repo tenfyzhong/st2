@@ -2,7 +2,6 @@ package st2
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"text/template"
 )
@@ -15,8 +14,6 @@ func Convert(ctx Context, reader io.Reader, writer io.Writer) error {
 	if writer == nil {
 		return errors.New("writer is nil")
 	}
-
-	fmt.Printf("%+v\n", ctx)
 
 	parse := CreateParser(ctx)
 	if parse == nil {
