@@ -65,6 +65,7 @@ const (
 	EEEA Eeee = 0 // a
 	EEEB Eeee = 1 // a
 	EEEC Eeee = 3 // a
+	eeed Eeee = 4
 
 	II1 int = 1
 	II2 int = 2
@@ -78,7 +79,8 @@ type Aaa struct { // aaa
 	// a
 	A  []int32 // a
 	B  int64   
-	C  *string 
+	C  *string` + " `json:\"hello_world\"` " + `
+	d  int64 
 	MM map[int]string
 }
 
@@ -154,7 +156,7 @@ type SampleMessage struct {
 					},
 					Members: []*Member{
 						{
-							Field: "A",
+							Field: "a",
 							Type: &ArrayType{
 								ChildType: Int32Val,
 							},
@@ -165,18 +167,18 @@ type SampleMessage struct {
 							},
 						},
 						{
-							Field: "B",
+							Field: "b",
 							Type:  Int64Val,
 							Index: 2,
 						},
 						{
-							Field:    "C",
+							Field:    "hello_world",
 							Type:     StringVal,
 							Index:    3,
 							Optional: true,
 						},
 						{
-							Field: "MM",
+							Field: "mm",
 							Type: &MapType{
 								Key:   Int64Val,
 								Value: StringVal,
@@ -192,17 +194,17 @@ type SampleMessage struct {
 					},
 					Members: []*Member{
 						{
-							Field: "A",
+							Field: "a",
 							Type:  Int32Val,
 							Index: 1,
 						},
 						{
-							Field: "B",
+							Field: "b",
 							Type:  Int64Val,
 							Index: 2,
 						},
 						{
-							Field: "C",
+							Field: "c",
 							Type:  StringVal,
 							Index: 3,
 						},
@@ -215,22 +217,22 @@ type SampleMessage struct {
 					},
 					Members: []*Member{
 						{
-							Field: "A",
+							Field: "a",
 							Type:  Int32Val,
 							Index: 1,
 						},
 						{
-							Field: "B",
+							Field: "b",
 							Type:  Int64Val,
 							Index: 2,
 						},
 						{
-							Field: "C",
+							Field: "c",
 							Type:  StringVal,
 							Index: 3,
 						},
 						{
-							Field: "Aaa",
+							Field: "aaa",
 							Type: &RawType{
 								Name: "Aaa",
 							},
@@ -245,12 +247,12 @@ type SampleMessage struct {
 					},
 					Members: []*Member{
 						{
-							Field: "Message",
+							Field: "message",
 							Type:  StringVal,
 							Index: 1,
 						},
 						{
-							Field: "Details",
+							Field: "details",
 							Type: &ArrayType{
 								ChildType: &RawType{
 									Name: "protobuf.Any",
