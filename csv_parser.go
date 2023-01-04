@@ -7,10 +7,13 @@ import (
 )
 
 type CsvParser struct {
+	ctx Context
 }
 
 func NewCsvParser(ctx Context) *CsvParser {
-	return &CsvParser{}
+	return &CsvParser{
+		ctx: ctx,
+	}
 }
 
 func (p CsvParser) Parse(reader io.Reader) ([]*Struct, error) {
@@ -20,9 +23,15 @@ func (p CsvParser) Parse(reader io.Reader) ([]*Struct, error) {
 		return nil, err
 	}
 	items := strings.Split(str, ",")
+	rootName := p.ctx.Root
+	if rootName == "" {
+		rootName = RootDefault
+	}
+	rootName = Camel(rootName)
+
 	st := &Struct{
 		Type: &StructType{
-			Name: "Root",
+			Name: rootName,
 			Type: "struct",
 		},
 	}
