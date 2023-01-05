@@ -2,6 +2,7 @@ package st2
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"strings"
 )
@@ -41,6 +42,7 @@ func (p CsvParser) Parse(reader io.Reader) ([]*Struct, error) {
 			Type:  StringVal,
 			Index: i + 1,
 		}
+		member.GoTag = append(member.GoTag, fmt.Sprintf(`csv:"%s"`, member.Field))
 		st.Members = append(st.Members, member)
 	}
 	return []*Struct{st}, nil
