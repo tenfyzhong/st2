@@ -80,7 +80,7 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 
 	member := &Member{
 		Field: root.Field,
-		GoTag: p.ctx.GoTag,
+		GoTag: []string{fmt.Sprintf(`json:"%s,omitempty"`, root.Field)},
 	}
 
 	switch root.Type {

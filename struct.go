@@ -1,7 +1,6 @@
 package st2
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -35,17 +34,11 @@ func (m Member) GoTagString() string {
 	if len(m.GoTag) == 0 {
 		return ""
 	}
-
-	strs := make([]string, 0)
-	for _, tag := range m.GoTag {
-		str := fmt.Sprintf("%s:\"%s\"", tag, m.Field)
-		strs = append(strs, str)
-	}
-	return "`" + strings.Join(strs, " ") + "`"
+	return "`" + strings.Join(m.GoTag, " ") + "`"
 }
 
 type Struct struct {
-	Members []*Member
 	Type    Type
+	Members []*Member
 	Comment Comment
 }

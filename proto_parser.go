@@ -97,7 +97,6 @@ func (v *ProtoVisitor) VisitField(f *parser.Field) bool {
 		Index:    int(fieldNumber),
 		Optional: f.IsOptional,
 		Comment:  v.comment2Comment(f.Comments, f.InlineComment),
-		GoTag:    v.ctx.GoTag,
 	})
 	return true
 }
@@ -121,7 +120,6 @@ func (v *ProtoVisitor) VisitMapField(f *parser.MapField) bool {
 		},
 		Index:   int(fieldNumber),
 		Comment: v.comment2Comment(f.Comments, f.InlineComment),
-		GoTag:   v.ctx.GoTag,
 	})
 	return true
 }
