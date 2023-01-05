@@ -2,7 +2,6 @@ package st2
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -29,7 +28,7 @@ func NewJsonParser(ctx Context) *JsonParser {
 func (p *JsonParser) Parse(reader io.Reader) ([]*Struct, error) {
 	data, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return nil, errors.New("read data failed")
+		return nil, err
 	}
 
 	if len(data) == 0 {
