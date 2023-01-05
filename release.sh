@@ -10,8 +10,6 @@
 #
 #################################################################
 
-set -x
-
 CWD=$(pwd)
 COMMAND=st2
 CMD_PATH=cmd/st2
@@ -28,7 +26,13 @@ GIT_TAG_MESSAGE=$(git tag -l --format='%(contents)' "$VERSION" 2>/dev/null)
 gobuild() {
     OS=$1
     ARCH=$2
-    CGO_ENABLED=0 GOOS="$OS" GOARCH="$ARCH" go build -ldflags "-X '${VERSION_KEY}=${VERSION}'" -o "${OUTPUT}/${COMMAND}-${OS}-${ARCH}"
+    SUFFIX=""
+    if [ "$OS" == "windows" ]; then
+        SUFFIX=.exe
+    fi
+    o="${OUTPUT}/${COMMAND}-${OS}-${ARCH}${SUFFIX}"
+    echo "go build $o"
+    CGO_ENABLED=0 GOOS="$OS" GOARCH="$ARCH" go build -ldflags "-X '${VERSION_KEY}=${VERSION}'" -o "$o"
 }
 
 build() {
@@ -53,8 +57,18 @@ build() {
 }
 
 release() {
-    gh release create "$VERSION" -d --verify-tag -n "$GIT_TAG_MESSAGE" "$OUTPUT"/*
+    echo "gh release create $VERSION"
+    gh release create "$VERSION" --verify-tag -n "$GIT_TAG_MESSAGE" "$OUTPUT"/*
 }
 
+echo "Release $VERSION"
+echo "========================================"
+echo "Release Message"
+echo "----------------------------------------"
+echo "$GIT_TAG_MESSAGE"
+echo "========================================"
+echo "Release step:"
+echo "----------------------------------------"
 build
+echo ""
 release
