@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/tenfyzhong/st2"
+	"github.com/tenfyzhong/st2/cmd/st2/config"
 	"github.com/urfave/cli/v3"
 )
 
@@ -16,7 +16,6 @@ const (
 	flagDst    = "dst"
 	flagInput  = "input"
 	flagOutput = "output"
-	flagGoTag  = "tag"
 	flagRoot   = "root"
 
 	categoryGo      = "go"
@@ -62,9 +61,6 @@ func action(ctx *cli.Context) error {
 	if src == dst {
 		return fmt.Errorf("src equals to dst\n\n")
 	}
-
-	goTag := ctx.StringSlice(flagGoTag)
-	goTag = uniqStrArray(goTag)
 
 	st2Ctx := st2.Context{
 		Src:  src,
@@ -134,7 +130,7 @@ func main() {
 		Usage:       "convert between json, protobuf, thrift, go struct",
 		UsageText:   "",
 		ArgsUsage:   "",
-		Version:     "0.1.0",
+		Version:     config.Version,
 		Description: "",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
@@ -165,12 +161,6 @@ func main() {
 				Required: false,
 				Usage:    "Output `file`, if not set, it will write to stdout",
 			},
-			&cli.StringSliceFlag{
-				Name:     flagGoTag,
-				Aliases:  []string{"t"},
-				Category: categoryGo,
-				Usage:    "Golang struct field `type`",
-			},
 			&cli.StringFlag{
 				Name:        flagRoot,
 				Aliases:     []string{"r"},
@@ -184,8 +174,7 @@ func main() {
 		HideHelpCommand:      true,
 		HideVersion:          false,
 		// BashComplete:         bashComplete,
-		Action:   action,
-		Compiled: time.Time{},
+		Action: action,
 		Authors: []*cli.Author{
 			{
 				Name:  "tenfyzhong",
