@@ -52,9 +52,9 @@ func TestCsvParser_Parse(t *testing.T) {
 			},
 			want1: []*Struct{
 				{
-					Type: &StructType{
-						Name: "Root",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "Root",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -83,9 +83,9 @@ func TestCsvParser_Parse(t *testing.T) {
 			},
 			want1: []*Struct{
 				{
-					Type: &StructType{
-						Name: "Hello",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "Hello",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{

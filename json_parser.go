@@ -103,11 +103,17 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 				ChildType: child.Type,
 			}
 		}
-	case StructVal:
+	case StructLikeVal:
 		finger := root.Fingerprint()
 		if st, ok := p.fingerMap[finger]; ok {
 			member.Field = root.Field
-			member.Type = st.Type
+			t, ok := st.Type.(*StructLikeType)
+			if !ok {
+				return nil
+			}
+			member.Type = &StructLikeType{
+				Name: t.Name,
+			}
 			return member
 		}
 
@@ -126,15 +132,18 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 
 		st := &Struct{
 			Members: members,
-			Type: &StructType{
-				Name: name,
+			Type: &StructLikeType{
+				Name:   name,
+				Source: SLSStruct,
 			},
 		}
 
 		p.structs = append(p.structs, st)
 		p.fingerMap[finger] = st
 
-		member.Type = st.Type
+		member.Type = &StructLikeType{
+			Name: name,
+		}
 	default:
 		return nil
 	}
@@ -154,7 +163,7 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 	case string:
 		node.Type = StringVal
 	case map[string]interface{}:
-		node.Type = StructVal
+		node.Type = StructLikeVal
 		node.Children = []*Node{}
 		for k, v := range c {
 			child := p.parseNode(k, v)

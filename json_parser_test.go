@@ -75,8 +75,9 @@ func TestJsonParser_Parse(t *testing.T) {
 							GoTag: []string{`json:"a,omitempty"`},
 						},
 					},
-					Type: &StructType{
-						Name: "HelloWorld",
+					Type: &StructLikeType{
+						Name:   "HelloWorld",
+						Source: SLSStruct,
 					},
 				},
 			},
@@ -122,8 +123,9 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			want1: []*Struct{
 				{
-					Type: &StructType{
-						Name: "A",
+					Type: &StructLikeType{
+						Name:   "A",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -141,8 +143,9 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "D",
+					Type: &StructLikeType{
+						Name:   "D",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -160,8 +163,9 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "E",
+					Type: &StructLikeType{
+						Name:   "E",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -179,8 +183,9 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "A01",
+					Type: &StructLikeType{
+						Name:   "A01",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -192,13 +197,14 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "F",
+					Type: &StructLikeType{
+						Name:   "F",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
 							Field: "a",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "A01",
 							},
 							Index: 1,
@@ -207,8 +213,9 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "Ggg",
+					Type: &StructLikeType{
+						Name:   "Ggg",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -220,13 +227,14 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "Root",
+					Type: &StructLikeType{
+						Name:   "Root",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
 							Field: "a",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "A",
 							},
 							Index: 1,
@@ -234,7 +242,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						},
 						{
 							Field: "b",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "A",
 							},
 							Index: 2,
@@ -251,7 +259,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						{
 							Field: "d",
 							Type: &ArrayType{
-								ChildType: &StructType{
+								ChildType: &StructLikeType{
 									Name: "D",
 								},
 							},
@@ -260,7 +268,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						},
 						{
 							Field: "e",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "E",
 							},
 							Index: 5,
@@ -268,7 +276,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						},
 						{
 							Field: "f",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "F",
 							},
 							Index: 6,
@@ -278,7 +286,7 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "ggg",
 							Type: &ArrayType{
 								ChildType: &ArrayType{
-									ChildType: &StructType{
+									ChildType: &StructLikeType{
 										Name: "Ggg",
 									},
 								},
@@ -332,8 +340,9 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			want1: []*Struct{
 				{
-					Type: &StructType{
-						Name: "A",
+					Type: &StructLikeType{
+						Name:   "A",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -351,8 +360,9 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "D",
+					Type: &StructLikeType{
+						Name:   "D",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -370,8 +380,9 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "E",
+					Type: &StructLikeType{
+						Name:   "E",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -389,8 +400,9 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "A01",
+					Type: &StructLikeType{
+						Name:   "A01",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -402,13 +414,14 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "F",
+					Type: &StructLikeType{
+						Name:   "F",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
 							Field: "a",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "A01",
 							},
 							Index: 1,
@@ -417,8 +430,9 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "Ggg",
+					Type: &StructLikeType{
+						Name:   "Ggg",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -430,13 +444,14 @@ func TestJsonParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "Root",
+					Type: &StructLikeType{
+						Name:   "Root",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
 							Field: "a",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "A",
 							},
 							Index: 1,
@@ -444,7 +459,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						},
 						{
 							Field: "b",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "A",
 							},
 							Index: 2,
@@ -461,7 +476,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						{
 							Field: "d",
 							Type: &ArrayType{
-								ChildType: &StructType{
+								ChildType: &StructLikeType{
 									Name: "D",
 								},
 							},
@@ -470,7 +485,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						},
 						{
 							Field: "e",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "E",
 							},
 							Index: 5,
@@ -478,7 +493,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						},
 						{
 							Field: "f",
-							Type: &StructType{
+							Type: &StructLikeType{
 								Name: "F",
 							},
 							Index: 6,
@@ -488,7 +503,7 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "ggg",
 							Type: &ArrayType{
 								ChildType: &ArrayType{
-									ChildType: &StructType{
+									ChildType: &StructLikeType{
 										Name: "Ggg",
 									},
 								},

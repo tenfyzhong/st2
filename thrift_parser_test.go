@@ -131,9 +131,9 @@ union UUU {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "SS",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "SS",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -212,9 +212,9 @@ union UUU {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "AAA",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "AAA",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -225,9 +225,9 @@ union UUU {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "BBB",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "BBB",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -242,7 +242,7 @@ union UUU {
 						},
 						{
 							Field: "e",
-							Type: &RawType{
+							Type: &StructLikeType{
 								Name: "EEE",
 							},
 							Index: 3,
@@ -250,10 +250,10 @@ union UUU {
 						{
 							Field: "mapab",
 							Type: &MapType{
-								Key: &RawType{
+								Key: &StructLikeType{
 									Name: "AAA",
 								},
-								Value: &RawType{
+								Value: &StructLikeType{
 									Name: "BBB",
 								},
 							},
@@ -262,7 +262,7 @@ union UUU {
 						{
 							Field: "seta",
 							Type: &SetType{
-								Key: &RawType{
+								Key: &StructLikeType{
 									Name: "AAA",
 								},
 							},
@@ -271,7 +271,7 @@ union UUU {
 						{
 							Field: "listb",
 							Type: &ArrayType{
-								ChildType: &RawType{
+								ChildType: &StructLikeType{
 									Name: "BBB",
 								},
 							},
@@ -280,21 +280,21 @@ union UUU {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "UUU",
-						Type: "union",
+					Type: &StructLikeType{
+						Name:   "UUU",
+						Source: SLSUnion,
 					},
 					Members: []*Member{
 						{
 							Field: "a",
-							Type: &RawType{
+							Type: &StructLikeType{
 								Name: "AAA",
 							},
 							Index: 1,
 						},
 						{
 							Field: "b",
-							Type: &RawType{
+							Type: &StructLikeType{
 								Name: "BBB",
 							},
 							Index: 2,

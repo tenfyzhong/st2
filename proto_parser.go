@@ -126,9 +126,9 @@ func (v *ProtoVisitor) VisitMapField(f *parser.MapField) bool {
 
 func (v *ProtoVisitor) VisitMessage(m *parser.Message) bool {
 	v.Struct = &Struct{
-		Type: &StructType{
-			Name: m.MessageName,
-			Type: "struct",
+		Type: &StructLikeType{
+			Name:   m.MessageName,
+			Source: SLSStruct,
 		},
 		Comment: v.comment2Comment(m.Comments, m.InlineCommentBehindLeftCurly),
 	}
@@ -203,7 +203,7 @@ func (v *ProtoVisitor) type2Type(str string) Type {
 	case "bytes":
 		return BinaryVal
 	}
-	return &RawType{
+	return &StructLikeType{
 		Name: str,
 	}
 }

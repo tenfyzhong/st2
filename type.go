@@ -6,26 +6,34 @@ import (
 	"strings"
 )
 
+type StructLikeSource int
+
+const (
+	SLSUnknown StructLikeSource = 0
+	SLSStruct  StructLikeSource = 1
+	SLSUnion   StructLikeSource = 2
+)
+
 var (
-	NullVal    Type = &NullType{}
-	BoolVal    Type = &BoolType{}
-	Float32Val Type = &Float32Type{}
-	Float64Val Type = &Float64Type{}
-	StringVal  Type = &StringType{}
-	ArrayVal   Type = &ArrayType{}
-	StructVal  Type = &StructType{}
-	Int8Val    Type = &Int8Type{}
-	Int16Val   Type = &Int16Type{}
-	Int32Val   Type = &Int32Type{}
-	Int64Val   Type = &Int64Type{}
-	Uint8Val   Type = &Uint8Type{}
-	Uint16Val  Type = &Uint16Type{}
-	Uint32Val  Type = &Uint32Type{}
-	Uint64Val  Type = &Uint64Type{}
-	BinaryVal  Type = &BinaryType{}
-	MapVal     Type = &MapType{}
-	SetVal     Type = &SetType{}
-	EnumVal    Type = &EnumType{}
+	NullVal       Type = &NullType{}
+	BoolVal       Type = &BoolType{}
+	Float32Val    Type = &Float32Type{}
+	Float64Val    Type = &Float64Type{}
+	StringVal     Type = &StringType{}
+	ArrayVal      Type = &ArrayType{}
+	Int8Val       Type = &Int8Type{}
+	Int16Val      Type = &Int16Type{}
+	Int32Val      Type = &Int32Type{}
+	Int64Val      Type = &Int64Type{}
+	Uint8Val      Type = &Uint8Type{}
+	Uint16Val     Type = &Uint16Type{}
+	Uint32Val     Type = &Uint32Type{}
+	Uint64Val     Type = &Uint64Type{}
+	BinaryVal     Type = &BinaryType{}
+	MapVal        Type = &MapType{}
+	SetVal        Type = &SetType{}
+	EnumVal       Type = &EnumType{}
+	StructLikeVal Type = &StructLikeType{}
 )
 
 type Type interface {
@@ -98,26 +106,6 @@ func (v ArrayType) Go() string        { return "[]" + v.ChildType.Go() }
 func (v ArrayType) Proto() string     { return "repeated " + v.ChildType.Proto() }
 func (v ArrayType) Thrift() string    { return "list<" + v.ChildType.Thrift() + ">" }
 func (v ArrayType) IsBasicType() bool { return false }
-
-type StructType struct {
-	Name string
-	Type string // struct or union, default struct
-}
-
-func (v StructType) Json() string            { return v.Name }
-func (v StructType) Go() string              { return "*" + goWithPackageName(v.Name) }
-func (v StructType) Proto() string           { return v.Name }
-func (v StructType) Thrift() string          { return v.Name }
-func (v StructType) IsBasicType() bool       { return false }
-func (v StructType) StructName() string      { return v.Name }
-func (v StructType) GoStructType() string    { return "struct" }
-func (v StructType) ProtoStructType() string { return "message" }
-func (v StructType) ThriftStructType() string {
-	if v.Type != "" {
-		return v.Type
-	}
-	return "struct"
-}
 
 type Int8Type struct {
 	V int8
@@ -252,15 +240,28 @@ func (v EnumType) GoStructType() string     { return "enum" }
 func (v EnumType) ProtoStructType() string  { return "enum" }
 func (v EnumType) ThriftStructType() string { return "enum" }
 
-type RawType struct {
-	Name string
+type StructLikeType struct {
+	Name   string
+	Source StructLikeSource
 }
 
-func (v RawType) Json() string      { return v.Name }
-func (v RawType) Go() string        { return "*" + goWithPackageName(v.Name) }
-func (v RawType) Proto() string     { return v.Name }
-func (v RawType) Thrift() string    { return v.Name }
-func (v RawType) IsBasicType() bool { return false }
+func (v StructLikeType) Json() string            { return v.Name }
+func (v StructLikeType) Go() string              { return "*" + goWithPackageName(v.Name) }
+func (v StructLikeType) Proto() string           { return v.Name }
+func (v StructLikeType) Thrift() string          { return v.Name }
+func (v StructLikeType) IsBasicType() bool       { return false }
+func (v StructLikeType) StructName() string      { return v.Name }
+func (v StructLikeType) GoStructType() string    { return "struct" }
+func (v StructLikeType) ProtoStructType() string { return "message" }
+func (v StructLikeType) ThriftStructType() string {
+	switch v.Source {
+	case SLSStruct:
+		return "struct"
+	case SLSUnion:
+		return "union"
+	}
+	return "struct"
+}
 
 func goWithPackageName(name string) string {
 	// If the name of the filed is in other package,

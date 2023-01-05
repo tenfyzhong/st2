@@ -30,7 +30,7 @@ func (node *Node) fingerprintHelper() string {
 			child = node.Children[0].Field + ":" + node.Children[0].Fingerprint()
 		}
 		return "[" + child + "]"
-	case StructVal:
+	case StructLikeVal:
 		children := make([]string, 0)
 		for _, child := range node.Children {
 			finger := child.Fingerprint()

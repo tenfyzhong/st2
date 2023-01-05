@@ -31,9 +31,9 @@ func (p CsvParser) Parse(reader io.Reader) ([]*Struct, error) {
 	rootName = Camel(rootName)
 
 	st := &Struct{
-		Type: &StructType{
-			Name: rootName,
-			Type: "struct",
+		Type: &StructLikeType{
+			Name:   rootName,
+			Source: SLSStruct,
 		},
 	}
 	for i, item := range items {
