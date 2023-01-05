@@ -67,10 +67,9 @@ func action(ctx *cli.Context) error {
 	goTag = uniqStrArray(goTag)
 
 	st2Ctx := st2.Context{
-		GoTag: goTag,
-		Src:   src,
-		Dst:   dst,
-		Root:  ctx.String(flagRoot),
+		Src:  src,
+		Dst:  dst,
+		Root: ctx.String(flagRoot),
 	}
 
 	reader, err := getReader(ctx)

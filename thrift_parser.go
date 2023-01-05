@@ -66,7 +66,6 @@ func (p ThriftParser) enum2struct(e *parser.Enum) *Struct {
 			Field: value.Name,
 			Type:  s.Type,
 			Index: int(value.Value),
-			GoTag: p.ctx.GoTag,
 		}
 		s.Members = append(s.Members, member)
 	}
@@ -92,7 +91,6 @@ func (p ThriftParser) structLike2struct(sl *parser.StructLike, stType string) *S
 			Type:     t,
 			Index:    int(field.ID),
 			Optional: field.Requiredness == parser.FieldType_Optional,
-			GoTag:    p.ctx.GoTag,
 		}
 		s.Members = append(s.Members, member)
 	}

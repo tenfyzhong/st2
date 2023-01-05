@@ -145,35 +145,35 @@ func TestConvert(t *testing.T) {
 				return a
 			},
 			wantData: []byte(`type A struct {
-	B float64
-	C string
+	B float64 ` + "`json:\"b,omitempty\"`" + `
+	C string ` + "`json:\"c,omitempty\"`" + `
 }
 
 type D struct {
-	B float64
-	C float64
+	B float64 ` + "`json:\"b,omitempty\"`" + `
+	C float64 ` + "`json:\"c,omitempty\"`" + `
 }
 
 type E struct {
-	Aa bool
-	Bb bool
+	Aa bool ` + "`json:\"aa,omitempty\"`" + `
+	Bb bool ` + "`json:\"bb,omitempty\"`" + `
 }
 
 type A01 struct {
-	Hello bool
+	Hello bool ` + "`json:\"hello,omitempty\"`" + `
 }
 
 type F struct {
-	A *A01
+	A *A01 ` + "`json:\"a,omitempty\"`" + `
 }
 
 type Root struct {
-	A *A
-	B *A
-	C []string
-	D []*D
-	E *E
-	F *F
+	A *A ` + "`json:\"a,omitempty\"`" + `
+	B *A ` + "`json:\"b,omitempty\"`" + `
+	C []string ` + "`json:\"c,omitempty\"`" + `
+	D []*D ` + "`json:\"d,omitempty\"`" + `
+	E *E ` + "`json:\"e,omitempty\"`" + `
+	F *F ` + "`json:\"f,omitempty\"`" + `
 }
 
 `),
