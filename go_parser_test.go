@@ -147,9 +147,9 @@ type SampleMessage struct {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "Aaa",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "Aaa",
+						Source: SLSStruct,
 					},
 					Comment: Comment{
 						BeginningComments: []string{"// haha"},
@@ -188,9 +188,9 @@ type SampleMessage struct {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "BbbBB",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "BbbBB",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -211,9 +211,9 @@ type SampleMessage struct {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "Ccc",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "Ccc",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -233,7 +233,7 @@ type SampleMessage struct {
 						},
 						{
 							Field: "aaa",
-							Type: &RawType{
+							Type: &StructLikeType{
 								Name: "Aaa",
 							},
 							Index: 4,
@@ -241,9 +241,9 @@ type SampleMessage struct {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "ErrorStatus",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "ErrorStatus",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -254,7 +254,7 @@ type SampleMessage struct {
 						{
 							Field: "details",
 							Type: &ArrayType{
-								ChildType: &RawType{
+								ChildType: &StructLikeType{
 									Name: "protobuf.Any",
 								},
 							},
@@ -263,9 +263,9 @@ type SampleMessage struct {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "SampleMessage",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "SampleMessage",
+						Source: SLSStruct,
 					},
 				},
 			},

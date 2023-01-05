@@ -112,9 +112,9 @@ message ErrorStatus {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "Aaa",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "Aaa",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -143,9 +143,9 @@ message ErrorStatus {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "BbbBB",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "BbbBB",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -166,9 +166,9 @@ message ErrorStatus {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "Ccc",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "Ccc",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -188,7 +188,7 @@ message ErrorStatus {
 						},
 						{
 							Field: "aaa",
-							Type: &RawType{
+							Type: &StructLikeType{
 								Name: "Aaa",
 							},
 							Index: 4,
@@ -196,9 +196,9 @@ message ErrorStatus {
 					},
 				},
 				{
-					Type: &StructType{
-						Name: "ErrorStatus",
-						Type: "struct",
+					Type: &StructLikeType{
+						Name:   "ErrorStatus",
+						Source: SLSStruct,
 					},
 					Members: []*Member{
 						{
@@ -209,7 +209,7 @@ message ErrorStatus {
 						{
 							Field: "details",
 							Type: &ArrayType{
-								ChildType: &RawType{
+								ChildType: &StructLikeType{
 									Name: "google.protobuf.Any",
 								},
 							},
@@ -219,7 +219,7 @@ message ErrorStatus {
 							Field: "m",
 							Type: &MapType{
 								Key: Int32Val,
-								Value: &RawType{
+								Value: &StructLikeType{
 									Name: "Ccc",
 								},
 							},

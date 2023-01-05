@@ -68,9 +68,9 @@ func (p GoParser) processType(decl *ast.GenDecl) *Struct {
 	}
 
 	res := &Struct{
-		Type: &StructType{
-			Name: name,
-			Type: "struct",
+		Type: &StructLikeType{
+			Name:   name,
+			Source: SLSStruct,
 		},
 		Comment: p.parseComment(decl.Doc, nil),
 	}
@@ -253,7 +253,7 @@ func (p GoParser) type2Type(t ast.Expr) Type {
 	case *ast.SelectorExpr:
 		selector := p.type2Type(t.X)
 		sub := p.type2Type(t.Sel)
-		return &RawType{
+		return &StructLikeType{
 			Name: strings.TrimLeft(selector.Go(), "*") + "." + strings.TrimLeft(sub.Go(), "*"),
 		}
 	}
@@ -299,7 +299,7 @@ func (p GoParser) nameType(name string) Type {
 	case "uintptr":
 		// TODO
 	}
-	return &RawType{
+	return &StructLikeType{
 		Name: name,
 	}
 }

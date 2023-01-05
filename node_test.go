@@ -68,7 +68,7 @@ func TestNode_Fingerprint(t *testing.T) {
 					Children: []*Node{
 						{
 							Field: "second",
-							Type:  StructVal,
+							Type:  StructLikeVal,
 							Children: []*Node{
 								{
 									Field: "third",
@@ -86,11 +86,11 @@ func TestNode_Fingerprint(t *testing.T) {
 			init: func(t *testing.T) *Node {
 				return &Node{
 					Field: "st",
-					Type:  StructVal,
+					Type:  StructLikeVal,
 					Children: []*Node{
 						{
 							Field: "a1",
-							Type:  StructVal,
+							Type:  StructLikeVal,
 							Children: []*Node{
 								{
 									Field: "b1",
@@ -100,7 +100,7 @@ func TestNode_Fingerprint(t *testing.T) {
 						},
 						{
 							Field: "a2",
-							Type:  StructVal,
+							Type:  StructLikeVal,
 							Children: []*Node{
 								{
 									Field: "b2",
