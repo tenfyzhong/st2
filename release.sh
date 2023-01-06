@@ -44,7 +44,7 @@ build() {
     rm -rf "$OUTPUT"
     mkdir -p "$OUTPUT"
 
-    go install
+    go install -ldflags "-X '${VERSION_KEY}=${VERSION}'"
 
     gobuild darwin amd64
 
