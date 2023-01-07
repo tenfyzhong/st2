@@ -21,10 +21,9 @@ const (
 	flagReadClipboard  = "rc"
 	flagWriteClipboard = "wc"
 
-	categoryGo      = "go"
-	categoryDefault = "default"
-	categoryInput   = "input"
-	categoryOutput  = "output"
+	categoryCommon = "common"
+	categoryInput  = "input"
+	categoryOutput = "output"
 )
 
 func getReader(ctx *cli.Context) (io.ReadCloser, error) {
@@ -147,46 +146,46 @@ func main() {
 			&cli.StringFlag{
 				Name:     flagSrc,
 				Aliases:  []string{"s"},
-				Category: categoryDefault,
+				Category: categoryInput,
 				Required: false,
 				Usage:    fmt.Sprintf("The source data `type`, it will use the suffix of the input file if not set, available value: `%s`", arrayString(st2.SourceLangs)),
 			},
 			&cli.StringFlag{
 				Name:     flagDst,
 				Aliases:  []string{"d"},
-				Category: categoryDefault,
+				Category: categoryOutput,
 				Required: false,
 				Usage:    fmt.Sprintf("The destination data `type`, it will use the suffix of the output file if not set, available value: `%s`", arrayString(st2.DestinationLangs)),
 			},
 			&cli.StringFlag{
 				Name:     flagInput,
 				Aliases:  []string{"i"},
-				Category: categoryDefault,
+				Category: categoryInput,
 				Required: false,
 				Usage:    "Input `file`, if not set, it will read from stdio",
 			},
 			&cli.StringFlag{
 				Name:     flagOutput,
 				Aliases:  []string{"o"},
-				Category: categoryDefault,
+				Category: categoryOutput,
 				Required: false,
 				Usage:    "Output `file`, if not set, it will write to stdout",
 			},
 			&cli.StringFlag{
 				Name:        flagRoot,
 				Aliases:     []string{"r"},
-				Category:    categoryDefault,
+				Category:    categoryCommon,
 				DefaultText: st2.RootDefault,
 				Usage:       "The root struct `name`",
 			},
 			&cli.BoolFlag{
 				Name:     flagReadClipboard,
-				Category: categoryDefault,
+				Category: categoryInput,
 				Usage:    "Read input from clipboard",
 			},
 			&cli.BoolFlag{
 				Name:     flagWriteClipboard,
-				Category: categoryDefault,
+				Category: categoryOutput,
 				Usage:    "Write output to clipboard",
 			},
 		},
