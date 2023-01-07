@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -12,19 +13,24 @@ import (
 )
 
 const (
-	flagSrc    = "src"
-	flagDst    = "dst"
-	flagInput  = "input"
-	flagOutput = "output"
-	flagRoot   = "root"
+	flagSrc            = "src"
+	flagDst            = "dst"
+	flagInput          = "input"
+	flagOutput         = "output"
+	flagRoot           = "root"
+	flagReadClipboard  = "rc"
+	flagWriteClipboard = "wc"
 
-	categoryGo      = "go"
-	categoryDefault = "default"
-	categoryInput   = "input"
-	categoryOutput  = "output"
+	categoryCommon = "common"
+	categoryInput  = "input"
+	categoryOutput = "output"
 )
 
-func getReader(ctx *cli.Context) (*os.File, error) {
+func getReader(ctx *cli.Context) (io.ReadCloser, error) {
+	if ctx.Bool(flagReadClipboard) {
+		return NewClipboardReadCloser(), nil
+	}
+
 	readfile := ctx.String(flagInput)
 	if readfile == "" {
 		return os.Stdin, nil
@@ -36,7 +42,11 @@ func getReader(ctx *cli.Context) (*os.File, error) {
 	return file, nil
 }
 
-func getWriter(ctx *cli.Context) (*os.File, error) {
+func getWriter(ctx *cli.Context) (io.WriteCloser, error) {
+	if ctx.Bool(flagWriteClipboard) {
+		return NewClipboardWriteCloser(), nil
+	}
+
 	writefile := ctx.String(flagOutput)
 	if writefile == "" {
 		return os.Stdout, nil
@@ -136,37 +146,47 @@ func main() {
 			&cli.StringFlag{
 				Name:     flagSrc,
 				Aliases:  []string{"s"},
-				Category: categoryDefault,
+				Category: categoryInput,
 				Required: false,
 				Usage:    fmt.Sprintf("The source data `type`, it will use the suffix of the input file if not set, available value: `%s`", arrayString(st2.SourceLangs)),
 			},
 			&cli.StringFlag{
 				Name:     flagDst,
 				Aliases:  []string{"d"},
-				Category: categoryDefault,
+				Category: categoryOutput,
 				Required: false,
 				Usage:    fmt.Sprintf("The destination data `type`, it will use the suffix of the output file if not set, available value: `%s`", arrayString(st2.DestinationLangs)),
 			},
 			&cli.StringFlag{
 				Name:     flagInput,
 				Aliases:  []string{"i"},
-				Category: categoryDefault,
+				Category: categoryInput,
 				Required: false,
 				Usage:    "Input `file`, if not set, it will read from stdio",
 			},
 			&cli.StringFlag{
 				Name:     flagOutput,
 				Aliases:  []string{"o"},
-				Category: categoryDefault,
+				Category: categoryOutput,
 				Required: false,
 				Usage:    "Output `file`, if not set, it will write to stdout",
 			},
 			&cli.StringFlag{
 				Name:        flagRoot,
 				Aliases:     []string{"r"},
-				Category:    categoryDefault,
+				Category:    categoryCommon,
 				DefaultText: st2.RootDefault,
 				Usage:       "The root struct `name`",
+			},
+			&cli.BoolFlag{
+				Name:     flagReadClipboard,
+				Category: categoryInput,
+				Usage:    "Read input from clipboard",
+			},
+			&cli.BoolFlag{
+				Name:     flagWriteClipboard,
+				Category: categoryOutput,
+				Usage:    "Write output to clipboard",
 			},
 		},
 		EnableBashCompletion: true,
