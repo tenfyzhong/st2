@@ -63,6 +63,7 @@ func (c *ClipboardWriteCloser) Write(p []byte) (n int, err error) {
 }
 
 func (c *ClipboardWriteCloser) Close() error {
+	clipboardInit()
 	clipboard.Write(clipboard.FmtText, c.data)
 	c.data = c.data[0:0]
 	return nil
