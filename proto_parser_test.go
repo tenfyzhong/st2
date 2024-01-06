@@ -37,7 +37,7 @@ func TestProtoParser_Parse(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, "found \"\\\"a\\\"(Token=2, Pos=<input>:1:1)\" but expected [syntax] at /Users/bytedance/go/pkg/mod/github.com/yoheimuta/go-protoparser/v4@v4.7.0/parser/syntax.go:62")
+				assert.ErrorContains(t, err, "found \"\\\"a\\\"(Token=2, Pos=<input>:1:1)\" but expected [syntax] at ")
 			},
 		},
 		{
