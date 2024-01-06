@@ -19,7 +19,6 @@ jobs:
           VERSION: ${{ steps.tag.outputs.version }}
         with:
           bin-path: "./cmd/st2"
-          version-key: "github.com/tenfyzhong/st2/cmd/st2/config.Version"
           command: "st2"
           build-option: "-ldflags \"-X 'github.com/tenfyzhong/st2/cmd/st2/config.Version=${VERSION}'\""
 
