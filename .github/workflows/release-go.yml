@@ -9,7 +9,7 @@ jobs:
   release:
     uses: tenfyzhong/workflows/.github/workflows/release-go.yml@main
     with:
-      bin-path: "cmd/st2"
+      bin-path: "./cmd/st2"
       version-key: "github.com/tenfyzhong/st2/cmd/st2/config.Version"
       command: "st2"
 
