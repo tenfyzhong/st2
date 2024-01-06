@@ -4,17 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"sort"
 )
 
 type JsonParser struct {
+	ctx Context
+
 	fingerMap map[string]*Struct
 	nameMap   map[string]bool
-
-	structs []*Struct
-
-	ctx Context
+	structs   []*Struct
 }
 
 func NewJsonParser(ctx Context) *JsonParser {
@@ -26,7 +24,7 @@ func NewJsonParser(ctx Context) *JsonParser {
 }
 
 func (p *JsonParser) Parse(reader io.Reader) ([]*Struct, error) {
-	data, err := ioutil.ReadAll(reader)
+	data, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
 	}
@@ -154,6 +152,10 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 	node := &Node{
 		Field: tag,
 	}
+	if v == nil {
+		node.Type = NullVal
+	}
+
 	switch c := v.(type) {
 	case bool:
 		node.Type = BoolVal

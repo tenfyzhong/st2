@@ -85,6 +85,43 @@ func TestJsonParser_Parse(t *testing.T) {
 			inspectErr: func(err error, t *testing.T) {},
 		},
 		{
+			name: "simple struct with null",
+			init: func(t *testing.T) *JsonParser {
+				return NewJsonParser(Context{
+					Root: "helloWorld",
+				})
+			},
+			args: func(t *testing.T) args {
+				return args{
+					reader: bytes.NewReader([]byte(`{"a":1, "b":null}`)),
+				}
+			},
+			want1: []*Struct{
+				{
+					Members: []*Member{
+						{
+							Field: "a",
+							Type:  Float64Val,
+							Index: 1,
+							GoTag: []string{`json:"a,omitempty"`},
+						},
+						{
+							Field: "b",
+							Type:  NullVal,
+							Index: 2,
+							GoTag: []string{`json:"b,omitempty"`},
+						},
+					},
+					Type: &StructLikeType{
+						Name:   "HelloWorld",
+						Source: SLSStruct,
+					},
+				},
+			},
+			wantErr:    false,
+			inspectErr: func(err error, t *testing.T) {},
+		},
+		{
 			name: "complex struct",
 			init: func(t *testing.T) *JsonParser {
 				return NewJsonParser(Context{})
