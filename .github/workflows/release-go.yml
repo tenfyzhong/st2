@@ -15,6 +15,7 @@ jobs:
       - name: Echo tag
         run: echo ${{ steps.tag.outputs.version }}
       - uses: tenfyzhong/workflows/.github/workflows/release-go.yml@main
+        name: release
         env:
           VERSION: ${{ steps.tag.outputs.version }}
         with:
