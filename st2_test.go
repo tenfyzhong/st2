@@ -426,7 +426,7 @@ type Ccc struct {
 
 type ErrorStatus struct {
 	Message string
-	Details []*protobuf.Any
+	Details []any
 }
 
 type SampleMessage struct {
@@ -521,7 +521,7 @@ struct Ccc {
 
 struct ErrorStatus {
     1: string message, 
-    2: list<google.protobuf.Any> details, 
+    2: list<binary> details, 
 }
 
 struct SampleMessage {
