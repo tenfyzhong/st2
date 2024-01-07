@@ -1,11 +1,16 @@
 package st2
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"sort"
 
-	json "github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
+)
+
+var (
+	jsonapi = jsoniter.Config{UseNumber: true}.Froze()
 )
 
 type JsonParser struct {
@@ -35,7 +40,7 @@ func (p *JsonParser) Parse(reader io.Reader) ([]*Struct, error) {
 	}
 
 	var v interface{}
-	err = json.Unmarshal(data, &v)
+	err = jsonapi.Unmarshal(data, &v)
 	if err != nil {
 		return nil, err
 	}
@@ -82,11 +87,22 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 	}
 
 	switch root.Type {
-	case NullVal, BoolVal, Float64Val, StringVal:
+	case NullVal,
+		BoolVal,
+		Float64Val,
+		StringVal,
+		Int8Val,
+		Int16Val,
+		Int32Val,
+		Int64Val,
+		Uint8Val,
+		Uint16Val,
+		Uint32Val,
+		Uint64Val:
 		member.Type = root.Type
 	case ArrayVal:
 		if len(root.Children) == 0 {
-			// ignore the current memeber if the array is empty
+			// ignore the current member if the array is empty
 			// the type of element is unknown
 			return nil
 		}
@@ -160,8 +176,17 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 	switch c := v.(type) {
 	case bool:
 		node.Type = BoolVal
-	case float64:
-		node.Type = Float64Val
+	case json.Number:
+		_, err := c.Int64()
+		if err == nil {
+			node.Type = Int64Val
+		} else {
+			node.Type = Float64Val
+		}
+	// case int64:
+	// 	node.Type = Int64Val
+	// case float64:
+	// 	node.Type = Float64Val
 	case string:
 		node.Type = StringVal
 	case map[string]interface{}:

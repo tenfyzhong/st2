@@ -70,7 +70,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "a",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"a,omitempty"`},
 						},
@@ -93,7 +93,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			args: func(t *testing.T) args {
 				return args{
-					reader: bytes.NewReader([]byte(`{"a":1, "b":null}`)),
+					reader: bytes.NewReader([]byte(`{"a":1, "b":null, "c": 1.1}`)),
 				}
 			},
 			want1: []*Struct{
@@ -101,7 +101,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "a",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"a,omitempty"`},
 						},
@@ -110,6 +110,12 @@ func TestJsonParser_Parse(t *testing.T) {
 							Type:  NullVal,
 							Index: 2,
 							GoTag: []string{`json:"b,omitempty"`},
+						},
+						{
+							Field: "c",
+							Type:  Float64Val,
+							Index: 3,
+							GoTag: []string{`json:"c,omitempty"`},
 						},
 					},
 					Type: &StructLikeType{
@@ -167,7 +173,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
@@ -187,13 +193,13 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
 						{
 							Field: "c",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 2,
 							GoTag: []string{`json:"c,omitempty"`},
 						},
@@ -257,7 +263,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "ggg",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"ggg,omitempty"`},
 						},
@@ -384,7 +390,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
@@ -404,13 +410,13 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
 						{
 							Field: "c",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 2,
 							GoTag: []string{`json:"c,omitempty"`},
 						},
@@ -474,7 +480,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "ggg",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"ggg,omitempty"`},
 						},

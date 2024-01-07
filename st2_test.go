@@ -145,13 +145,13 @@ func TestConvert(t *testing.T) {
 				return a
 			},
 			wantData: []byte(`type A struct {
-	B float64 ` + "`json:\"b,omitempty\"`" + `
+	B int64 ` + "`json:\"b,omitempty\"`" + `
 	C string ` + "`json:\"c,omitempty\"`" + `
 }
 
 type D struct {
-	B float64 ` + "`json:\"b,omitempty\"`" + `
-	C float64 ` + "`json:\"c,omitempty\"`" + `
+	B int64 ` + "`json:\"b,omitempty\"`" + `
+	C int64 ` + "`json:\"c,omitempty\"`" + `
 }
 
 type E struct {
@@ -220,13 +220,13 @@ type Root struct {
 				return a
 			},
 			wantData: []byte(`message A {
-    double b = 1; 
+    int64 b = 1; 
     string c = 2; 
 }
 
 message D {
-    double b = 1; 
-    double c = 2; 
+    int64 b = 1; 
+    int64 c = 2; 
 }
 
 message E {
@@ -295,13 +295,13 @@ message Root {
 				return a
 			},
 			wantData: []byte(`struct A {
-    1: double b, 
+    1: i64 b, 
     2: string c, 
 }
 
 struct D {
-    1: double b, 
-    2: double c, 
+    1: i64 b, 
+    2: i64 c, 
 }
 
 struct E {
