@@ -87,7 +87,7 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 	}
 
 	switch root.Type {
-	case NullVal,
+	case AnyVal,
 		BoolVal,
 		Float64Val,
 		StringVal,
@@ -110,7 +110,7 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 		child := p.parseStructs(root.Children[0])
 		if child == nil {
 			member.Type = &ArrayType{
-				ChildType: NullVal,
+				ChildType: AnyVal,
 			}
 		} else {
 			member.Type = &ArrayType{
@@ -170,7 +170,7 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 		Field: tag,
 	}
 	if v == nil {
-		node.Type = NullVal
+		node.Type = AnyVal
 	}
 
 	switch c := v.(type) {
@@ -200,7 +200,7 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 			node.Children = append(node.Children, child)
 		} else {
 			child := &Node{
-				Type: NullVal,
+				Type: AnyVal,
 			}
 			node.Children = append(node.Children, child)
 		}

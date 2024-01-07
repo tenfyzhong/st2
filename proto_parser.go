@@ -203,7 +203,7 @@ func (v *ProtoVisitor) type2Type(str string) Type {
 	case "bytes":
 		return BinaryVal
 	case "google.protobuf.Any":
-		return NullVal
+		return AnyVal
 	}
 	return &StructLikeType{
 		Name: str,

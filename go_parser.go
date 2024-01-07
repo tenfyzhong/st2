@@ -299,7 +299,7 @@ func (p GoParser) nameType(name string) Type {
 	case "uintptr":
 		// TODO
 	case "any":
-		return NullVal
+		return AnyVal
 	}
 	return &StructLikeType{
 		Name: name,

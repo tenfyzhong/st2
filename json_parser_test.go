@@ -107,7 +107,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						},
 						{
 							Field: "b",
-							Type:  NullVal,
+							Type:  AnyVal,
 							Index: 2,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
@@ -558,7 +558,7 @@ func TestJsonParser_Parse(t *testing.T) {
 						{
 							Field: "hh",
 							Type: &ArrayType{
-								ChildType: NullVal,
+								ChildType: AnyVal,
 							},
 							Index: 8,
 							GoTag: []string{`json:"hh,omitempty"`},
@@ -567,7 +567,7 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "jj",
 							Type: &ArrayType{
 								ChildType: &ArrayType{
-									ChildType: NullVal,
+									ChildType: AnyVal,
 								},
 							},
 							Index: 9,

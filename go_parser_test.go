@@ -254,7 +254,7 @@ type SampleMessage struct {
 						{
 							Field: "details",
 							Type: &ArrayType{
-								ChildType: NullVal,
+								ChildType: AnyVal,
 							},
 							Index: 2,
 						},

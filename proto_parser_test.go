@@ -209,7 +209,7 @@ message ErrorStatus {
 						{
 							Field: "details",
 							Type: &ArrayType{
-								ChildType: NullVal,
+								ChildType: AnyVal,
 							},
 							Index: 2,
 						},
