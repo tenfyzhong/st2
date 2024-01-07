@@ -5,6 +5,12 @@ import (
 	"fmt"
 	"io"
 	"sort"
+
+	jsoniter "github.com/json-iterator/go"
+)
+
+var (
+	jsonapi = jsoniter.Config{UseNumber: true}.Froze()
 )
 
 type JsonParser struct {
@@ -34,7 +40,7 @@ func (p *JsonParser) Parse(reader io.Reader) ([]*Struct, error) {
 	}
 
 	var v interface{}
-	err = json.Unmarshal(data, &v)
+	err = jsonapi.Unmarshal(data, &v)
 	if err != nil {
 		return nil, err
 	}
@@ -81,11 +87,22 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 	}
 
 	switch root.Type {
-	case NullVal, BoolVal, Float64Val, StringVal:
+	case AnyVal,
+		BoolVal,
+		Float64Val,
+		StringVal,
+		Int8Val,
+		Int16Val,
+		Int32Val,
+		Int64Val,
+		Uint8Val,
+		Uint16Val,
+		Uint32Val,
+		Uint64Val:
 		member.Type = root.Type
 	case ArrayVal:
 		if len(root.Children) == 0 {
-			// ignore the current memeber if the array is empty
+			// ignore the current member if the array is empty
 			// the type of element is unknown
 			return nil
 		}
@@ -93,7 +110,7 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 		child := p.parseStructs(root.Children[0])
 		if child == nil {
 			member.Type = &ArrayType{
-				ChildType: NullVal,
+				ChildType: AnyVal,
 			}
 		} else {
 			member.Type = &ArrayType{
@@ -153,14 +170,19 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 		Field: tag,
 	}
 	if v == nil {
-		node.Type = NullVal
+		node.Type = AnyVal
 	}
 
 	switch c := v.(type) {
 	case bool:
 		node.Type = BoolVal
-	case float64:
-		node.Type = Float64Val
+	case json.Number:
+		_, err := c.Int64()
+		if err == nil {
+			node.Type = Int64Val
+		} else {
+			node.Type = Float64Val
+		}
 	case string:
 		node.Type = StringVal
 	case map[string]interface{}:
@@ -175,6 +197,11 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 		node.Type = ArrayVal
 		if len(c) > 0 {
 			child := p.parseNode("", c[0])
+			node.Children = append(node.Children, child)
+		} else {
+			child := &Node{
+				Type: AnyVal,
+			}
 			node.Children = append(node.Children, child)
 		}
 	}

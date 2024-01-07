@@ -99,7 +99,7 @@ type Ccc struct {
 
 type ErrorStatus struct {
 	Message string
-	Details []*protobuf.Any
+	Details []any
 }
 
 type SampleMessage struct {
@@ -254,9 +254,7 @@ type SampleMessage struct {
 						{
 							Field: "details",
 							Type: &ArrayType{
-								ChildType: &StructLikeType{
-									Name: "protobuf.Any",
-								},
+								ChildType: AnyVal,
 							},
 							Index: 2,
 						},

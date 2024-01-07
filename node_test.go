@@ -18,7 +18,7 @@ func TestNode_Fingerprint(t *testing.T) {
 			init: func(t *testing.T) *Node {
 				return &Node{
 					Field: "root",
-					Type:  NullVal,
+					Type:  AnyVal,
 				}
 			},
 			want1: "null",

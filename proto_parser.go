@@ -176,32 +176,34 @@ func (v *ProtoVisitor) VisitSyntax(s *parser.Syntax) bool {
 
 func (v *ProtoVisitor) type2Type(str string) Type {
 	switch str {
-	case "double":
+	case StrDouble:
 		return Float64Val
-	case "float":
+	case StrFloat:
 		return Float32Val
-	case "int32":
+	case StrInt32:
 		return Int32Val
-	case "int64":
+	case StrInt64:
 		return Int64Val
-	case "uint32":
+	case StrUint32:
 		return Uint32Val
-	case "uint64":
+	case StrUint64:
 		return Uint64Val
-	case "sint32":
+	case StrSint32:
 		return Int32Val
-	case "sint64":
+	case StrSint64:
 		return Int64Val
-	case "fixed32":
+	case StrFixed32:
 		return Int32Val
-	case "fixed64":
+	case StrFixed64:
 		return Int64Val
-	case "bool":
+	case StrBool:
 		return BoolVal
-	case "string":
+	case StrString:
 		return StringVal
-	case "bytes":
+	case StrBytes:
 		return BinaryVal
+	case StrPbAny:
+		return AnyVal
 	}
 	return &StructLikeType{
 		Name: str,

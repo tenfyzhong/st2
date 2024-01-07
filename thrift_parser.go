@@ -104,32 +104,32 @@ func (p ThriftParser) type2Type(t *parser.Type) Type {
 	}
 
 	switch t.Name {
-	case "bool":
+	case StrBool:
 		return BoolVal
-	case "byte":
+	case StrByte:
 		return Int8Val
-	case "i16":
+	case StrI16:
 		return Int16Val
-	case "i32":
+	case StrI32:
 		return Int32Val
-	case "i64":
+	case StrI64:
 		return Int64Val
-	case "double":
+	case StrDouble:
 		return Float64Val
-	case "string":
+	case StrString:
 		return StringVal
-	case "binary":
+	case StrBinary:
 		return BinaryVal
-	case "map":
+	case StrMap:
 		return &MapType{
 			Key:   p.type2Type(t.KeyType),
 			Value: p.type2Type(t.ValueType),
 		}
-	case "list":
+	case StrList:
 		return &ArrayType{
 			ChildType: p.type2Type(t.ValueType),
 		}
-	case "set":
+	case StrSet:
 		return &SetType{
 			Key: p.type2Type(t.ValueType),
 		}

@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	NullVal       Type = &NullType{}
+	AnyVal        Type = &AnyType{}
 	BoolVal       Type = &BoolType{}
 	Float32Val    Type = &Float32Type{}
 	Float64Val    Type = &Float64Type{}
@@ -44,23 +44,23 @@ type Type interface {
 	IsBasicType() bool
 }
 
-type NullType struct{}
+type AnyType struct{}
 
-func (v NullType) Json() string      { return "null" }
-func (v NullType) Go() string        { return "interface{}" }
-func (v NullType) Proto() string     { return "" }
-func (v NullType) Thrift() string    { return "" }
-func (v NullType) Value() string     { return "nil" }
-func (v NullType) IsBasicType() bool { return false }
+func (v AnyType) Json() string      { return StrNull }
+func (v AnyType) Go() string        { return StrAny }
+func (v AnyType) Proto() string     { return StrPbAny }
+func (v AnyType) Thrift() string    { return StrBinary }
+func (v AnyType) Value() string     { return StrNil }
+func (v AnyType) IsBasicType() bool { return false }
 
 type BoolType struct {
 	V bool
 }
 
-func (v BoolType) Json() string      { return "bool" }
-func (v BoolType) Go() string        { return "bool" }
-func (v BoolType) Proto() string     { return "bool" }
-func (v BoolType) Thrift() string    { return "bool" }
+func (v BoolType) Json() string      { return StrBool }
+func (v BoolType) Go() string        { return StrBool }
+func (v BoolType) Proto() string     { return StrBool }
+func (v BoolType) Thrift() string    { return StrBool }
 func (v BoolType) Value() string     { return strconv.FormatBool(v.V) }
 func (v BoolType) IsBasicType() bool { return true }
 
@@ -68,10 +68,10 @@ type Float32Type struct {
 	V float32
 }
 
-func (v Float32Type) Json() string      { return "number" }
-func (v Float32Type) Go() string        { return "float32" }
-func (v Float32Type) Proto() string     { return "float" }
-func (v Float32Type) Thrift() string    { return "double" }
+func (v Float32Type) Json() string      { return StrNumber }
+func (v Float32Type) Go() string        { return StrFloat32 }
+func (v Float32Type) Proto() string     { return StrFloat }
+func (v Float32Type) Thrift() string    { return StrDouble }
 func (v Float32Type) Value() string     { return strconv.FormatFloat(float64(v.V), 'f', -1, 32) }
 func (v Float32Type) IsBasicType() bool { return true }
 
@@ -79,10 +79,10 @@ type Float64Type struct {
 	V float64
 }
 
-func (v Float64Type) Json() string      { return "number" }
-func (v Float64Type) Go() string        { return "float64" }
-func (v Float64Type) Proto() string     { return "double" }
-func (v Float64Type) Thrift() string    { return "double" }
+func (v Float64Type) Json() string      { return StrNumber }
+func (v Float64Type) Go() string        { return StrFloat64 }
+func (v Float64Type) Proto() string     { return StrDouble }
+func (v Float64Type) Thrift() string    { return StrDouble }
 func (v Float64Type) Value() string     { return strconv.FormatFloat(v.V, 'f', -1, 64) }
 func (v Float64Type) IsBasicType() bool { return true }
 
@@ -90,10 +90,10 @@ type StringType struct {
 	V string
 }
 
-func (v StringType) Json() string      { return "string" }
-func (v StringType) Go() string        { return "string" }
-func (v StringType) Proto() string     { return "string" }
-func (v StringType) Thrift() string    { return "string" }
+func (v StringType) Json() string      { return StrString }
+func (v StringType) Go() string        { return StrString }
+func (v StringType) Proto() string     { return StrString }
+func (v StringType) Thrift() string    { return StrString }
 func (v StringType) Value() string     { return v.V }
 func (v StringType) IsBasicType() bool { return true }
 
@@ -103,18 +103,18 @@ type ArrayType struct {
 
 func (v ArrayType) Json() string      { return "[]" + v.ChildType.Json() }
 func (v ArrayType) Go() string        { return "[]" + v.ChildType.Go() }
-func (v ArrayType) Proto() string     { return "repeated " + v.ChildType.Proto() }
-func (v ArrayType) Thrift() string    { return "list<" + v.ChildType.Thrift() + ">" }
+func (v ArrayType) Proto() string     { return StrRepeated + " " + v.ChildType.Proto() }
+func (v ArrayType) Thrift() string    { return StrList + "<" + v.ChildType.Thrift() + ">" }
 func (v ArrayType) IsBasicType() bool { return false }
 
 type Int8Type struct {
 	V int8
 }
 
-func (v Int8Type) Json() string      { return "number" }
-func (v Int8Type) Go() string        { return "int8" }
-func (v Int8Type) Proto() string     { return "int32" }
-func (v Int8Type) Thrift() string    { return "byte" }
+func (v Int8Type) Json() string      { return StrNumber }
+func (v Int8Type) Go() string        { return StrInt8 }
+func (v Int8Type) Proto() string     { return StrInt32 }
+func (v Int8Type) Thrift() string    { return StrByte }
 func (v Int8Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
 func (v Int8Type) IsBasicType() bool { return true }
 
@@ -122,10 +122,10 @@ type Int16Type struct {
 	V int16
 }
 
-func (v Int16Type) Json() string      { return "number" }
-func (v Int16Type) Go() string        { return "int16" }
-func (v Int16Type) Proto() string     { return "int32" }
-func (v Int16Type) Thrift() string    { return "i16" }
+func (v Int16Type) Json() string      { return StrNumber }
+func (v Int16Type) Go() string        { return StrInt16 }
+func (v Int16Type) Proto() string     { return StrInt32 }
+func (v Int16Type) Thrift() string    { return StrI16 }
 func (v Int16Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
 func (v Int16Type) IsBasicType() bool { return true }
 
@@ -133,10 +133,10 @@ type Int32Type struct {
 	V int32
 }
 
-func (v Int32Type) Json() string      { return "number" }
-func (v Int32Type) Go() string        { return "int32" }
-func (v Int32Type) Proto() string     { return "int32" }
-func (v Int32Type) Thrift() string    { return "i32" }
+func (v Int32Type) Json() string      { return StrNumber }
+func (v Int32Type) Go() string        { return StrInt32 }
+func (v Int32Type) Proto() string     { return StrInt32 }
+func (v Int32Type) Thrift() string    { return StrI32 }
 func (v Int32Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
 func (v Int32Type) IsBasicType() bool { return true }
 
@@ -144,10 +144,10 @@ type Int64Type struct {
 	V int64
 }
 
-func (v Int64Type) Json() string      { return "number" }
-func (v Int64Type) Go() string        { return "int64" }
-func (v Int64Type) Proto() string     { return "int64" }
-func (v Int64Type) Thrift() string    { return "i64" }
+func (v Int64Type) Json() string      { return StrNumber }
+func (v Int64Type) Go() string        { return StrInt64 }
+func (v Int64Type) Proto() string     { return StrInt64 }
+func (v Int64Type) Thrift() string    { return StrI64 }
 func (v Int64Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
 func (v Int64Type) IsBasicType() bool { return true }
 
@@ -155,10 +155,10 @@ type Uint8Type struct {
 	V int8
 }
 
-func (v Uint8Type) Json() string      { return "number" }
-func (v Uint8Type) Go() string        { return "uint8" }
-func (v Uint8Type) Proto() string     { return "uint32" }
-func (v Uint8Type) Thrift() string    { return "byte" }
+func (v Uint8Type) Json() string      { return StrNumber }
+func (v Uint8Type) Go() string        { return StrUint8 }
+func (v Uint8Type) Proto() string     { return StrUint32 }
+func (v Uint8Type) Thrift() string    { return StrByte }
 func (v Uint8Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
 func (v Uint8Type) IsBasicType() bool { return true }
 
@@ -166,10 +166,10 @@ type Uint16Type struct {
 	V int16
 }
 
-func (v Uint16Type) Json() string      { return "number" }
-func (v Uint16Type) Go() string        { return "uint16" }
-func (v Uint16Type) Proto() string     { return "uint32" }
-func (v Uint16Type) Thrift() string    { return "i16" }
+func (v Uint16Type) Json() string      { return StrNumber }
+func (v Uint16Type) Go() string        { return StrUint16 }
+func (v Uint16Type) Proto() string     { return StrUint32 }
+func (v Uint16Type) Thrift() string    { return StrI16 }
 func (v Uint16Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
 func (v Uint16Type) IsBasicType() bool { return true }
 
@@ -177,10 +177,10 @@ type Uint32Type struct {
 	V int32
 }
 
-func (v Uint32Type) Json() string      { return "number" }
-func (v Uint32Type) Go() string        { return "uint32" }
-func (v Uint32Type) Proto() string     { return "uint32" }
-func (v Uint32Type) Thrift() string    { return "i32" }
+func (v Uint32Type) Json() string      { return StrNumber }
+func (v Uint32Type) Go() string        { return StrUint32 }
+func (v Uint32Type) Proto() string     { return StrUint32 }
+func (v Uint32Type) Thrift() string    { return StrI32 }
 func (v Uint32Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
 func (v Uint32Type) IsBasicType() bool { return true }
 
@@ -188,19 +188,19 @@ type Uint64Type struct {
 	V int64
 }
 
-func (v Uint64Type) Json() string      { return "number" }
-func (v Uint64Type) Go() string        { return "uint64" }
-func (v Uint64Type) Proto() string     { return "uint64" }
-func (v Uint64Type) Thrift() string    { return "i64" }
+func (v Uint64Type) Json() string      { return StrNumber }
+func (v Uint64Type) Go() string        { return StrUint64 }
+func (v Uint64Type) Proto() string     { return StrUint64 }
+func (v Uint64Type) Thrift() string    { return StrI64 }
 func (v Uint64Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
 func (v Uint64Type) IsBasicType() bool { return true }
 
 type BinaryType struct{}
 
-func (v BinaryType) Json() string      { return "string" }
-func (v BinaryType) Go() string        { return "[]byte" }
-func (v BinaryType) Proto() string     { return "bytes" }
-func (v BinaryType) Thrift() string    { return "binary" }
+func (v BinaryType) Json() string      { return StrString }
+func (v BinaryType) Go() string        { return "[]" + StrByte }
+func (v BinaryType) Proto() string     { return StrBytes }
+func (v BinaryType) Thrift() string    { return StrBinary }
 func (v BinaryType) IsBasicType() bool { return false }
 
 type MapType struct {
@@ -221,9 +221,9 @@ type SetType struct {
 }
 
 func (v SetType) Json() string      { return "{}" }
-func (v SetType) Go() string        { return fmt.Sprintf("map[%s]bool", v.Key.Go()) }
-func (v SetType) Proto() string     { return fmt.Sprintf("map<%s, bool>", v.Key.Proto()) }
-func (v SetType) Thrift() string    { return fmt.Sprintf("set<%s>", v.Key.Thrift()) }
+func (v SetType) Go() string        { return fmt.Sprintf("%s[%s]%s", StrMap, v.Key.Go(), StrBool) }
+func (v SetType) Proto() string     { return fmt.Sprintf("%s<%s, %s>", StrMap, v.Key.Proto(), StrBool) }
+func (v SetType) Thrift() string    { return fmt.Sprintf("%s<%s>", StrSet, v.Key.Thrift()) }
 func (v SetType) IsBasicType() bool { return false }
 
 type EnumType struct {

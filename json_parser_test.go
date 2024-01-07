@@ -50,7 +50,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, "invalid character 'a' looking for beginning of value")
+				assert.EqualError(t, err, "Read: unexpected value type: 0, error found in #0 byte of ...|a|..., bigger context ...|a|...")
 			},
 		},
 		{
@@ -70,7 +70,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "a",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"a,omitempty"`},
 						},
@@ -93,7 +93,7 @@ func TestJsonParser_Parse(t *testing.T) {
 			},
 			args: func(t *testing.T) args {
 				return args{
-					reader: bytes.NewReader([]byte(`{"a":1, "b":null}`)),
+					reader: bytes.NewReader([]byte(`{"a":1, "b":null, "c": 1.1}`)),
 				}
 			},
 			want1: []*Struct{
@@ -101,15 +101,21 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "a",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"a,omitempty"`},
 						},
 						{
 							Field: "b",
-							Type:  NullVal,
+							Type:  AnyVal,
 							Index: 2,
 							GoTag: []string{`json:"b,omitempty"`},
+						},
+						{
+							Field: "c",
+							Type:  Float64Val,
+							Index: 3,
+							GoTag: []string{`json:"c,omitempty"`},
 						},
 					},
 					Type: &StructLikeType{
@@ -167,7 +173,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
@@ -187,13 +193,13 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
 						{
 							Field: "c",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 2,
 							GoTag: []string{`json:"c,omitempty"`},
 						},
@@ -257,7 +263,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "ggg",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"ggg,omitempty"`},
 						},
@@ -371,7 +377,8 @@ func TestJsonParser_Parse(t *testing.T) {
 	"ggg": [[{
 		"ggg": 1
 	}]],
-	"hh": []
+	"hh": [],
+	"jj": [[]]
 }]`)),
 				}
 			},
@@ -384,7 +391,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
@@ -404,13 +411,13 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "b",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"b,omitempty"`},
 						},
 						{
 							Field: "c",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 2,
 							GoTag: []string{`json:"c,omitempty"`},
 						},
@@ -474,7 +481,7 @@ func TestJsonParser_Parse(t *testing.T) {
 					Members: []*Member{
 						{
 							Field: "ggg",
-							Type:  Float64Val,
+							Type:  Int64Val,
 							Index: 1,
 							GoTag: []string{`json:"ggg,omitempty"`},
 						},
@@ -547,6 +554,24 @@ func TestJsonParser_Parse(t *testing.T) {
 							},
 							Index: 7,
 							GoTag: []string{`json:"ggg,omitempty"`},
+						},
+						{
+							Field: "hh",
+							Type: &ArrayType{
+								ChildType: AnyVal,
+							},
+							Index: 8,
+							GoTag: []string{`json:"hh,omitempty"`},
+						},
+						{
+							Field: "jj",
+							Type: &ArrayType{
+								ChildType: &ArrayType{
+									ChildType: AnyVal,
+								},
+							},
+							Index: 9,
+							GoTag: []string{`json:"jj,omitempty"`},
 						},
 					},
 				},

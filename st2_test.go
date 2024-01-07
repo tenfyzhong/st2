@@ -101,7 +101,7 @@ func TestConvert(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, `invalid character 'a' looking for beginning of value`)
+				assert.EqualError(t, err, `Read: unexpected value type: 0, error found in #0 byte of ...|a|..., bigger context ...|a|...`)
 			},
 		},
 		{
@@ -137,7 +137,8 @@ func TestConvert(t *testing.T) {
             "hello": true
         }
     },
-    "gg": []
+    "gg": [],
+	"h": null
 }]
 `)),
 				}
@@ -145,13 +146,13 @@ func TestConvert(t *testing.T) {
 				return a
 			},
 			wantData: []byte(`type A struct {
-	B float64 ` + "`json:\"b,omitempty\"`" + `
+	B int64 ` + "`json:\"b,omitempty\"`" + `
 	C string ` + "`json:\"c,omitempty\"`" + `
 }
 
 type D struct {
-	B float64 ` + "`json:\"b,omitempty\"`" + `
-	C float64 ` + "`json:\"c,omitempty\"`" + `
+	B int64 ` + "`json:\"b,omitempty\"`" + `
+	C int64 ` + "`json:\"c,omitempty\"`" + `
 }
 
 type E struct {
@@ -174,6 +175,8 @@ type Root struct {
 	D []*D ` + "`json:\"d,omitempty\"`" + `
 	E *E ` + "`json:\"e,omitempty\"`" + `
 	F *F ` + "`json:\"f,omitempty\"`" + `
+	Gg []any ` + "`json:\"gg,omitempty\"`" + `
+	H any ` + "`json:\"h,omitempty\"`" + `
 }
 
 `),
@@ -212,7 +215,8 @@ type Root struct {
             "hello": true
         }
     },
-    "gg": []
+    "gg": [],
+	"h": null
 }]
 `)),
 				}
@@ -220,13 +224,13 @@ type Root struct {
 				return a
 			},
 			wantData: []byte(`message A {
-    double b = 1; 
+    int64 b = 1; 
     string c = 2; 
 }
 
 message D {
-    double b = 1; 
-    double c = 2; 
+    int64 b = 1; 
+    int64 c = 2; 
 }
 
 message E {
@@ -249,6 +253,8 @@ message Root {
     repeated D d = 4; 
     E e = 5; 
     F f = 6; 
+    repeated google.protobuf.Any gg = 7; 
+    google.protobuf.Any h = 8; 
 }
 
 `),
@@ -287,7 +293,8 @@ message Root {
             "hello": true
         }
     },
-    "gg": []
+    "gg": [],
+	"h": null
 }]
 `)),
 				}
@@ -295,13 +302,13 @@ message Root {
 				return a
 			},
 			wantData: []byte(`struct A {
-    1: double b, 
+    1: i64 b, 
     2: string c, 
 }
 
 struct D {
-    1: double b, 
-    2: double c, 
+    1: i64 b, 
+    2: i64 c, 
 }
 
 struct E {
@@ -324,6 +331,8 @@ struct Root {
     4: list<D> d, 
     5: E e, 
     6: F f, 
+    7: list<binary> gg, 
+    8: binary h, 
 }
 
 `),
@@ -417,7 +426,7 @@ type Ccc struct {
 
 type ErrorStatus struct {
 	Message string
-	Details []*protobuf.Any
+	Details []any
 }
 
 type SampleMessage struct {
@@ -512,7 +521,7 @@ struct Ccc {
 
 struct ErrorStatus {
     1: string message, 
-    2: list<google.protobuf.Any> details, 
+    2: list<binary> details, 
 }
 
 struct SampleMessage {

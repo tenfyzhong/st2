@@ -209,9 +209,7 @@ message ErrorStatus {
 						{
 							Field: "details",
 							Type: &ArrayType{
-								ChildType: &StructLikeType{
-									Name: "google.protobuf.Any",
-								},
+								ChildType: AnyVal,
 							},
 							Index: 2,
 						},
