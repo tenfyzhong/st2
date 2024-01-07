@@ -209,24 +209,24 @@ func (p GoParser) parseComment(doc *ast.CommentGroup, comment *ast.CommentGroup)
 
 func (p GoParser) isBasicType(str string) bool {
 	basic := []string{
-		"int",
-		"int8",
-		"int16",
-		"int32",
-		"int64",
-		"uint8",
-		"uint16",
-		"uint32",
-		"uint64",
-		"float32",
-		"float64",
-		"bool",
-		"string",
-		"complex64",
-		"complex128",
-		"byte",
-		"rune",
-		"uintptr"}
+		StrInt,
+		StrInt8,
+		StrInt16,
+		StrInt32,
+		StrInt64,
+		StrUint8,
+		StrUint16,
+		StrUint32,
+		StrUint64,
+		StrFloat32,
+		StrFloat64,
+		StrBool,
+		StrString,
+		StrComplex64,
+		StrComplex128,
+		StrByte,
+		StrRune,
+		StrUintptr}
 	for _, name := range basic {
 		if name == str {
 			return true
@@ -262,43 +262,45 @@ func (p GoParser) type2Type(t ast.Expr) Type {
 
 func (p GoParser) nameType(name string) Type {
 	switch name {
-	case "int":
+	case StrInt:
 		return Int64Val
-	case "int8":
+	case StrInt8:
 		return Int8Val
-	case "int16":
+	case StrInt16:
 		return Int16Val
-	case "int32":
+	case StrInt32:
 		return Int32Val
-	case "int64":
+	case StrInt64:
 		return Int64Val
-	case "uint8":
-		return Uint8Val
-	case "uint16":
-		return Uint16Val
-	case "uint32":
-		return Uint32Val
-	case "uint64":
+	case StrUint:
 		return Uint64Val
-	case "float32":
-		return Float32Val
-	case "float64":
-		return Float64Val
-	case "bool":
-		return BoolVal
-	case "string":
-		return StringVal
-	case "complex64":
-		// TODO
-	case "complex128":
-		// TODO
-	case "byte":
+	case StrUint8:
 		return Uint8Val
-	case "rune":
+	case StrUint16:
+		return Uint16Val
+	case StrUint32:
+		return Uint32Val
+	case StrUint64:
+		return Uint64Val
+	case StrFloat32:
+		return Float32Val
+	case StrFloat64:
+		return Float64Val
+	case StrBool:
+		return BoolVal
+	case StrString:
+		return StringVal
+	case StrComplex64:
 		// TODO
-	case "uintptr":
+	case StrComplex128:
 		// TODO
-	case "any":
+	case StrByte:
+		return Uint8Val
+	case StrRune:
+		// TODO
+	case StrUintptr:
+		// TODO
+	case StrAny:
 		return AnyVal
 	}
 	return &StructLikeType{
