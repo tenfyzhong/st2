@@ -1,10 +1,11 @@
 package st2
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"sort"
+
+	json "github.com/json-iterator/go"
 )
 
 type JsonParser struct {

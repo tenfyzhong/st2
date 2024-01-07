@@ -101,7 +101,7 @@ func TestConvert(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, `invalid character 'a' looking for beginning of value`)
+				assert.EqualError(t, err, `Read: unexpected value type: 0, error found in #0 byte of ...|a|..., bigger context ...|a|...`)
 			},
 		},
 		{
