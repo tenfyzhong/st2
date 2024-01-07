@@ -183,10 +183,6 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 		} else {
 			node.Type = Float64Val
 		}
-	// case int64:
-	// 	node.Type = Int64Val
-	// case float64:
-	// 	node.Type = Float64Val
 	case string:
 		node.Type = StringVal
 	case map[string]interface{}:
@@ -201,6 +197,11 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 		node.Type = ArrayVal
 		if len(c) > 0 {
 			child := p.parseNode("", c[0])
+			node.Children = append(node.Children, child)
+		} else {
+			child := &Node{
+				Type: NullVal,
+			}
 			node.Children = append(node.Children, child)
 		}
 	}

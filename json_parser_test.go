@@ -377,7 +377,8 @@ func TestJsonParser_Parse(t *testing.T) {
 	"ggg": [[{
 		"ggg": 1
 	}]],
-	"hh": []
+	"hh": [],
+	"jj": [[]]
 }]`)),
 				}
 			},
@@ -553,6 +554,24 @@ func TestJsonParser_Parse(t *testing.T) {
 							},
 							Index: 7,
 							GoTag: []string{`json:"ggg,omitempty"`},
+						},
+						{
+							Field: "hh",
+							Type: &ArrayType{
+								ChildType: NullVal,
+							},
+							Index: 8,
+							GoTag: []string{`json:"hh,omitempty"`},
+						},
+						{
+							Field: "jj",
+							Type: &ArrayType{
+								ChildType: &ArrayType{
+									ChildType: NullVal,
+								},
+							},
+							Index: 9,
+							GoTag: []string{`json:"jj,omitempty"`},
 						},
 					},
 				},

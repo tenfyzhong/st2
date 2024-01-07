@@ -175,6 +175,7 @@ type Root struct {
 	D []*D ` + "`json:\"d,omitempty\"`" + `
 	E *E ` + "`json:\"e,omitempty\"`" + `
 	F *F ` + "`json:\"f,omitempty\"`" + `
+	Gg []any ` + "`json:\"gg,omitempty\"`" + `
 	H any ` + "`json:\"h,omitempty\"`" + `
 }
 
@@ -252,6 +253,7 @@ message Root {
     repeated D d = 4; 
     E e = 5; 
     F f = 6; 
+    repeated google.protobuf.Any gg = 7; 
     google.protobuf.Any h = 8; 
 }
 
@@ -329,6 +331,7 @@ struct Root {
     4: list<D> d, 
     5: E e, 
     6: F f, 
+    7: list<binary> gg, 
     8: binary h, 
 }
 
