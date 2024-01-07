@@ -47,9 +47,9 @@ type Type interface {
 type NullType struct{}
 
 func (v NullType) Json() string      { return "null" }
-func (v NullType) Go() string        { return "interface{}" }
-func (v NullType) Proto() string     { return "" }
-func (v NullType) Thrift() string    { return "" }
+func (v NullType) Go() string        { return "any" }
+func (v NullType) Proto() string     { return "google.protobuf.Any" }
+func (v NullType) Thrift() string    { return "binary" }
 func (v NullType) Value() string     { return "nil" }
 func (v NullType) IsBasicType() bool { return false }
 
