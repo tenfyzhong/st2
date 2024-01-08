@@ -204,8 +204,8 @@ func main() {
 		Copyright: "Copyright (c) 2022 tenfy",
 		ExitErrHandler: func(ctx *cli.Context, err error) {
 			if err != nil {
-				cli.ErrWriter.Write([]byte(err.Error()))
-				// cli.ShowAppHelp(ctx)
+				cli.ErrWriter.Write([]byte(strings.TrimSpace(err.Error())))
+				os.Exit(-1)
 			}
 		},
 		UseShortOptionHandling: true,
