@@ -129,7 +129,7 @@ func TestCamel(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tArgs := tt.args(t)
 
-			got1 := Camel(tArgs.s)
+			got1 := camel(tArgs.s)
 
 			if !reflect.DeepEqual(got1, tt.want1) {
 				t.Errorf("Camel got1 = %v, want1: %v", got1, tt.want1)
@@ -199,7 +199,7 @@ func TestSnake(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			tArgs := tt.args(t)
 
-			got1 := Snake(tArgs.s)
+			got1 := snake(tArgs.s)
 
 			if !reflect.DeepEqual(got1, tt.want1) {
 				t.Errorf("Snake got1 = %v, want1: %v", got1, tt.want1)

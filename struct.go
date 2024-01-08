@@ -4,11 +4,14 @@ import (
 	"strings"
 )
 
+// Comment record a [Member] or [Struct] comments
 type Comment struct {
+	InlineComment string
+
 	BeginningComments []string
-	InlineComment     string
 }
 
+// Member is fields of [Struct]
 type Member struct {
 	Field string
 	Type
@@ -18,10 +21,12 @@ type Member struct {
 	GoTag    []string
 }
 
+// FieldCamel get a camel type field name
 func (m Member) FieldCamel() string {
-	return Camel(m.Field)
+	return camel(m.Field)
 }
 
+// Go get the golang file type string
 func (m Member) Go() string {
 	name := m.Type.Go()
 	if m.Optional && m.Type.IsBasicType() {
@@ -30,6 +35,7 @@ func (m Member) Go() string {
 	return name
 }
 
+// GoTagString get the go field tag string
 func (m Member) GoTagString() string {
 	if len(m.GoTag) == 0 {
 		return ""
@@ -37,6 +43,7 @@ func (m Member) GoTagString() string {
 	return "`" + strings.Join(m.GoTag, " ") + "`"
 }
 
+// Struct is a parsed result which contains the source struct data
 type Struct struct {
 	Type    Type
 	Members []*Member

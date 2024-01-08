@@ -2,6 +2,7 @@ package st2
 
 import "github.com/tenfyzhong/st2/tmpl"
 
+// CreateParser Create a [Parse] belongs to the context
 func CreateParser(ctx Context) Parse {
 	switch ctx.Src {
 	case LangGo:
@@ -18,6 +19,7 @@ func CreateParser(ctx Context) Parse {
 	return nil
 }
 
+// CreateTmpl Get the template data belongs to the context
 func CreateTmpl(ctx Context) string {
 	switch ctx.Dst {
 	case LangGo:

@@ -13,6 +13,7 @@ var (
 	jsonapi = jsoniter.Config{UseNumber: true}.Froze()
 )
 
+// JsonParser is a Parser to parse json source
 type JsonParser struct {
 	ctx Context
 
@@ -21,6 +22,7 @@ type JsonParser struct {
 	structs   []*Struct
 }
 
+// NewJsonParser create [JsonParser]
 func NewJsonParser(ctx Context) *JsonParser {
 	return &JsonParser{
 		fingerMap: make(map[string]*Struct),
@@ -29,6 +31,7 @@ func NewJsonParser(ctx Context) *JsonParser {
 	}
 }
 
+// Parse method parse json source
 func (p *JsonParser) Parse(reader io.Reader) ([]*Struct, error) {
 	data, err := io.ReadAll(reader)
 	if err != nil {
@@ -76,7 +79,7 @@ func (p *JsonParser) genUniqName(seed string) string {
 	return p.genUniqName(seed + "a")
 }
 
-func (p *JsonParser) parseStructs(root *Node) *Member {
+func (p *JsonParser) parseStructs(root *jsonNode) *Member {
 	if root == nil {
 		return nil
 	}
@@ -165,8 +168,8 @@ func (p *JsonParser) parseStructs(root *Node) *Member {
 	return member
 }
 
-func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
-	node := &Node{
+func (p *JsonParser) parseNode(tag string, v interface{}) *jsonNode {
+	node := &jsonNode{
 		Field: tag,
 	}
 	if v == nil {
@@ -187,7 +190,7 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 		node.Type = StringVal
 	case map[string]interface{}:
 		node.Type = StructLikeVal
-		node.Children = []*Node{}
+		node.Children = []*jsonNode{}
 		for k, v := range c {
 			child := p.parseNode(k, v)
 			node.Children = append(node.Children, child)
@@ -199,7 +202,7 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *Node {
 			child := p.parseNode("", c[0])
 			node.Children = append(node.Children, child)
 		} else {
-			child := &Node{
+			child := &jsonNode{
 				Type: AnyVal,
 			}
 			node.Children = append(node.Children, child)

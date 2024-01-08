@@ -7,16 +7,19 @@ import (
 	"strings"
 )
 
+// CsvParser is a Parser to parse `.csv` source.
 type CsvParser struct {
 	ctx Context
 }
 
+// NewCsvParser create [CsvParser]
 func NewCsvParser(ctx Context) *CsvParser {
 	return &CsvParser{
 		ctx: ctx,
 	}
 }
 
+// Parse method parse csv source
 func (p CsvParser) Parse(reader io.Reader) ([]*Struct, error) {
 	bufioReader := bufio.NewReader(reader)
 	str, err := bufioReader.ReadString('\n')
@@ -28,7 +31,7 @@ func (p CsvParser) Parse(reader io.Reader) ([]*Struct, error) {
 	if rootName == "" {
 		rootName = RootDefault
 	}
-	rootName = Camel(rootName)
+	rootName = camel(rootName)
 
 	st := &Struct{
 		Type: &StructLikeType{

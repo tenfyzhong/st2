@@ -6,6 +6,7 @@ import (
 	"text/template"
 )
 
+// Convert is a wrap function parse from reader and write the output to writer
 func Convert(ctx Context, reader io.Reader, writer io.Writer) error {
 	if reader == nil {
 		return errors.New("reader is nil")

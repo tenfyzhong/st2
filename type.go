@@ -6,12 +6,14 @@ import (
 	"strings"
 )
 
+// StructLikeSource which type of [StructLikeType]
 type StructLikeSource int
 
+// const values of [StructLikeSource]
 const (
-	SLSUnknown StructLikeSource = 0
-	SLSStruct  StructLikeSource = 1
-	SLSUnion   StructLikeSource = 2
+	SLSUnknown StructLikeSource = 0 // Unknown type
+	SLSStruct  StructLikeSource = 1 // Struct type
+	SLSUnion   StructLikeSource = 2 // Union type
 )
 
 var (
@@ -44,6 +46,7 @@ type Type interface {
 	IsBasicType() bool
 }
 
+// AnyType cover json null value, go any value, proto any value
 type AnyType struct{}
 
 func (v AnyType) Json() string      { return StrNull }

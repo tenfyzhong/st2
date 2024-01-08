@@ -9,16 +9,19 @@ import (
 	"strings"
 )
 
+// GoParser is a Parser to parse golang source.
 type GoParser struct {
 	ctx Context
 }
 
+// NewGoParser create [GoParser]
 func NewGoParser(ctx Context) *GoParser {
 	return &GoParser{
 		ctx: ctx,
 	}
 }
 
+// Parse method parse golang source
 func (p GoParser) Parse(reader io.Reader) ([]*Struct, error) {
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, "", reader, parser.ParseComments)
@@ -84,7 +87,7 @@ func (p GoParser) processType(decl *ast.GenDecl) *Struct {
 
 			t := p.type2Type(field.Type)
 			member := &Member{
-				Field:    Snake(fieldName),
+				Field:    snake(fieldName),
 				Type:     t,
 				Index:    i + 1,
 				Optional: p.isOptional(field.Type),

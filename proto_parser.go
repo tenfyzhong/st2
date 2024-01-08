@@ -8,16 +8,19 @@ import (
 	"github.com/yoheimuta/go-protoparser/v4/parser"
 )
 
+// ProtoParser is a Parser to parse protobuf source
 type ProtoParser struct {
 	ctx Context
 }
 
+// NewProtoParser create [ProtoParser]
 func NewProtoParser(ctx Context) *ProtoParser {
 	return &ProtoParser{
 		ctx: ctx,
 	}
 }
 
+// Parse method parse protobuf source
 func (p ProtoParser) Parse(reader io.Reader) ([]*Struct, error) {
 	got, err := protoparser.Parse(reader)
 	if err != nil {
@@ -26,7 +29,7 @@ func (p ProtoParser) Parse(reader io.Reader) ([]*Struct, error) {
 
 	res := make([]*Struct, 0, len(got.ProtoBody))
 	for _, pb := range got.ProtoBody {
-		v := NewProtoVisitor(p.ctx)
+		v := newProtoVisitor(p.ctx)
 		pb.Accept(v)
 		if v.Struct != nil {
 			res = append(res, v.Struct)
@@ -35,25 +38,25 @@ func (p ProtoParser) Parse(reader io.Reader) ([]*Struct, error) {
 	return res, nil
 }
 
-type ProtoVisitor struct {
+type protoVisitor struct {
 	Struct *Struct
 	ctx    Context
 }
 
-func NewProtoVisitor(ctx Context) *ProtoVisitor {
-	return &ProtoVisitor{
+func newProtoVisitor(ctx Context) *protoVisitor {
+	return &protoVisitor{
 		ctx: ctx,
 	}
 }
 
-func (v *ProtoVisitor) VisitComment(c *parser.Comment) {
+func (v *protoVisitor) VisitComment(c *parser.Comment) {
 }
 
-func (v *ProtoVisitor) VisitEmptyStatement(s *parser.EmptyStatement) bool {
+func (v *protoVisitor) VisitEmptyStatement(s *parser.EmptyStatement) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitEnum(e *parser.Enum) bool {
+func (v *protoVisitor) VisitEnum(e *parser.Enum) bool {
 	v.Struct = &Struct{
 		Type: &EnumType{
 			Name: e.EnumName,
@@ -63,7 +66,7 @@ func (v *ProtoVisitor) VisitEnum(e *parser.Enum) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitEnumField(f *parser.EnumField) bool {
+func (v *protoVisitor) VisitEnumField(f *parser.EnumField) bool {
 	number, _ := strconv.ParseInt(f.Number, 10, 32)
 	v.Struct.Members = append(v.Struct.Members, &Member{
 		Field:   f.Ident,
@@ -74,15 +77,15 @@ func (v *ProtoVisitor) VisitEnumField(f *parser.EnumField) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitExtend(e *parser.Extend) bool {
+func (v *protoVisitor) VisitExtend(e *parser.Extend) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitExtensions(e *parser.Extensions) bool {
+func (v *protoVisitor) VisitExtensions(e *parser.Extensions) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitField(f *parser.Field) bool {
+func (v *protoVisitor) VisitField(f *parser.Field) bool {
 	fieldNumber, _ := strconv.ParseInt(f.FieldNumber, 10, 64)
 	v.Struct.Members = append(v.Struct.Members, &Member{
 		Field: f.FieldName,
@@ -101,16 +104,16 @@ func (v *ProtoVisitor) VisitField(f *parser.Field) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitGroupField(g *parser.GroupField) bool {
+func (v *protoVisitor) VisitGroupField(g *parser.GroupField) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitImport(i *parser.Import) bool {
+func (v *protoVisitor) VisitImport(i *parser.Import) bool {
 	// fmt.Printf("%+v\n", i)
 	return true
 }
 
-func (v *ProtoVisitor) VisitMapField(f *parser.MapField) bool {
+func (v *protoVisitor) VisitMapField(f *parser.MapField) bool {
 	fieldNumber, _ := strconv.ParseInt(f.FieldNumber, 10, 64)
 	v.Struct.Members = append(v.Struct.Members, &Member{
 		Field: f.MapName,
@@ -124,7 +127,7 @@ func (v *ProtoVisitor) VisitMapField(f *parser.MapField) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitMessage(m *parser.Message) bool {
+func (v *protoVisitor) VisitMessage(m *parser.Message) bool {
 	v.Struct = &Struct{
 		Type: &StructLikeType{
 			Name:   m.MessageName,
@@ -135,46 +138,46 @@ func (v *ProtoVisitor) VisitMessage(m *parser.Message) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitOneof(o *parser.Oneof) bool {
+func (v *protoVisitor) VisitOneof(o *parser.Oneof) bool {
 	return true
 }
 
-func (v *ProtoVisitor) VisitOneofField(f *parser.OneofField) bool {
+func (v *protoVisitor) VisitOneofField(f *parser.OneofField) bool {
 	// fmt.Printf("%+v\n", f)
 	return true
 }
 
-func (v *ProtoVisitor) VisitOption(o *parser.Option) bool {
+func (v *protoVisitor) VisitOption(o *parser.Option) bool {
 	// fmt.Printf("%+v\n", o)
 	return true
 }
 
-func (v *ProtoVisitor) VisitPackage(p *parser.Package) bool {
+func (v *protoVisitor) VisitPackage(p *parser.Package) bool {
 	// fmt.Printf("%+v\n", p)
 	return true
 }
 
-func (v *ProtoVisitor) VisitReserved(r *parser.Reserved) bool {
+func (v *protoVisitor) VisitReserved(r *parser.Reserved) bool {
 	// fmt.Printf("%+v\n", r)
 	return true
 }
 
-func (v *ProtoVisitor) VisitRPC(rpc *parser.RPC) bool {
+func (v *protoVisitor) VisitRPC(rpc *parser.RPC) bool {
 	// fmt.Printf("%+v\n", rpc)
 	return true
 }
 
-func (v *ProtoVisitor) VisitService(s *parser.Service) bool {
+func (v *protoVisitor) VisitService(s *parser.Service) bool {
 	// fmt.Printf("%+v\n", s)
 	return true
 }
 
-func (v *ProtoVisitor) VisitSyntax(s *parser.Syntax) bool {
+func (v *protoVisitor) VisitSyntax(s *parser.Syntax) bool {
 	// fmt.Printf("%+v\n", s)
 	return true
 }
 
-func (v *ProtoVisitor) type2Type(str string) Type {
+func (v *protoVisitor) type2Type(str string) Type {
 	switch str {
 	case StrDouble:
 		return Float64Val
@@ -210,7 +213,7 @@ func (v *ProtoVisitor) type2Type(str string) Type {
 	}
 }
 
-func (v *ProtoVisitor) comment2Comment(beginComments []*parser.Comment, inlineComment *parser.Comment) Comment {
+func (v *protoVisitor) comment2Comment(beginComments []*parser.Comment, inlineComment *parser.Comment) Comment {
 	comment := Comment{}
 	for _, c := range beginComments {
 		comment.BeginningComments = append(comment.BeginningComments, c.Raw)

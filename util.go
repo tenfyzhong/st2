@@ -47,7 +47,7 @@ var acronyms = map[string]bool{
 	"XSS":   true,
 }
 
-func Camel(s string) string {
+func camel(s string) string {
 	items := strings.Split(s, "_")
 	for i, item := range items {
 		if len(item) == 0 {
@@ -58,7 +58,7 @@ func Camel(s string) string {
 	return strings.Join(items, "")
 }
 
-func Snake(s string) string {
+func snake(s string) string {
 	return strcase.ToSnake(s)
 }
 

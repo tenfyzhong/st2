@@ -3,23 +3,25 @@ package st2
 import (
 	"errors"
 	"io"
-	"io/ioutil"
 
 	"github.com/cloudwego/thriftgo/parser"
 )
 
+// ThriftParser is a Parser to parse thrift source
 type ThriftParser struct {
 	ctx Context
 }
 
+// NewThriftParser create [ThriftParser]
 func NewThriftParser(ctx Context) *ThriftParser {
 	return &ThriftParser{
 		ctx: ctx,
 	}
 }
 
+// Parse method parse thrift source
 func (p ThriftParser) Parse(reader io.Reader) ([]*Struct, error) {
-	data, err := ioutil.ReadAll(reader)
+	data, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, errors.New("read data failed")
 	}
