@@ -8,8 +8,16 @@
 `st2` provide a terminal command line tool `st2`, which can be used to generate go/protobuf/thrift code from json/protobuf/thrift/go/csv code.
 
 ### Install
+####  Use home brew
+```bash
+brew tap tenfyzhong/tap
+brew install st2
+```
+
+#### Download from release
 You can download the release of `st2` from the [GitHub releases](https://github.com/tenfyzhong/st2/releases).  
-Or you can build it from source code.
+
+#### build from source
 ```bash
 go install github.com/tenfyzhong/st2/cmd/st2@latest
 ```
