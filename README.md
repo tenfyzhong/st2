@@ -1,5 +1,7 @@
 # st2
-[![test](https://github.com/tenfyzhong/st2/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/tenfyzhong/st2/actions/workflows/test.yml)
+[![go](https://github.com/tenfyzhong/st2/actions/workflows/build-test.yml/badge.svg?branch=main)](https://github.com/tenfyzhong/st2/actions/workflows/build-test.yml)
+[![codecov](https://codecov.io/gh/tenfyzhong/st2/graph/badge.svg?token=1LTM5DPX7S)](https://codecov.io/gh/tenfyzhong/st2)
+[![GitHub tag](https://img.shields.io/github/tag/tenfyzhong/st2.svg)](https://github.com/tenfyzhong/st2/tags)
 [![Go Reference](https://pkg.go.dev/badge/github.com/tenfyzhong/st2.svg)](https://pkg.go.dev/github.com/tenfyzhong/st2)
 
 `st2` provide a package to parse json/protobuf/thrift/go/csv code and generage go/protobuf/thrift code.
