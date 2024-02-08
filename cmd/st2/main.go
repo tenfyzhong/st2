@@ -126,14 +126,14 @@ func main() {
 				Aliases:  []string{"s"},
 				Category: categoryInput,
 				Required: false,
-				Usage:    fmt.Sprintf("The source data `type`, it will use the suffix of the input file if not set, available value: `%s`", arrayString(st2.SourceLangs)),
+				Usage:    fmt.Sprintf("The source data `type`, it will use the suffix of the input file if not set, available value: `%s`", arrayLangName(st2.SourceLangs)),
 			},
 			&cli.StringFlag{
 				Name:     flagDst,
 				Aliases:  []string{"d"},
 				Category: categoryOutput,
 				Required: false,
-				Usage:    fmt.Sprintf("The destination data `type`, it will use the suffix of the output file if not set, available value: `%s`", arrayString(st2.DestinationLangs)),
+				Usage:    fmt.Sprintf("The destination data `type`, it will use the suffix of the output file if not set, available value: `%s`", arrayLangName(st2.DestinationLangs)),
 			},
 			&cli.StringFlag{
 				Name:      flagInput,
@@ -193,22 +193,26 @@ func main() {
 	cmd.Run(context.Background(), os.Args)
 }
 
-func srcTypeFromName(name string) string {
-	for _, lang := range st2.SourceLangs {
-		if strings.HasSuffix(name, "."+lang) {
-			return lang
+func matchLangName(langs []st2.Lang, name string) string {
+	for _, lang := range langs {
+		if strings.HasSuffix(name, "."+lang.Lang) {
+			return lang.Lang
+		}
+		for _, alias := range lang.Aliases {
+			if strings.HasSuffix(name, "."+alias) {
+				return lang.Lang
+			}
 		}
 	}
 	return ""
 }
 
+func srcTypeFromName(name string) string {
+	return matchLangName(st2.SourceLangs, name)
+}
+
 func dstTypeFromName(name string) string {
-	for _, lang := range st2.DestinationLangs {
-		if strings.HasSuffix(name, "."+lang) {
-			return lang
-		}
-	}
-	return ""
+	return matchLangName(st2.DestinationLangs, name)
 }
 
 func getSrc(cmd *cli.Command) string {
@@ -227,7 +231,11 @@ func getDst(cmd *cli.Command) string {
 	return dstTypeFromName(cmd.String(flagOutput))
 }
 
-func arrayString(arr []string) string {
+func arrayLangName(langs []st2.Lang) string {
+	arr := make([]string, 0, len(langs))
+	for _, lang := range langs {
+		arr = append(arr, lang.Lang)
+	}
 	return "[" + strings.Join(arr, ",") + "]"
 }
 

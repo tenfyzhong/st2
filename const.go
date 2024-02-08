@@ -9,6 +9,7 @@ const (
 	LangThrift = "thrift"
 	LangCsv    = "csv"
 	LangYaml   = "yaml"
+	LangYml    = "yml"
 
 	RootDefault = "Root"
 )
@@ -56,9 +57,40 @@ const (
 )
 
 var (
-	SourceLangs      = []string{LangJson, LangYaml, LangProto, LangThrift, LangGo, LangCsv}
-	DestinationLangs = []string{LangGo, LangProto, LangThrift}
-	LangTmplMap      = map[string]string{
+	SourceLangs = []Lang{
+		{
+			Lang: LangJson,
+		},
+		{
+			Lang:    LangYaml,
+			Aliases: []string{LangYml},
+		},
+		{
+			Lang: LangProto,
+		},
+		{
+			Lang: LangThrift,
+		},
+		{
+			Lang: LangGo,
+		},
+		{
+			Lang: LangCsv,
+		},
+	}
+
+	DestinationLangs = []Lang{
+		{
+			Lang: LangGo,
+		},
+		{
+			Lang: LangProto,
+		},
+		{
+			Lang: LangThrift,
+		},
+	}
+	LangTmplMap = map[string]string{
 		LangGo:     tmpl.Go,
 		LangProto:  tmpl.Proto,
 		LangThrift: tmpl.Thrift,
