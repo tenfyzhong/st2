@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -26,12 +27,12 @@ const (
 	categoryOutput = "output"
 )
 
-func getReader(ctx *cli.Context) (io.ReadCloser, error) {
-	if ctx.Bool(flagReadClipboard) {
+func getReader(cmd *cli.Command) (io.ReadCloser, error) {
+	if cmd.Bool(flagReadClipboard) {
 		return NewClipboardReadCloser(), nil
 	}
 
-	readfile := ctx.String(flagInput)
+	readfile := cmd.String(flagInput)
 	if readfile == "" {
 		return os.Stdin, nil
 	}
@@ -42,12 +43,12 @@ func getReader(ctx *cli.Context) (io.ReadCloser, error) {
 	return file, nil
 }
 
-func getWriter(ctx *cli.Context) (io.WriteCloser, error) {
-	if ctx.Bool(flagWriteClipboard) {
+func getWriter(cmd *cli.Command) (io.WriteCloser, error) {
+	if cmd.Bool(flagWriteClipboard) {
 		return NewClipboardWriteCloser(), nil
 	}
 
-	writefile := ctx.String(flagOutput)
+	writefile := cmd.String(flagOutput)
 	if writefile == "" {
 		return os.Stdout, nil
 	}
@@ -58,12 +59,12 @@ func getWriter(ctx *cli.Context) (io.WriteCloser, error) {
 	return file, nil
 }
 
-func action(ctx *cli.Context) error {
-	src := getSrc(ctx)
+func action(ctx context.Context, cmd *cli.Command) error {
+	src := getSrc(cmd)
 	if src == "" {
 		return fmt.Errorf("flag: %s is required\n\n", flagSrc)
 	}
-	dst := getDst(ctx)
+	dst := getDst(cmd)
 	if dst == "" {
 		return fmt.Errorf("flag: %s is required\n\n", flagDst)
 	}
@@ -75,16 +76,16 @@ func action(ctx *cli.Context) error {
 	st2Ctx := st2.Context{
 		Src:  src,
 		Dst:  dst,
-		Root: ctx.String(flagRoot),
+		Root: cmd.String(flagRoot),
 	}
 
-	reader, err := getReader(ctx)
+	reader, err := getReader(cmd)
 	if err != nil {
 		return err
 	}
 	defer reader.Close()
 
-	writer, err := getWriter(ctx)
+	writer, err := getWriter(cmd)
 	if err != nil {
 		return err
 	}
@@ -111,33 +112,10 @@ func (f FlagList) Swap(i, j int) {
 	f[i], f[j] = f[j], f[i]
 }
 
-// func bashComplete(ctx *cli.Context) {
-// 	flags := FlagList{}
-// 	for _, flag := range ctx.App.Flags {
-// 		for _, name := range flag.Names() {
-// 			flags = append(flags, name)
-// 		}
-// 	}
-// 	sort.Sort(flags)
-// 	for _, flag := range flags {
-// 		if len(flag) == 1 {
-// 			fmt.Printf("-%s\n", flag)
-// 		} else {
-// 			fmt.Printf("--%s\n", flag)
-// 		}
-// 	}
-
-// 	fmt.Printf("%s\n", jsonType)
-// 	fmt.Printf("%s\n", goType)
-// 	fmt.Printf("%s\n", protoType)
-// 	fmt.Printf("%s\n", thriftType)
-// }
-
 func main() {
-	app := &cli.App{
+	cmd := &cli.Command{
 		Name:        "st2",
-		HelpName:    "",
-		Usage:       "convert between json, protobuf, thrift, go struct",
+		Usage:       "convert between json, yaml, protobuf, thrift, go struct",
 		UsageText:   "",
 		ArgsUsage:   "",
 		Version:     config.Version,
@@ -189,20 +167,18 @@ func main() {
 				Usage:    "Write output to clipboard",
 			},
 		},
-		EnableBashCompletion: true,
-		HideHelp:             false,
-		HideHelpCommand:      true,
-		HideVersion:          false,
+		EnableShellCompletion:      true,
+		ShellCompletionCommandName: "st2",
+		HideHelp:                   false,
+		HideHelpCommand:            true,
+		HideVersion:                false,
 		// BashComplete:         bashComplete,
 		Action: action,
-		Authors: []*cli.Author{
-			{
-				Name:  "tenfyzhong",
-				Email: "tenfy@tenfy.cn",
-			},
+		Authors: []any{
+			"tenfyzhong",
 		},
 		Copyright: "Copyright (c) 2022 tenfy",
-		ExitErrHandler: func(ctx *cli.Context, err error) {
+		ExitErrHandler: func(ctx context.Context, cmd *cli.Command, err error) {
 			if err != nil {
 				cli.ErrWriter.Write([]byte(strings.TrimSpace(err.Error())))
 				os.Exit(-1)
@@ -212,7 +188,7 @@ func main() {
 		Suggest:                true,
 	}
 
-	app.Run(os.Args)
+	cmd.Run(context.Background(), os.Args)
 }
 
 func srcTypeFromName(name string) string {
@@ -233,20 +209,20 @@ func dstTypeFromName(name string) string {
 	return ""
 }
 
-func getSrc(ctx *cli.Context) string {
-	src := ctx.String(flagSrc)
+func getSrc(cmd *cli.Command) string {
+	src := cmd.String(flagSrc)
 	if src != "" {
 		return src
 	}
-	return srcTypeFromName(ctx.String(flagInput))
+	return srcTypeFromName(cmd.String(flagInput))
 }
 
-func getDst(ctx *cli.Context) string {
-	dst := ctx.String(flagDst)
+func getDst(cmd *cli.Command) string {
+	dst := cmd.String(flagDst)
 	if dst != "" {
 		return dst
 	}
-	return dstTypeFromName(ctx.String(flagOutput))
+	return dstTypeFromName(cmd.String(flagOutput))
 }
 
 func arrayString(arr []string) string {

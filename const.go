@@ -56,7 +56,7 @@ const (
 )
 
 var (
-	SourceLangs      = []string{LangJson, LangProto, LangThrift, LangGo, LangCsv}
+	SourceLangs      = []string{LangJson, LangYaml, LangProto, LangThrift, LangGo, LangCsv}
 	DestinationLangs = []string{LangGo, LangProto, LangThrift}
 	LangTmplMap      = map[string]string{
 		LangGo:     tmpl.Go,

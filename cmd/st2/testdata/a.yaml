@@ -1,0 +1,19 @@
+- a:
+    b: 1
+    c: hello
+  b:
+    b: 2
+    c: world
+  c: ["123"]
+  d:
+    - b: 3
+      c: 4
+  e: 
+    aa: true
+    bb: false
+  f:
+    a:
+      hello: true
+  gg:
+    - null
+  h: null
