@@ -2,15 +2,14 @@ package st2
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gopkg.in/yaml.v3"
 )
 
-func TestJsonParser_Parse(t *testing.T) {
+func TestYamlParser_Parse(t *testing.T) {
 	type args struct {
 		reader io.Reader
 	}
@@ -28,7 +27,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "empty",
 			init: func(t *testing.T) *StructuredParser {
-				return NewJsonParser(Context{})
+				return NewYamlParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -38,31 +37,31 @@ func TestJsonParser_Parse(t *testing.T) {
 			want1:   nil,
 			wantErr: false,
 		},
-		{
-			name: "illegal json",
-			init: func(t *testing.T) *StructuredParser {
-				return NewJsonParser(Context{})
-			},
-			args: func(t *testing.T) args {
-				return args{
-					reader: bytes.NewReader([]byte("a")),
-				}
-			},
-			wantErr: true,
-			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, "Read: unexpected value type: 0, error found in #0 byte of ...|a|..., bigger context ...|a|...")
-			},
-		},
+		// {
+		// 	name: "illegal yaml",
+		// 	init: func(t *testing.T) *StructuredParser {
+		// 		return NewYamlParser(Context{})
+		// 	},
+		// 	args: func(t *testing.T) args {
+		// 		return args{
+		// 			reader: bytes.NewReader([]byte("a")),
+		// 		}
+		// 	},
+		// 	wantErr: true,
+		// 	inspectErr: func(err error, t *testing.T) {
+		// 		assert.EqualError(t, err, "Read: unexpected value type: 0, error found in #0 byte of ...|a|..., bigger context ...|a|...")
+		// 	},
+		// },
 		{
 			name: "simple struct",
 			init: func(t *testing.T) *StructuredParser {
-				return NewJsonParser(Context{
+				return NewYamlParser(Context{
 					Root: "helloWorld",
 				})
 			},
 			args: func(t *testing.T) args {
 				return args{
-					reader: bytes.NewReader([]byte(`{"a":1}`)),
+					reader: bytes.NewReader([]byte(`a: 1`)),
 				}
 			},
 			want1: []*Struct{
@@ -72,7 +71,7 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "a",
 							Type:  Int64Val,
 							Index: 1,
-							GoTag: []string{`json:"a,omitempty"`},
+							GoTag: []string{`yaml:"a"`},
 						},
 					},
 					Type: &StructLikeType{
@@ -87,7 +86,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "simple struct with null",
 			init: func(t *testing.T) *StructuredParser {
-				return NewJsonParser(Context{
+				return NewYamlParser(Context{
 					Root: "helloWorld",
 				})
 			},
@@ -103,19 +102,19 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "a",
 							Type:  Int64Val,
 							Index: 1,
-							GoTag: []string{`json:"a,omitempty"`},
+							GoTag: []string{`yaml:"a"`},
 						},
 						{
 							Field: "b",
 							Type:  AnyVal,
 							Index: 2,
-							GoTag: []string{`json:"b,omitempty"`},
+							GoTag: []string{`yaml:"b"`},
 						},
 						{
 							Field: "c",
 							Type:  Float64Val,
 							Index: 3,
-							GoTag: []string{`json:"c,omitempty"`},
+							GoTag: []string{`yaml:"c"`},
 						},
 					},
 					Type: &StructLikeType{
@@ -130,7 +129,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "complex struct",
 			init: func(t *testing.T) *StructuredParser {
-				return NewJsonParser(Context{})
+				return NewYamlParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -175,13 +174,13 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "b",
 							Type:  Int64Val,
 							Index: 1,
-							GoTag: []string{`json:"b,omitempty"`},
+							GoTag: []string{`yaml:"b"`},
 						},
 						{
 							Field: "c",
 							Type:  StringVal,
 							Index: 2,
-							GoTag: []string{`json:"c,omitempty"`},
+							GoTag: []string{`yaml:"c"`},
 						},
 					},
 				},
@@ -195,13 +194,13 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "b",
 							Type:  Int64Val,
 							Index: 1,
-							GoTag: []string{`json:"b,omitempty"`},
+							GoTag: []string{`yaml:"b"`},
 						},
 						{
 							Field: "c",
 							Type:  Int64Val,
 							Index: 2,
-							GoTag: []string{`json:"c,omitempty"`},
+							GoTag: []string{`yaml:"c"`},
 						},
 					},
 				},
@@ -215,13 +214,13 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "aa",
 							Type:  BoolVal,
 							Index: 1,
-							GoTag: []string{`json:"aa,omitempty"`},
+							GoTag: []string{`yaml:"aa"`},
 						},
 						{
 							Field: "bb",
 							Type:  BoolVal,
 							Index: 2,
-							GoTag: []string{`json:"bb,omitempty"`},
+							GoTag: []string{`yaml:"bb"`},
 						},
 					},
 				},
@@ -235,7 +234,7 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "hello",
 							Type:  BoolVal,
 							Index: 1,
-							GoTag: []string{`json:"hello,omitempty"`},
+							GoTag: []string{`yaml:"hello"`},
 						},
 					},
 				},
@@ -251,7 +250,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "A01",
 							},
 							Index: 1,
-							GoTag: []string{`json:"a,omitempty"`},
+							GoTag: []string{`yaml:"a"`},
 						},
 					},
 				},
@@ -265,7 +264,7 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "ggg",
 							Type:  Int64Val,
 							Index: 1,
-							GoTag: []string{`json:"ggg,omitempty"`},
+							GoTag: []string{`yaml:"ggg"`},
 						},
 					},
 				},
@@ -281,7 +280,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "A",
 							},
 							Index: 1,
-							GoTag: []string{`json:"a,omitempty"`},
+							GoTag: []string{`yaml:"a"`},
 						},
 						{
 							Field: "b",
@@ -289,7 +288,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "A",
 							},
 							Index: 2,
-							GoTag: []string{`json:"b,omitempty"`},
+							GoTag: []string{`yaml:"b"`},
 						},
 						{
 							Field: "cccc",
@@ -297,7 +296,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								ChildType: StringVal,
 							},
 							Index: 3,
-							GoTag: []string{`json:"cccc,omitempty"`},
+							GoTag: []string{`yaml:"cccc"`},
 						},
 						{
 							Field: "d",
@@ -307,7 +306,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								},
 							},
 							Index: 4,
-							GoTag: []string{`json:"d,omitempty"`},
+							GoTag: []string{`yaml:"d"`},
 						},
 						{
 							Field: "e",
@@ -315,7 +314,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "E",
 							},
 							Index: 5,
-							GoTag: []string{`json:"e,omitempty"`},
+							GoTag: []string{`yaml:"e"`},
 						},
 						{
 							Field: "f",
@@ -323,7 +322,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "F",
 							},
 							Index: 6,
-							GoTag: []string{`json:"f,omitempty"`},
+							GoTag: []string{`yaml:"f"`},
 						},
 						{
 							Field: "ggg",
@@ -335,7 +334,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								},
 							},
 							Index: 7,
-							GoTag: []string{`json:"ggg,omitempty"`},
+							GoTag: []string{`yaml:"ggg"`},
 						},
 					},
 				},
@@ -346,7 +345,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		{
 			name: "complex array struct",
 			init: func(t *testing.T) *StructuredParser {
-				return NewJsonParser(Context{})
+				return NewYamlParser(Context{})
 			},
 			args: func(t *testing.T) args {
 				return args{
@@ -393,13 +392,13 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "b",
 							Type:  Int64Val,
 							Index: 1,
-							GoTag: []string{`json:"b,omitempty"`},
+							GoTag: []string{`yaml:"b"`},
 						},
 						{
 							Field: "c",
 							Type:  StringVal,
 							Index: 2,
-							GoTag: []string{`json:"c,omitempty"`},
+							GoTag: []string{`yaml:"c"`},
 						},
 					},
 				},
@@ -413,13 +412,13 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "b",
 							Type:  Int64Val,
 							Index: 1,
-							GoTag: []string{`json:"b,omitempty"`},
+							GoTag: []string{`yaml:"b"`},
 						},
 						{
 							Field: "c",
 							Type:  Int64Val,
 							Index: 2,
-							GoTag: []string{`json:"c,omitempty"`},
+							GoTag: []string{`yaml:"c"`},
 						},
 					},
 				},
@@ -433,13 +432,13 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "aa",
 							Type:  BoolVal,
 							Index: 1,
-							GoTag: []string{`json:"aa,omitempty"`},
+							GoTag: []string{`yaml:"aa"`},
 						},
 						{
 							Field: "bb",
 							Type:  BoolVal,
 							Index: 2,
-							GoTag: []string{`json:"bb,omitempty"`},
+							GoTag: []string{`yaml:"bb"`},
 						},
 					},
 				},
@@ -453,7 +452,7 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "hello",
 							Type:  BoolVal,
 							Index: 1,
-							GoTag: []string{`json:"hello,omitempty"`},
+							GoTag: []string{`yaml:"hello"`},
 						},
 					},
 				},
@@ -469,7 +468,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "A01",
 							},
 							Index: 1,
-							GoTag: []string{`json:"a,omitempty"`},
+							GoTag: []string{`yaml:"a"`},
 						},
 					},
 				},
@@ -483,7 +482,7 @@ func TestJsonParser_Parse(t *testing.T) {
 							Field: "ggg",
 							Type:  Int64Val,
 							Index: 1,
-							GoTag: []string{`json:"ggg,omitempty"`},
+							GoTag: []string{`yaml:"ggg"`},
 						},
 					},
 				},
@@ -499,7 +498,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "A",
 							},
 							Index: 1,
-							GoTag: []string{`json:"a,omitempty"`},
+							GoTag: []string{`yaml:"a"`},
 						},
 						{
 							Field: "b",
@@ -507,7 +506,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "A",
 							},
 							Index: 2,
-							GoTag: []string{`json:"b,omitempty"`},
+							GoTag: []string{`yaml:"b"`},
 						},
 						{
 							Field: "cccc",
@@ -515,7 +514,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								ChildType: StringVal,
 							},
 							Index: 3,
-							GoTag: []string{`json:"cccc,omitempty"`},
+							GoTag: []string{`yaml:"cccc"`},
 						},
 						{
 							Field: "d",
@@ -525,7 +524,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								},
 							},
 							Index: 4,
-							GoTag: []string{`json:"d,omitempty"`},
+							GoTag: []string{`yaml:"d"`},
 						},
 						{
 							Field: "e",
@@ -533,7 +532,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "E",
 							},
 							Index: 5,
-							GoTag: []string{`json:"e,omitempty"`},
+							GoTag: []string{`yaml:"e"`},
 						},
 						{
 							Field: "f",
@@ -541,7 +540,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								Name: "F",
 							},
 							Index: 6,
-							GoTag: []string{`json:"f,omitempty"`},
+							GoTag: []string{`yaml:"f"`},
 						},
 						{
 							Field: "ggg",
@@ -553,7 +552,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								},
 							},
 							Index: 7,
-							GoTag: []string{`json:"ggg,omitempty"`},
+							GoTag: []string{`yaml:"ggg"`},
 						},
 						{
 							Field: "hh",
@@ -561,7 +560,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								ChildType: AnyVal,
 							},
 							Index: 8,
-							GoTag: []string{`json:"hh,omitempty"`},
+							GoTag: []string{`yaml:"hh"`},
 						},
 						{
 							Field: "jj",
@@ -571,7 +570,7 @@ func TestJsonParser_Parse(t *testing.T) {
 								},
 							},
 							Index: 9,
-							GoTag: []string{`json:"jj,omitempty"`},
+							GoTag: []string{`yaml:"jj"`},
 						},
 					},
 				},
@@ -593,13 +592,13 @@ func TestJsonParser_Parse(t *testing.T) {
 			}
 
 			if !reflect.DeepEqual(got1, tt.want1) {
-				got1json, _ := json.MarshalIndent(got1, "", "  ")
-				want1json, _ := json.MarshalIndent(tt.want1, "", "  ")
-				t.Errorf("JsonParser.Parse got1 = %v, want1: %v", string(got1json), string(want1json))
+				got1yaml, _ := yaml.Marshal(got1)
+				want1yaml, _ := yaml.Marshal(tt.want1)
+				t.Errorf("YamlParser.Parse got1 = %v, want1: %v", string(got1yaml), string(want1yaml))
 			}
 
 			if (err != nil) != tt.wantErr {
-				t.Fatalf("JsonParser.Parse error = %v, wantErr: %t", err, tt.wantErr)
+				t.Fatalf("YamlParser.Parse error = %v, wantErr: %t", err, tt.wantErr)
 			}
 
 			if tt.inspectErr != nil {

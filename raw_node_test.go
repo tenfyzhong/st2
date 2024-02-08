@@ -5,18 +5,18 @@ import (
 	"testing"
 )
 
-func TestJsonNode_Fingerprint(t *testing.T) {
+func TestRawNode_Fingerprint(t *testing.T) {
 	tests := []struct {
 		name    string
-		init    func(t *testing.T) *jsonNode
-		inspect func(r *jsonNode, t *testing.T) //inspects receiver after test run
+		init    func(t *testing.T) *rawNode
+		inspect func(r *rawNode, t *testing.T) //inspects receiver after test run
 
 		want1 string
 	}{
 		{
 			name: "null",
-			init: func(t *testing.T) *jsonNode {
-				return &jsonNode{
+			init: func(t *testing.T) *rawNode {
+				return &rawNode{
 					Field: "root",
 					Type:  AnyVal,
 				}
@@ -25,8 +25,8 @@ func TestJsonNode_Fingerprint(t *testing.T) {
 		},
 		{
 			name: "number",
-			init: func(t *testing.T) *jsonNode {
-				return &jsonNode{
+			init: func(t *testing.T) *rawNode {
+				return &rawNode{
 					Field: "number1",
 					Type:  Float64Val,
 				}
@@ -35,8 +35,8 @@ func TestJsonNode_Fingerprint(t *testing.T) {
 		},
 		{
 			name: "empty array",
-			init: func(t *testing.T) *jsonNode {
-				return &jsonNode{
+			init: func(t *testing.T) *rawNode {
+				return &rawNode{
 					Field: "arr",
 					Type:  ArrayVal,
 				}
@@ -45,11 +45,11 @@ func TestJsonNode_Fingerprint(t *testing.T) {
 		},
 		{
 			name: "string array",
-			init: func(t *testing.T) *jsonNode {
-				return &jsonNode{
+			init: func(t *testing.T) *rawNode {
+				return &rawNode{
 					Field: "arr",
 					Type:  ArrayVal,
-					Children: []*jsonNode{
+					Children: []*rawNode{
 						{
 							Field: "",
 							Type:  StringVal,
@@ -61,15 +61,15 @@ func TestJsonNode_Fingerprint(t *testing.T) {
 		},
 		{
 			name: "struct array",
-			init: func(t *testing.T) *jsonNode {
-				return &jsonNode{
+			init: func(t *testing.T) *rawNode {
+				return &rawNode{
 					Field: "arr",
 					Type:  ArrayVal,
-					Children: []*jsonNode{
+					Children: []*rawNode{
 						{
 							Field: "second",
 							Type:  StructLikeVal,
-							Children: []*jsonNode{
+							Children: []*rawNode{
 								{
 									Field: "third",
 									Type:  Float64Val,
@@ -83,15 +83,15 @@ func TestJsonNode_Fingerprint(t *testing.T) {
 		},
 		{
 			name: "struct",
-			init: func(t *testing.T) *jsonNode {
-				return &jsonNode{
+			init: func(t *testing.T) *rawNode {
+				return &rawNode{
 					Field: "st",
 					Type:  StructLikeVal,
-					Children: []*jsonNode{
+					Children: []*rawNode{
 						{
 							Field: "a1",
 							Type:  StructLikeVal,
-							Children: []*jsonNode{
+							Children: []*rawNode{
 								{
 									Field: "b1",
 									Type:  Float64Val,
@@ -101,7 +101,7 @@ func TestJsonNode_Fingerprint(t *testing.T) {
 						{
 							Field: "a2",
 							Type:  StructLikeVal,
-							Children: []*jsonNode{
+							Children: []*rawNode{
 								{
 									Field: "b2",
 									Type:  StringVal,

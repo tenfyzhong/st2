@@ -436,6 +436,77 @@ type SampleMessage struct {
 			wantErr: false,
 		},
 		{
+			name: "yaml to go",
+			args: func(t *testing.T) args {
+				a := args{
+					ctx: Context{
+						Src: "yaml",
+						Dst: "go",
+					},
+					buffer: bytes.NewBuffer(nil),
+					reader: bytes.NewReader([]byte(`
+- a:
+    b: 1
+    c: hello
+  b:
+    b: 2
+    c: world
+  c: ["123"]
+  d:
+    - b: 3
+      c: 4
+  e: 
+    aa: true
+    bb: false
+  f:
+    a:
+      hello: true
+  gg:
+    - null
+  h: null
+`)),
+				}
+				a.writer = a.buffer
+				return a
+			},
+			wantData: []byte(`type A struct {
+	B int64 ` + "`yaml:\"b\"`" + `
+	C string ` + "`yaml:\"c\"`" + `
+}
+
+type D struct {
+	B int64 ` + "`yaml:\"b\"`" + `
+	C int64 ` + "`yaml:\"c\"`" + `
+}
+
+type E struct {
+	Aa bool ` + "`yaml:\"aa\"`" + `
+	Bb bool ` + "`yaml:\"bb\"`" + `
+}
+
+type A01 struct {
+	Hello bool ` + "`yaml:\"hello\"`" + `
+}
+
+type F struct {
+	A *A01 ` + "`yaml:\"a\"`" + `
+}
+
+type Root struct {
+	A *A ` + "`yaml:\"a\"`" + `
+	B *A ` + "`yaml:\"b\"`" + `
+	C []string ` + "`yaml:\"c\"`" + `
+	D []*D ` + "`yaml:\"d\"`" + `
+	E *E ` + "`yaml:\"e\"`" + `
+	F *F ` + "`yaml:\"f\"`" + `
+	Gg []any ` + "`yaml:\"gg\"`" + `
+	H any ` + "`yaml:\"h\"`" + `
+}
+
+`),
+			wantErr: false,
+		},
+		{
 			name: "proto to thrift",
 			args: func(t *testing.T) args {
 				a := args{
@@ -960,7 +1031,7 @@ struct SampleMessage {
 
 			if !tt.wantErr {
 				actual := tArgs.buffer.Bytes()
-				assert.Equal(t, tt.wantData, actual, fmt.Sprintf("[%s] should equal to [%s]", string(tt.wantData), string(actual)))
+				assert.Equal(t, string(tt.wantData), string(actual), fmt.Sprintf("[%s]\nshould equal to \n[%s]", string(tt.wantData), string(actual)))
 			}
 		})
 	}
