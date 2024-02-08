@@ -9,6 +9,8 @@ func CreateParser(ctx Context) Parse {
 		return NewGoParser(ctx)
 	case LangJson:
 		return NewJsonParser(ctx)
+	case LangYaml:
+		return NewYamlParser(ctx)
 	case LangProto:
 		return NewProtoParser(ctx)
 	case LangThrift:
@@ -25,6 +27,7 @@ func CreateTmpl(ctx Context) string {
 	case LangGo:
 		return tmpl.Go
 	case LangJson:
+	case LangYaml:
 	case LangProto:
 		return tmpl.Proto
 	case LangThrift:

@@ -1,6 +1,8 @@
 package st2
 
-import jsoniter "github.com/json-iterator/go"
+import (
+	jsoniter "github.com/json-iterator/go"
+)
 
 var (
 	jsonapi = jsoniter.Config{UseNumber: true}.Froze()

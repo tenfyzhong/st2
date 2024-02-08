@@ -8,6 +8,7 @@ const (
 	LangProto  = "proto"
 	LangThrift = "thrift"
 	LangCsv    = "csv"
+	LangYaml   = "yaml"
 
 	RootDefault = "Root"
 )

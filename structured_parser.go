@@ -203,6 +203,8 @@ func (p *StructuredParser) parseNode(tag string, v interface{}) *rawNode {
 		node.Type = Int32Val
 	case int64:
 		node.Type = Int64Val
+	case int:
+		node.Type = Int64Val
 	case uint8:
 		node.Type = Uint8Val
 	case uint16:
@@ -210,6 +212,8 @@ func (p *StructuredParser) parseNode(tag string, v interface{}) *rawNode {
 	case uint32:
 		node.Type = Uint32Val
 	case uint64:
+		node.Type = Uint64Val
+	case uint:
 		node.Type = Uint64Val
 	case string:
 		node.Type = StringVal
