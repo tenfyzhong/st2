@@ -16,8 +16,8 @@ func TestJsonParser_Parse(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		init    func(t *testing.T) *JsonParser
-		inspect func(r *JsonParser, t *testing.T) //inspects receiver after test run
+		init    func(t *testing.T) *StructuredParser
+		inspect func(r *StructuredParser, t *testing.T) //inspects receiver after test run
 
 		args func(t *testing.T) args
 
@@ -27,7 +27,7 @@ func TestJsonParser_Parse(t *testing.T) {
 	}{
 		{
 			name: "empty",
-			init: func(t *testing.T) *JsonParser {
+			init: func(t *testing.T) *StructuredParser {
 				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
@@ -40,7 +40,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		},
 		{
 			name: "illegal json",
-			init: func(t *testing.T) *JsonParser {
+			init: func(t *testing.T) *StructuredParser {
 				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
@@ -55,7 +55,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		},
 		{
 			name: "simple struct",
-			init: func(t *testing.T) *JsonParser {
+			init: func(t *testing.T) *StructuredParser {
 				return NewJsonParser(Context{
 					Root: "helloWorld",
 				})
@@ -86,7 +86,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		},
 		{
 			name: "simple struct with null",
-			init: func(t *testing.T) *JsonParser {
+			init: func(t *testing.T) *StructuredParser {
 				return NewJsonParser(Context{
 					Root: "helloWorld",
 				})
@@ -129,7 +129,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		},
 		{
 			name: "complex struct",
-			init: func(t *testing.T) *JsonParser {
+			init: func(t *testing.T) *StructuredParser {
 				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
@@ -345,7 +345,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		},
 		{
 			name: "complex array struct",
-			init: func(t *testing.T) *JsonParser {
+			init: func(t *testing.T) *StructuredParser {
 				return NewJsonParser(Context{})
 			},
 			args: func(t *testing.T) args {
