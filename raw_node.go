@@ -4,25 +4,25 @@ import (
 	"strings"
 )
 
-type jsonNode struct {
+type rawNode struct {
 	Field       string
 	Type        Type
-	Children    []*jsonNode
+	Children    []*rawNode
 	fingerprint string
 }
 
-func (node jsonNode) FieldCamel() string {
+func (node rawNode) FieldCamel() string {
 	return camel(node.Field)
 }
 
-func (node *jsonNode) Fingerprint() string {
+func (node *rawNode) Fingerprint() string {
 	if node.fingerprint == "" {
 		node.fingerprint = node.fingerprintHelper()
 	}
 	return node.fingerprint
 }
 
-func (node *jsonNode) fingerprintHelper() string {
+func (node *rawNode) fingerprintHelper() string {
 	switch node.Type {
 	case ArrayVal:
 		child := "null"
@@ -42,7 +42,7 @@ func (node *jsonNode) fingerprintHelper() string {
 	}
 }
 
-type NodeList []*jsonNode
+type NodeList []*rawNode
 
 func (l NodeList) Len() int {
 	return len(l)

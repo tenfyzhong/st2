@@ -79,7 +79,7 @@ func (p *JsonParser) genUniqName(seed string) string {
 	return p.genUniqName(seed + "a")
 }
 
-func (p *JsonParser) parseStructs(root *jsonNode) *Member {
+func (p *JsonParser) parseStructs(root *rawNode) *Member {
 	if root == nil {
 		return nil
 	}
@@ -168,8 +168,8 @@ func (p *JsonParser) parseStructs(root *jsonNode) *Member {
 	return member
 }
 
-func (p *JsonParser) parseNode(tag string, v interface{}) *jsonNode {
-	node := &jsonNode{
+func (p *JsonParser) parseNode(tag string, v interface{}) *rawNode {
+	node := &rawNode{
 		Field: tag,
 	}
 	if v == nil {
@@ -190,7 +190,7 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *jsonNode {
 		node.Type = StringVal
 	case map[string]interface{}:
 		node.Type = StructLikeVal
-		node.Children = []*jsonNode{}
+		node.Children = []*rawNode{}
 		for k, v := range c {
 			child := p.parseNode(k, v)
 			node.Children = append(node.Children, child)
@@ -202,7 +202,7 @@ func (p *JsonParser) parseNode(tag string, v interface{}) *jsonNode {
 			child := p.parseNode("", c[0])
 			node.Children = append(node.Children, child)
 		} else {
-			child := &jsonNode{
+			child := &rawNode{
 				Type: AnyVal,
 			}
 			node.Children = append(node.Children, child)
