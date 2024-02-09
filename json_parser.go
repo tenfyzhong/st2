@@ -10,7 +10,7 @@ var (
 
 type JsonUnmarshalTagFormat struct{}
 
-func (j JsonUnmarshalTagFormat) Unmarshal(data []byte, v interface{}) error {
+func (j JsonUnmarshalTagFormat) Unmarshal(data []byte, v any) error {
 	return jsonapi.Unmarshal(data, v)
 }
 
