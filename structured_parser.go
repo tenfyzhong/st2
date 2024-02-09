@@ -7,10 +7,10 @@ import (
 	"sort"
 )
 
-type UnmarshalFunc func(data []byte, v interface{}) error
+type UnmarshalFunc func(data []byte, v any) error
 
 type UnmarshalTagFormat interface {
-	Unmarshal(data []byte, v interface{}) error
+	Unmarshal(data []byte, v any) error
 	TagFormat() string
 }
 
@@ -46,7 +46,7 @@ func (p *StructuredParser) Parse(reader io.Reader) ([]*Struct, error) {
 		return nil, nil
 	}
 
-	var v interface{}
+	var v any
 	err = p.unmarshalTagFormat.Unmarshal(data, &v)
 	if err != nil {
 		return nil, err
@@ -173,7 +173,7 @@ func (p *StructuredParser) parseStructs(root *rawNode) *Member {
 	return member
 }
 
-func (p *StructuredParser) parseNode(tag string, v interface{}) *rawNode {
+func (p *StructuredParser) parseNode(tag string, v any) *rawNode {
 	node := &rawNode{
 		Field: tag,
 	}
@@ -217,7 +217,7 @@ func (p *StructuredParser) parseNode(tag string, v interface{}) *rawNode {
 		node.Type = Uint64Val
 	case string:
 		node.Type = StringVal
-	case map[string]interface{}:
+	case map[string]any:
 		node.Type = StructLikeVal
 		node.Children = []*rawNode{}
 		for k, v := range c {
@@ -225,7 +225,7 @@ func (p *StructuredParser) parseNode(tag string, v interface{}) *rawNode {
 			node.Children = append(node.Children, child)
 		}
 		sort.Sort(NodeList(node.Children))
-	case []interface{}:
+	case []any:
 		node.Type = ArrayVal
 		if len(c) > 0 {
 			child := p.parseNode("", c[0])

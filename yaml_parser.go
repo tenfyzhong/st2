@@ -6,7 +6,7 @@ import (
 
 type YamlUnmarshalTagFormat struct{}
 
-func (j YamlUnmarshalTagFormat) Unmarshal(data []byte, v interface{}) error {
+func (j YamlUnmarshalTagFormat) Unmarshal(data []byte, v any) error {
 	return yaml.Unmarshal(data, v)
 }
 
