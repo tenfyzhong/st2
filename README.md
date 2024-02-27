@@ -1,13 +1,22 @@
+# Table of Contents
+- [st2](#st2)
+  - [Cli](#cli)
+    - [Install](#install)
+      - [Use home brew](#use-home-brew)
+      - [Download from release](#download-from-release)
+      - [build from source](#build-from-source)
+    - [Usage](#usage)
+
 # st2
 [![go](https://github.com/tenfyzhong/st2/actions/workflows/build-test.yml/badge.svg?branch=main)](https://github.com/tenfyzhong/st2/actions/workflows/build-test.yml)
 [![codecov](https://codecov.io/gh/tenfyzhong/st2/graph/badge.svg?token=1LTM5DPX7S)](https://codecov.io/gh/tenfyzhong/st2)
 [![GitHub tag](https://img.shields.io/github/tag/tenfyzhong/st2.svg)](https://github.com/tenfyzhong/st2/tags)
 [![Go Reference](https://pkg.go.dev/badge/github.com/tenfyzhong/st2.svg)](https://pkg.go.dev/github.com/tenfyzhong/st2)
 
-`st2` provide a package to parse json/protobuf/thrift/go/csv code and generage go/protobuf/thrift code.
+`st2` provide a package to parse json/yaml/protobuf/thrift/go/csv code and generage go/protobuf/thrift code.
 
 ## Cli
-`st2` provide a terminal command line tool `st2`, which can be used to generate go/protobuf/thrift code from json/protobuf/thrift/go/csv code.
+`st2` provide a terminal command line tool `st2`, which can be used to generate go/protobuf/thrift code from json/yaml/protobuf/thrift/go/csv code.
 
 ### Install
 ####  Use home brew
@@ -27,7 +36,7 @@ go install github.com/tenfyzhong/st2/cmd/st2@latest
 ### Usage
 ```
 NAME:
-   st2 - convert between json, protobuf, thrift, go struct
+   st2 - convert between json, yaml, protobuf, thrift, go struct
 
 USAGE:
    st2 [global options] [arguments...]
@@ -47,7 +56,7 @@ GLOBAL OPTIONS:
 
    --input file, -i file  Input file, if not set, it will read from stdio
    --rc                   Read input from clipboard (default: false)
-   --src type, -s type    The source data type, it will use the suffix of the input file if not set, available value: `[json,proto,thrift,go,csv]`
+   --src type, -s type    The source data type, it will use the suffix of the input file if not set, available value: `[json,yaml,proto,thrift,go,csv]`
 
    output
 
