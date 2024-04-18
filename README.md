@@ -45,9 +45,12 @@ VERSION:
    developing
 
 AUTHOR:
-   tenfyzhong <tenfy@tenfy.cn>
+   tenfyzhong
 
 GLOBAL OPTIONS:
+   --help, -h     show help (default: false)
+   --version, -v  print the version (default: false)
+
    common
 
    --root name, -r name  The root struct name (default: Root)
@@ -62,6 +65,8 @@ GLOBAL OPTIONS:
 
    --dst type, -d type     The destination data type, it will use the suffix of the output file if not set, available value: `[go,proto,thrift]`
    --output file, -o file  Output file, if not set, it will write to stdout
+   --prefix prefix         Add prefix to struct name
+   --suffix suffix         Add suffix to struct name
    --wc                    Write output to clipboard (default: false)
 
 

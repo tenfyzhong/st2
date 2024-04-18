@@ -579,6 +579,113 @@ func TestJsonParser_Parse(t *testing.T) {
 			wantErr:    false,
 			inspectErr: func(err error, t *testing.T) {},
 		},
+		{
+			name: "with prefix and suffix",
+			init: func(t *testing.T) *StructuredParser {
+				return NewJsonParser(Context{
+					Prefix: "Pre",
+					Suffix: "Suf",
+				})
+			},
+			args: func(t *testing.T) args {
+				return args{
+					reader: bytes.NewReader([]byte(`
+[{
+	"你好": {
+		"b": 1
+	},
+	"e是e": {
+		"aa": true
+	},
+	"g gg": [[{
+		"ggg": 1
+	}]]
+}]`)),
+				}
+			},
+			want1: []*Struct{
+				{
+					Type: &StructLikeType{
+						Name:   "PreEeSuf",
+						Source: SLSStruct,
+					},
+					Members: []*Member{
+						{
+							Field: "aa",
+							Type:  BoolVal,
+							Index: 1,
+							GoTag: []string{`json:"aa,omitempty"`},
+						},
+					},
+				},
+				{
+					Type: &StructLikeType{
+						Name:   "PreGggSuf",
+						Source: SLSStruct,
+					},
+					Members: []*Member{
+						{
+							Field: "ggg",
+							Type:  Int64Val,
+							Index: 1,
+							GoTag: []string{`json:"ggg,omitempty"`},
+						},
+					},
+				},
+				{
+					Type: &StructLikeType{
+						Name:   "PreASuf",
+						Source: SLSStruct,
+					},
+					Members: []*Member{
+						{
+							Field: "b",
+							Type:  Int64Val,
+							Index: 1,
+							GoTag: []string{`json:"b,omitempty"`},
+						},
+					},
+				},
+				{
+					Type: &StructLikeType{
+						Name:   "PreRootSuf",
+						Source: SLSStruct,
+					},
+					Members: []*Member{
+						{
+							Field: "ee",
+							Type: &StructLikeType{
+								Name: "PreEeSuf",
+							},
+							Index: 1,
+							GoTag: []string{`json:"e是e,omitempty"`},
+						},
+						{
+							Field: "ggg",
+							Type: &ArrayType{
+								ChildType: &ArrayType{
+									ChildType: &StructLikeType{
+										Name: "PreGggSuf",
+									},
+								},
+							},
+							Index: 2,
+							GoTag: []string{`json:"g gg,omitempty"`},
+						},
+						{
+							Field: "A",
+							Type: &StructLikeType{
+								Name: "PreASuf",
+							},
+							Index: 3,
+							GoTag: []string{`json:"你好,omitempty"`},
+						},
+					},
+				},
+			},
+			wantErr:    false,
+			inspectErr: func(err error, t *testing.T) {},
+		},
 	}
 
 	for _, tt := range tests {
