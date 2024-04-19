@@ -69,6 +69,8 @@ func (p *StructuredParser) Parse(reader io.Reader) ([]*Struct, error) {
 }
 
 func (p *StructuredParser) genUniqName(seed string) string {
+	seed = normalizeToken(seed, "A")
+
 	if !p.nameMap[seed] {
 		return seed
 	}
@@ -89,7 +91,7 @@ func (p *StructuredParser) parseStructs(root *rawNode) *Member {
 	}
 
 	member := &Member{
-		Field: root.Field,
+		Field: normalizeToken(root.Field, "A"),
 		GoTag: []string{fmt.Sprintf(p.unmarshalTagFormat.TagFormat(), root.Field)},
 	}
 
@@ -141,6 +143,8 @@ func (p *StructuredParser) parseStructs(root *rawNode) *Member {
 
 		name := p.genUniqName(root.FieldCamel())
 		p.nameMap[name] = true
+
+		name = p.ctx.Prefix + name + p.ctx.Suffix
 
 		members := make([]*Member, 0, len(root.Children))
 

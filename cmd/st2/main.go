@@ -21,6 +21,8 @@ const (
 	flagRoot           = "root"
 	flagReadClipboard  = "rc"
 	flagWriteClipboard = "wc"
+	flagPrefix         = "prefix"
+	flagSuffix         = "suffix"
 
 	categoryCommon = "common"
 	categoryInput  = "input"
@@ -73,11 +75,7 @@ func action(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("src equals to dst\n\n")
 	}
 
-	st2Ctx := st2.Context{
-		Src:  src,
-		Dst:  dst,
-		Root: cmd.String(flagRoot),
-	}
+	st2Ctx := st2.NewContext(src, dst, cmd.String(flagRoot), cmd.String(flagPrefix), cmd.String(flagSuffix))
 
 	reader, err := getReader(cmd)
 	if err != nil {
@@ -167,6 +165,16 @@ func main() {
 				Name:     flagWriteClipboard,
 				Category: categoryOutput,
 				Usage:    "Write output to clipboard",
+			},
+			&cli.StringFlag{
+				Name:     flagPrefix,
+				Category: categoryOutput,
+				Usage:    "Add `prefix` to struct name",
+			},
+			&cli.StringFlag{
+				Name:     flagSuffix,
+				Category: categoryOutput,
+				Usage:    "Add `suffix` to struct name",
 			},
 		},
 		EnableShellCompletion:      true,
