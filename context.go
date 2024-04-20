@@ -1,20 +1,27 @@
 package st2
 
-// Context struct contains the context running
-type Context struct {
-	Src    string
-	Dst    string
-	Root   string
-	Prefix string
-	Suffix string
+type XMLContext struct {
+	ContentTagPrefix   string
+	AttributeTagPrefix string
 }
 
-func NewContext(src, dst, root, prefix, suffix string) Context {
+// Context struct contains the context running
+type Context struct {
+	Src        string
+	Dst        string
+	Root       string
+	Prefix     string
+	Suffix     string
+	XMLContext XMLContext
+}
+
+func NewContext(src, dst, root, prefix, suffix string, xmlContext XMLContext) Context {
 	return Context{
-		Src:    src,
-		Dst:    dst,
-		Root:   normalizeToken(root, ""),
-		Prefix: normalizeToken(prefix, ""),
-		Suffix: normalizeToken(suffix, ""),
+		Src:        src,
+		Dst:        dst,
+		Root:       normalizeToken(root, ""),
+		Prefix:     normalizeToken(prefix, ""),
+		Suffix:     normalizeToken(suffix, ""),
+		XMLContext: xmlContext,
 	}
 }

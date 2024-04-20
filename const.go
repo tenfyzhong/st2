@@ -10,8 +10,11 @@ const (
 	LangCsv    = "csv"
 	LangYaml   = "yaml"
 	LangYml    = "yml"
+	LangXML    = "xml"
 
 	RootDefault = "Root"
+
+	FlagXMLAttributeTagPrefixDefault = ","
 )
 
 const (
@@ -76,6 +79,9 @@ var (
 		},
 		{
 			Lang: LangCsv,
+		},
+		{
+			Lang: LangXML,
 		},
 	}
 
