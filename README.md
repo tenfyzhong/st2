@@ -59,7 +59,7 @@ GLOBAL OPTIONS:
 
    --input file, -i file              Input file, if not set, it will read from stdio
    --rc                               Read input from clipboard (default: false)
-   --src type, -s type                The source data type, it will use the suffix of the input file if not set, available value: `[json,yaml,proto,thrift,go,csv,xml]`
+   --src type, -s type                The source data type, it will use the suffix of the input file if not set, available value: `[json,yaml,proto,thrift,go,csv,xml,toml]`
    --xml-attribute-tag-prefix prefix  Add prefix to xml attribute tag in go field, only works for xml source and go destination (default: ,)
    --xml-content-tag-prefix prefix    Add prefix to xml content tag in go field, only works for xml source and go destination
 

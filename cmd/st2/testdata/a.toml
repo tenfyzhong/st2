@@ -1,0 +1,15 @@
+url     = "https://grafana.home/api/annotations"
+api_key = "glsa_secret_2b3226ac"
+cluster = "Sandbox"
+
+[spikes]
+dashboard = "84357279284502"
+panel     = 23
+
+[logs]
+dashboard = "84357279284503"
+panel     = 24
+
+[cpu]
+dashboard = "84357279284504"
+panel     = 25

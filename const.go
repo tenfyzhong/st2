@@ -11,6 +11,7 @@ const (
 	LangYaml   = "yaml"
 	LangYml    = "yml"
 	LangXML    = "xml"
+	LangToml   = "toml"
 
 	RootDefault = "Root"
 
@@ -82,6 +83,9 @@ var (
 		},
 		{
 			Lang: LangXML,
+		},
+		{
+			Lang: LangToml,
 		},
 	}
 
