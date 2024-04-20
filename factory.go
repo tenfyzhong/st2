@@ -19,6 +19,8 @@ func CreateParser(ctx Context) Parse {
 		return NewCsvParser(ctx)
 	case LangXML:
 		return NewXMLParser(ctx)
+	case LangToml:
+		return NewTomlParser(ctx)
 	}
 	return nil
 }

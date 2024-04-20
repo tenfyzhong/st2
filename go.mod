@@ -3,10 +3,12 @@ module github.com/tenfyzhong/st2
 go 1.18
 
 require (
+	github.com/basgys/goxml2json v1.1.0
 	github.com/cloudwego/thriftgo v0.2.4
 	github.com/iancoleman/strcase v0.2.0
 	github.com/json-iterator/go v1.1.12
-	github.com/stretchr/testify v1.8.4
+	github.com/pelletier/go-toml/v2 v2.2.1
+	github.com/stretchr/testify v1.9.0
 	github.com/urfave/cli/v3 v3.0.0-alpha8
 	github.com/yoheimuta/go-protoparser/v4 v4.7.0
 	golang.design/x/clipboard v0.6.3
@@ -14,7 +16,6 @@ require (
 )
 
 require (
-	github.com/basgys/goxml2json v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
