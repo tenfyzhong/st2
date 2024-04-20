@@ -14,15 +14,17 @@ import (
 )
 
 const (
-	flagSrc            = "src"
-	flagDst            = "dst"
-	flagInput          = "input"
-	flagOutput         = "output"
-	flagRoot           = "root"
-	flagReadClipboard  = "rc"
-	flagWriteClipboard = "wc"
-	flagPrefix         = "prefix"
-	flagSuffix         = "suffix"
+	flagSrc                   = "src"
+	flagDst                   = "dst"
+	flagInput                 = "input"
+	flagOutput                = "output"
+	flagRoot                  = "root"
+	flagReadClipboard         = "rc"
+	flagWriteClipboard        = "wc"
+	flagPrefix                = "prefix"
+	flagSuffix                = "suffix"
+	flagXMLContentTagPrefix   = "xml-content-tag-prefix"
+	flagXMLAttributeTagPrefix = "xml-attribute-tag-prefix"
 
 	categoryCommon = "common"
 	categoryInput  = "input"
@@ -75,7 +77,18 @@ func action(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("src equals to dst\n\n")
 	}
 
-	st2Ctx := st2.NewContext(src, dst, cmd.String(flagRoot), cmd.String(flagPrefix), cmd.String(flagSuffix))
+	st2Ctx := st2.NewContext(
+		src,
+		dst,
+		cmd.String(flagRoot),
+		cmd.String(flagPrefix),
+		cmd.String(flagSuffix),
+		st2.XMLContext{
+			ContentTagPrefix:   cmd.String(flagXMLContentTagPrefix),
+			AttributeTagPrefix: cmd.String(flagXMLAttributeTagPrefix),
+		},
+	)
+	fmt.Printf("st2Ctx:%+v\n", st2Ctx)
 
 	reader, err := getReader(cmd)
 	if err != nil {
@@ -142,6 +155,22 @@ func main() {
 				Usage:     "Input `file`, if not set, it will read from stdio",
 			},
 			&cli.StringFlag{
+				Name:      flagXMLContentTagPrefix,
+				Category:  categoryInput,
+				Required:  false,
+				TakesFile: false,
+				Usage:     "Add `prefix` to xml content tag in go field, only works for xml source and go destination",
+			},
+			&cli.StringFlag{
+				Name:        flagXMLAttributeTagPrefix,
+				Category:    categoryInput,
+				Required:    false,
+				TakesFile:   false,
+				DefaultText: st2.FlagXMLAttributeTagPrefixDefault,
+				Value:       st2.FlagXMLAttributeTagPrefixDefault,
+				Usage:       "Add `prefix` to xml attribute tag in go field, only works for xml source and go destination",
+			},
+			&cli.StringFlag{
 				Name:      flagOutput,
 				Aliases:   []string{"o"},
 				Category:  categoryOutput,
@@ -154,6 +183,7 @@ func main() {
 				Aliases:     []string{"r"},
 				Category:    categoryCommon,
 				DefaultText: st2.RootDefault,
+				Value:       st2.RootDefault,
 				Usage:       "The root struct `name`",
 			},
 			&cli.BoolFlag{
