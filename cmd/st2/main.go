@@ -125,7 +125,7 @@ func (f FlagList) Swap(i, j int) {
 func main() {
 	cmd := &cli.Command{
 		Name:        "st2",
-		Usage:       "convert between json, yaml, protobuf, thrift, go struct",
+		Usage:       "convert between json, yaml, csv, xml, toml, protobuf, thrift, go struct",
 		UsageText:   "",
 		ArgsUsage:   "",
 		Version:     config.Version,
