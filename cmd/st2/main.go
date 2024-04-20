@@ -88,7 +88,6 @@ func action(ctx context.Context, cmd *cli.Command) error {
 			AttributeTagPrefix: cmd.String(flagXMLAttributeTagPrefix),
 		},
 	)
-	fmt.Printf("st2Ctx:%+v\n", st2Ctx)
 
 	reader, err := getReader(cmd)
 	if err != nil {
