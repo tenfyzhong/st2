@@ -1,6 +1,7 @@
 package st2
 
 import (
+	"bytes"
 	"errors"
 	"io"
 	"text/template"
@@ -36,5 +37,16 @@ func Convert(ctx Context, reader io.Reader, writer io.Writer) error {
 		return err
 	}
 
-	return t.Execute(writer, structs)
+	b := new(bytes.Buffer)
+	err = t.Execute(b, structs)
+	if err != nil {
+		return err
+	}
+
+	data := b.Bytes()
+	formater := CreateFormater(ctx)
+	data = formater.Format(data)
+
+	_, err = writer.Write(data)
+	return err
 }

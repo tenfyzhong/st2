@@ -39,3 +39,12 @@ func CreateTmpl(ctx Context) string {
 	}
 	return ""
 }
+
+// CreateFormater Create a [Format] to format code
+func CreateFormater(ctx Context) Format {
+	switch ctx.Dst {
+	case LangGo:
+		return &GoFormater{}
+	}
+	return &EmptyFormater{}
+}

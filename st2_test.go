@@ -146,37 +146,37 @@ func TestConvert(t *testing.T) {
 				return a
 			},
 			wantData: []byte(`type A struct {
-	B int64 ` + "`json:\"b,omitempty\"`" + `
-	C string ` + "`json:\"c,omitempty\"`" + `
+	B int64  ` + "`" + `json:"b,omitempty"` + "`" + `
+	C string ` + "`" + `json:"c,omitempty"` + "`" + `
 }
 
 type D struct {
-	B int64 ` + "`json:\"b,omitempty\"`" + `
-	C int64 ` + "`json:\"c,omitempty\"`" + `
+	B int64 ` + "`" + `json:"b,omitempty"` + "`" + `
+	C int64 ` + "`" + `json:"c,omitempty"` + "`" + `
 }
 
 type E struct {
-	Aa bool ` + "`json:\"aa,omitempty\"`" + `
-	Bb bool ` + "`json:\"bb,omitempty\"`" + `
+	Aa bool ` + "`" + `json:"aa,omitempty"` + "`" + `
+	Bb bool ` + "`" + `json:"bb,omitempty"` + "`" + `
 }
 
 type A01 struct {
-	Hello bool ` + "`json:\"hello,omitempty\"`" + `
+	Hello bool ` + "`" + `json:"hello,omitempty"` + "`" + `
 }
 
 type F struct {
-	A *A01 ` + "`json:\"a,omitempty\"`" + `
+	A *A01 ` + "`" + `json:"a,omitempty"` + "`" + `
 }
 
 type Root struct {
-	A *A ` + "`json:\"a,omitempty\"`" + `
-	B *A ` + "`json:\"b,omitempty\"`" + `
-	C []string ` + "`json:\"c,omitempty\"`" + `
-	D []*D ` + "`json:\"d,omitempty\"`" + `
-	E *E ` + "`json:\"e,omitempty\"`" + `
-	F *F ` + "`json:\"f,omitempty\"`" + `
-	Gg []any ` + "`json:\"gg,omitempty\"`" + `
-	H any ` + "`json:\"h,omitempty\"`" + `
+	A  *A       ` + "`" + `json:"a,omitempty"` + "`" + `
+	B  *A       ` + "`" + `json:"b,omitempty"` + "`" + `
+	C  []string ` + "`" + `json:"c,omitempty"` + "`" + `
+	D  []*D     ` + "`" + `json:"d,omitempty"` + "`" + `
+	E  *E       ` + "`" + `json:"e,omitempty"` + "`" + `
+	F  *F       ` + "`" + `json:"f,omitempty"` + "`" + `
+	Gg []any    ` + "`" + `json:"gg,omitempty"` + "`" + `
+	H  any      ` + "`" + `json:"h,omitempty"` + "`" + `
 }
 
 `),
@@ -397,9 +397,9 @@ message SampleMessage {
 				return a
 			},
 			wantData: []byte(`// EEEE
-type Eeee int // EEEE 
+type Eeee int // EEEE
 
-const ( 
+const (
 	A Eeee = 0 // a
 )
 
@@ -418,9 +418,9 @@ type BbbBB struct {
 }
 
 type Ccc struct {
-	A int32
-	B int64
-	C string
+	A   int32
+	B   int64
+	C   string
 	Aaa *Aaa
 }
 
@@ -470,37 +470,37 @@ type SampleMessage struct {
 				return a
 			},
 			wantData: []byte(`type A struct {
-	B int64 ` + "`yaml:\"b\"`" + `
-	C string ` + "`yaml:\"c\"`" + `
+	B int64  ` + "`" + `yaml:"b"` + "`" + `
+	C string ` + "`" + `yaml:"c"` + "`" + `
 }
 
 type D struct {
-	B int64 ` + "`yaml:\"b\"`" + `
-	C int64 ` + "`yaml:\"c\"`" + `
+	B int64 ` + "`" + `yaml:"b"` + "`" + `
+	C int64 ` + "`" + `yaml:"c"` + "`" + `
 }
 
 type E struct {
-	Aa bool ` + "`yaml:\"aa\"`" + `
-	Bb bool ` + "`yaml:\"bb\"`" + `
+	Aa bool ` + "`" + `yaml:"aa"` + "`" + `
+	Bb bool ` + "`" + `yaml:"bb"` + "`" + `
 }
 
 type A01 struct {
-	Hello bool ` + "`yaml:\"hello\"`" + `
+	Hello bool ` + "`" + `yaml:"hello"` + "`" + `
 }
 
 type F struct {
-	A *A01 ` + "`yaml:\"a\"`" + `
+	A *A01 ` + "`" + `yaml:"a"` + "`" + `
 }
 
 type Root struct {
-	A *A ` + "`yaml:\"a\"`" + `
-	B *A ` + "`yaml:\"b\"`" + `
-	C []string ` + "`yaml:\"c\"`" + `
-	D []*D ` + "`yaml:\"d\"`" + `
-	E *E ` + "`yaml:\"e\"`" + `
-	F *F ` + "`yaml:\"f\"`" + `
-	Gg []any ` + "`yaml:\"gg\"`" + `
-	H any ` + "`yaml:\"h\"`" + `
+	A  *A       ` + "`" + `yaml:"a"` + "`" + `
+	B  *A       ` + "`" + `yaml:"b"` + "`" + `
+	C  []string ` + "`" + `yaml:"c"` + "`" + `
+	D  []*D     ` + "`" + `yaml:"d"` + "`" + `
+	E  *E       ` + "`" + `yaml:"e"` + "`" + `
+	F  *F       ` + "`" + `yaml:"f"` + "`" + `
+	Gg []any    ` + "`" + `yaml:"gg"` + "`" + `
+	H  any      ` + "`" + `yaml:"h"` + "`" + `
 }
 
 `),
@@ -656,9 +656,9 @@ union UUU {
 			},
 			wantData: []byte(`type EEE int
 
-const ( 
-	A EEE = 1  
-	B EEE = 2 
+const (
+	A EEE = 1
+	B EEE = 2
 )
 
 type SS struct {
@@ -680,11 +680,11 @@ type AAA struct {
 }
 
 type BBB struct {
-	B1 int16
-	B2 int32
-	E *EEE
+	B1    int16
+	B2    int32
+	E     *EEE
 	Mapab map[*AAA]*BBB
-	Seta map[*AAA]bool
+	Seta  map[*AAA]bool
 	Listb []*BBB
 }
 
