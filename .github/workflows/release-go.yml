@@ -21,7 +21,7 @@ jobs:
       - name: Echo tag
         run: echo ${{ steps.tag.outputs.version }}
   release:
-    uses: tenfyzhong/workflows/.github/workflows/release-go.yml@feat-go-parse-version
+    uses: tenfyzhong/workflows/.github/workflows/release-go.yml@main
     needs: tag
     name: release
     with:

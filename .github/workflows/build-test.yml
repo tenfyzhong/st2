@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-test:
-    uses: tenfyzhong/workflows/.github/workflows/go-build-test.yml@feat-go-parse-version
+    uses: tenfyzhong/workflows/.github/workflows/go-build-test.yml@main
     with:
       path: "."
     secrets:
