@@ -21,11 +21,10 @@ jobs:
       - name: Echo tag
         run: echo ${{ steps.tag.outputs.version }}
   release:
-    uses: tenfyzhong/workflows/.github/workflows/release-go.yml@main
+    uses: tenfyzhong/workflows/.github/workflows/release-go.yml@feat-go-parse-version
     needs: tag
     name: release
     with:
       bin-path: "./cmd/st2"
       command: "st2"
       build-option: "-ldflags \"-X 'github.com/tenfyzhong/st2/cmd/st2/config.Version=${{ needs.tag.outputs.version }}'\""
-
