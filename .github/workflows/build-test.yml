@@ -1,6 +1,5 @@
 name: go
 on:
-  push:
   pull_request_target:
     branches: [ "main" ]
 
