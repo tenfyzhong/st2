@@ -17,13 +17,13 @@ func TestGoParser_Parse(t *testing.T) {
 	tests := []struct {
 		name    string
 		init    func(t *testing.T) GoParser
-		inspect func(r GoParser, t *testing.T) //inspects receiver after test run
+		inspect func(r GoParser, t *testing.T) // inspects receiver after test run
 
 		args func(t *testing.T) args
 
 		want1      []*Struct
 		wantErr    bool
-		inspectErr func(err error, t *testing.T) //use for more precise error evaluation after test
+		inspectErr func(err error, t *testing.T) // use for more precise error evaluation after test
 	}{
 		{
 			name: "parse error",
@@ -78,9 +78,9 @@ const (
 type Aaa struct { // aaa
 	// a
 	A  []int32 // a
-	B  int64   
+	B  int64
 	C  *string` + " `json:\"hello_world\"` " + `
-	d  int64 
+	d  int64
 	MM map[int]string
 }
 

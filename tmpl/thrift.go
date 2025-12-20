@@ -5,7 +5,7 @@ const Thrift = `
     {{- range $comment := .Comment.BeginningComments }}
     {{ $comment }}
     {{- end}}
-    {{.Index}}: {{.Thrift}} {{.Field}}, {{ .Comment.InlineComment }} {{- end -}}
+    {{.Index}}: {{.Thrift}} {{.Field}},{{- if .Comment.InlineComment }} {{ .Comment.InlineComment }}{{- end }} {{- end -}}
 
 {{- define "STRUCT" -}}
 {{- range $comment := .Comment.BeginningComments -}}
@@ -23,8 +23,8 @@ const Thrift = `
 {{- $comment }}
 {{ end -}}
 enum {{ .Type.StructName }} { {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
-{{- range $member := .Members }} 
-    {{ $member.Field }} = {{ $member.Index }}; {{ $member.Comment.InlineComment}} {{- end}}
+{{- range $member := .Members }}
+    {{ $member.Field }} = {{ $member.Index }};{{- if $member.Comment.InlineComment }} {{ $member.Comment.InlineComment}}{{- end}} {{- end}}
 }
 {{- end }}
 

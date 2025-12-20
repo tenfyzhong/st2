@@ -9,7 +9,7 @@ func TestRawNode_Fingerprint(t *testing.T) {
 	tests := []struct {
 		name    string
 		init    func(t *testing.T) *rawNode
-		inspect func(r *rawNode, t *testing.T) //inspects receiver after test run
+		inspect func(r *rawNode, t *testing.T) // inspects receiver after test run
 
 		want1 string
 	}{

@@ -45,7 +45,10 @@ func Convert(ctx Context, reader io.Reader, writer io.Writer) error {
 
 	data := b.Bytes()
 	formater := CreateFormater(ctx)
-	data = formater.Format(data)
+	data, err = formater.Format(data)
+	if err != nil {
+		return err
+	}
 
 	_, err = writer.Write(data)
 	return err

@@ -155,47 +155,47 @@ func (v Int64Type) Value() string     { return strconv.FormatInt(int64(v.V), 10)
 func (v Int64Type) IsBasicType() bool { return true }
 
 type Uint8Type struct {
-	V int8
+	V uint8
 }
 
 func (v Uint8Type) Json() string      { return StrNumber }
 func (v Uint8Type) Go() string        { return StrUint8 }
 func (v Uint8Type) Proto() string     { return StrUint32 }
 func (v Uint8Type) Thrift() string    { return StrByte }
-func (v Uint8Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
+func (v Uint8Type) Value() string     { return strconv.FormatUint(uint64(v.V), 10) }
 func (v Uint8Type) IsBasicType() bool { return true }
 
 type Uint16Type struct {
-	V int16
+	V uint16
 }
 
 func (v Uint16Type) Json() string      { return StrNumber }
 func (v Uint16Type) Go() string        { return StrUint16 }
 func (v Uint16Type) Proto() string     { return StrUint32 }
 func (v Uint16Type) Thrift() string    { return StrI16 }
-func (v Uint16Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
+func (v Uint16Type) Value() string     { return strconv.FormatUint(uint64(v.V), 10) }
 func (v Uint16Type) IsBasicType() bool { return true }
 
 type Uint32Type struct {
-	V int32
+	V uint32
 }
 
 func (v Uint32Type) Json() string      { return StrNumber }
 func (v Uint32Type) Go() string        { return StrUint32 }
 func (v Uint32Type) Proto() string     { return StrUint32 }
 func (v Uint32Type) Thrift() string    { return StrI32 }
-func (v Uint32Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
+func (v Uint32Type) Value() string     { return strconv.FormatUint(uint64(v.V), 10) }
 func (v Uint32Type) IsBasicType() bool { return true }
 
 type Uint64Type struct {
-	V int64
+	V uint64
 }
 
 func (v Uint64Type) Json() string      { return StrNumber }
 func (v Uint64Type) Go() string        { return StrUint64 }
 func (v Uint64Type) Proto() string     { return StrUint64 }
 func (v Uint64Type) Thrift() string    { return StrI64 }
-func (v Uint64Type) Value() string     { return strconv.FormatInt(int64(v.V), 10) }
+func (v Uint64Type) Value() string     { return strconv.FormatUint(v.V, 10) }
 func (v Uint64Type) IsBasicType() bool { return true }
 
 type BinaryType struct{}

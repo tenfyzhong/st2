@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"sort"
+	"strings"
 )
 
 type UnmarshalFunc func(data []byte, v any) error
@@ -63,26 +64,37 @@ func (p *StructuredParser) Parse(reader io.Reader) ([]*Struct, error) {
 	structs := p.structs
 	p.fingerMap = make(map[string]*Struct)
 	p.nameMap = make(map[string]bool)
-	p.structs = p.structs[0:0]
+	p.structs = nil
 
 	return structs, nil
 }
 
 func (p *StructuredParser) genUniqName(seed string) string {
-	seed = normalizeToken(seed, "A")
+	baseSeed := normalizeToken(seed, "A")
 
-	if !p.nameMap[seed] {
-		return seed
+	// First try the base name without any suffix
+	if !p.nameMap[baseSeed] {
+		return baseSeed
 	}
 
-	for i := 1; i < 1000; i++ {
-		name := fmt.Sprintf("%s%02d", seed, i)
+	// Hard limit to prevent infinite recursion
+	for i := 1; i < 10000; i++ {
+		var name string
+		if i < 1000 {
+			name = fmt.Sprintf("%s%02d", baseSeed, i)
+		} else {
+			// After 1000 attempts, start adding 'a' suffixes
+			suffix := strings.Repeat("a", (i-1000)/1000+1)
+			name = baseSeed + suffix
+		}
+
 		if !p.nameMap[name] {
 			return name
 		}
 	}
 
-	return p.genUniqName(seed + "a")
+	// Fallback - should never reach here
+	return baseSeed + "_conflict"
 }
 
 func (p *StructuredParser) parseStructs(root *rawNode) *Member {

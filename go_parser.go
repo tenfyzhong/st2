@@ -1,6 +1,7 @@
 package st2
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -32,7 +33,10 @@ func (p GoParser) Parse(reader io.Reader) ([]*Struct, error) {
 
 	res := make([]*Struct, 0)
 	for _, node := range f.Decls {
-		st := p.processNode(fset, node)
+		st, err := p.processNode(fset, node)
+		if err != nil {
+			return nil, err
+		}
 		if st != nil {
 			res = append(res, st...)
 		}
@@ -40,20 +44,20 @@ func (p GoParser) Parse(reader io.Reader) ([]*Struct, error) {
 	return res, nil
 }
 
-func (p GoParser) processNode(fset *token.FileSet, node ast.Decl) []*Struct {
+func (p GoParser) processNode(fset *token.FileSet, node ast.Decl) ([]*Struct, error) {
 	switch n := node.(type) {
 	case *ast.GenDecl:
 		if n.Tok == token.TYPE {
 			st := p.processType(n)
 			if st == nil {
-				return nil
+				return nil, nil
 			}
-			return []*Struct{st}
+			return []*Struct{st}, nil
 		} else if n.Tok == token.CONST {
 			return p.processConst(n)
 		}
 	}
-	return nil
+	return nil, nil
 }
 
 func (p GoParser) processType(decl *ast.GenDecl) *Struct {
@@ -136,7 +140,7 @@ func (p GoParser) isOptional(field ast.Expr) bool {
 }
 
 // There are may be many enum in a const block
-func (p GoParser) processConst(decl *ast.GenDecl) []*Struct {
+func (p GoParser) processConst(decl *ast.GenDecl) ([]*Struct, error) {
 	m := make(map[string]*Struct)
 	for _, spec := range decl.Specs {
 		v, ok := spec.(*ast.ValueSpec)
@@ -177,7 +181,7 @@ func (p GoParser) processConst(decl *ast.GenDecl) []*Struct {
 		}
 		valueInt, err := strconv.ParseInt(value.Value, 10, 64)
 		if err != nil {
-			continue
+			return nil, fmt.Errorf("invalid enum value %s for %s: %w", value.Value, name, err)
 		}
 
 		st.Members = append(st.Members, &Member{
@@ -194,7 +198,7 @@ func (p GoParser) processConst(decl *ast.GenDecl) []*Struct {
 	for _, st := range m {
 		res = append(res, st)
 	}
-	return res
+	return res, nil
 }
 
 func (p GoParser) parseComment(doc *ast.CommentGroup, comment *ast.CommentGroup) Comment {
@@ -229,7 +233,8 @@ func (p GoParser) isBasicType(str string) bool {
 		StrComplex128,
 		StrByte,
 		StrRune,
-		StrUintptr}
+		StrUintptr,
+	}
 	for _, name := range basic {
 		if name == str {
 			return true

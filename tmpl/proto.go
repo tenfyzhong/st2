@@ -5,7 +5,7 @@ const Proto = `
     {{- range $comment := .Comment.BeginningComments }}
     {{ $comment }}
     {{- end}}
-    {{.Proto}} {{.Field}} = {{.Index}}; {{ .Comment.InlineComment }} {{- end -}}
+    {{.Proto}} {{.Field}} = {{.Index}};{{- if .Comment.InlineComment }} {{ .Comment.InlineComment }}{{- end }} {{- end -}}
 
 {{- define "STRUCT" -}}
 {{- range $comment := .Comment.BeginningComments -}}
@@ -23,8 +23,8 @@ message {{ .Type.StructName }} { {{- if .Comment.InlineComment }} {{ .Comment.In
 {{- $comment }}
 {{ end -}}
 enum {{ .Type.StructName }} { {{- if .Comment.InlineComment }} {{ .Comment.InlineComment }} {{- end }}
-{{- range $member := .Members }} 
-    {{ $member.Field }} = {{ $member.Index }}; {{ $member.Comment.InlineComment}} {{- end}}
+{{- range $member := .Members }}
+    {{ $member.Field }} = {{ $member.Index }};{{- if $member.Comment.InlineComment }} {{ $member.Comment.InlineComment}}{{- end}} {{- end}}
 }
 {{- end }}
 
