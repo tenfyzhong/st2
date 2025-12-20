@@ -17,13 +17,13 @@ func TestCsvParser_Parse(t *testing.T) {
 	tests := []struct {
 		name    string
 		init    func(t *testing.T) CsvParser
-		inspect func(r CsvParser, t *testing.T) //inspects receiver after test run
+		inspect func(r CsvParser, t *testing.T) // inspects receiver after test run
 
 		args func(t *testing.T) args
 
 		want1      []*Struct
 		wantErr    bool
-		inspectErr func(err error, t *testing.T) //use for more precise error evaluation after test
+		inspectErr func(err error, t *testing.T) // use for more precise error evaluation after test
 	}{
 		{
 			name: "empty",
@@ -37,7 +37,7 @@ func TestCsvParser_Parse(t *testing.T) {
 			},
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
-				assert.EqualError(t, err, "EOF")
+				assert.EqualError(t, err, "empty CSV input")
 			},
 		},
 		{
@@ -76,7 +76,7 @@ func TestCsvParser_Parse(t *testing.T) {
 			},
 			args: func(t *testing.T) args {
 				return args{
-					reader: bytes.NewReader([]byte(`a,b,c,d,c d , a b ,hello world, t       t   
+					reader: bytes.NewReader([]byte(`a,b,c,d,c d , a b ,hello world, t       t
 1,2,3,4
 `)),
 				}

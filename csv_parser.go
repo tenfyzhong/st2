@@ -23,8 +23,11 @@ func NewCsvParser(ctx Context) *CsvParser {
 func (p CsvParser) Parse(reader io.Reader) ([]*Struct, error) {
 	bufioReader := bufio.NewReader(reader)
 	str, err := bufioReader.ReadString('\n')
-	if err != nil {
+	if err != nil && err != io.EOF {
 		return nil, err
+	}
+	if str == "" && err == io.EOF {
+		return nil, fmt.Errorf("empty CSV input")
 	}
 	items := strings.Split(str, ",")
 	rootName := p.ctx.Root

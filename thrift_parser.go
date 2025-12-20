@@ -2,7 +2,9 @@ package st2
 
 import (
 	"errors"
+	"fmt"
 	"io"
+	"math"
 
 	"github.com/cloudwego/thriftgo/parser"
 )
@@ -42,7 +44,11 @@ func (p ThriftParser) Parse(reader io.Reader) ([]*Struct, error) {
 	res := make([]*Struct, 0)
 
 	for _, e := range thrift.Enums {
-		res = append(res, p.enum2struct(e))
+		st, err := p.enum2struct(e)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, st)
 	}
 
 	for _, s := range thrift.Structs {
@@ -56,7 +62,7 @@ func (p ThriftParser) Parse(reader io.Reader) ([]*Struct, error) {
 	return res, nil
 }
 
-func (p ThriftParser) enum2struct(e *parser.Enum) *Struct {
+func (p ThriftParser) enum2struct(e *parser.Enum) (*Struct, error) {
 	s := &Struct{
 		Type: &EnumType{
 			Name: e.Name,
@@ -64,6 +70,9 @@ func (p ThriftParser) enum2struct(e *parser.Enum) *Struct {
 	}
 
 	for _, value := range e.Values {
+		if value.Value > math.MaxInt || value.Value < math.MinInt {
+			return nil, fmt.Errorf("enum value %d for %s is out of int range", value.Value, value.Name)
+		}
 		member := &Member{
 			Field: value.Name,
 			Type:  s.Type,
@@ -71,7 +80,7 @@ func (p ThriftParser) enum2struct(e *parser.Enum) *Struct {
 		}
 		s.Members = append(s.Members, member)
 	}
-	return s
+	return s, nil
 }
 
 func (p ThriftParser) structLike2struct(sl *parser.StructLike, source StructLikeSource) *Struct {

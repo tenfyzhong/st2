@@ -17,13 +17,13 @@ func TestProtoParser_Parse(t *testing.T) {
 	tests := []struct {
 		name    string
 		init    func(t *testing.T) ProtoParser
-		inspect func(r ProtoParser, t *testing.T) //inspects receiver after test run
+		inspect func(r ProtoParser, t *testing.T) // inspects receiver after test run
 
 		args func(t *testing.T) args
 
 		want1      []*Struct
 		wantErr    bool
-		inspectErr func(err error, t *testing.T) //use for more precise error evaluation after test
+		inspectErr func(err error, t *testing.T) // use for more precise error evaluation after test
 	}{
 		{
 			name: "err",

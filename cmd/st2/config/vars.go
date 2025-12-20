@@ -1,5 +1,3 @@
 package config
 
-var (
-	Version = "developing"
-)
+var Version = "developing"

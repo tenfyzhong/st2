@@ -4,9 +4,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var (
-	jsonapi = jsoniter.Config{UseNumber: true}.Froze()
-)
+var jsonapi = jsoniter.Config{UseNumber: true}.Froze()
 
 type JsonUnmarshalTagFormat struct{}
 

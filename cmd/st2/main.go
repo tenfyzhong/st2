@@ -77,6 +77,16 @@ func action(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("src equals to dst\n\n")
 	}
 
+	// Validate src is a supported source format
+	if !isValidLang(st2.SourceLangs, src) {
+		return fmt.Errorf("unsupported source format: %s. Available: %v\n\n", src, arrayLangName(st2.SourceLangs))
+	}
+
+	// Validate dst is a supported destination format
+	if !isValidLang(st2.DestinationLangs, dst) {
+		return fmt.Errorf("unsupported destination format: %s. Available: %v\n\n", dst, arrayLangName(st2.DestinationLangs))
+	}
+
 	st2Ctx := st2.NewContext(
 		src,
 		dst,
@@ -109,6 +119,7 @@ type FlagList []string
 func (f FlagList) Len() int {
 	return len(f)
 }
+
 func (f FlagList) Less(i, j int) bool {
 	if len(f[i]) == 1 && len(f[j]) > 1 {
 		return false
@@ -118,6 +129,7 @@ func (f FlagList) Less(i, j int) bool {
 	}
 	return f[i] < f[j]
 }
+
 func (f FlagList) Swap(i, j int) {
 	f[i], f[j] = f[j], f[i]
 }
@@ -276,17 +288,16 @@ func arrayLangName(langs []st2.Lang) string {
 	return "[" + strings.Join(arr, ",") + "]"
 }
 
-func uniqStrArray(arr []string) []string {
-	m := make(map[string]bool)
-	last := 0
-	for i := 0; i < len(arr); i++ {
-		cur := arr[i]
-		if m[cur] {
-			continue
+func isValidLang(langs []st2.Lang, name string) bool {
+	for _, lang := range langs {
+		if lang.Lang == name {
+			return true
 		}
-		arr[last] = arr[i]
-		m[cur] = true
-		last++
+		for _, alias := range lang.Aliases {
+			if alias == name {
+				return true
+			}
+		}
 	}
-	return arr[0:last]
+	return false
 }

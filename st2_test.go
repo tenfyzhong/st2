@@ -22,7 +22,7 @@ func TestConvert(t *testing.T) {
 
 		wantData   []byte
 		wantErr    bool
-		inspectErr func(err error, t *testing.T) //use for more precise error evaluation after test
+		inspectErr func(err error, t *testing.T) // use for more precise error evaluation after test
 	}{
 		{
 			name: "reader is nil",
@@ -224,37 +224,37 @@ type Root struct {
 				return a
 			},
 			wantData: []byte(`message A {
-    int64 b = 1; 
-    string c = 2; 
+    int64 b = 1;
+    string c = 2;
 }
 
 message D {
-    int64 b = 1; 
-    int64 c = 2; 
+    int64 b = 1;
+    int64 c = 2;
 }
 
 message E {
-    bool aa = 1; 
-    bool bb = 2; 
+    bool aa = 1;
+    bool bb = 2;
 }
 
 message A01 {
-    bool hello = 1; 
+    bool hello = 1;
 }
 
 message F {
-    A01 a = 1; 
+    A01 a = 1;
 }
 
 message Root {
-    A a = 1; 
-    A b = 2; 
-    repeated string c = 3; 
-    repeated D d = 4; 
-    E e = 5; 
-    F f = 6; 
-    repeated google.protobuf.Any gg = 7; 
-    google.protobuf.Any h = 8; 
+    A a = 1;
+    A b = 2;
+    repeated string c = 3;
+    repeated D d = 4;
+    E e = 5;
+    F f = 6;
+    repeated google.protobuf.Any gg = 7;
+    google.protobuf.Any h = 8;
 }
 
 `),
@@ -302,37 +302,37 @@ message Root {
 				return a
 			},
 			wantData: []byte(`struct A {
-    1: i64 b, 
-    2: string c, 
+    1: i64 b,
+    2: string c,
 }
 
 struct D {
-    1: i64 b, 
-    2: i64 c, 
+    1: i64 b,
+    2: i64 c,
 }
 
 struct E {
-    1: bool aa, 
-    2: bool bb, 
+    1: bool aa,
+    2: bool bb,
 }
 
 struct A01 {
-    1: bool hello, 
+    1: bool hello,
 }
 
 struct F {
-    1: A01 a, 
+    1: A01 a,
 }
 
 struct Root {
-    1: A a, 
-    2: A b, 
-    3: list<string> c, 
-    4: list<D> d, 
-    5: E e, 
-    6: F f, 
-    7: list<binary> gg, 
-    8: binary h, 
+    1: A a,
+    2: A b,
+    3: list<string> c,
+    4: list<D> d,
+    5: E e,
+    6: F f,
+    7: list<binary> gg,
+    8: binary h,
 }
 
 `),
@@ -354,7 +354,7 @@ import "google/protobuf/any.proto";
 option go_package="tenfyzhong/st2";
 
 // EEEE
-enum Eeee { // EEEE 
+enum Eeee { // EEEE
     // A
     A = 0; // a
 }
@@ -455,7 +455,7 @@ type SampleMessage struct {
   d:
     - b: 3
       c: 4
-  e: 
+  e:
     aa: true
     bb: false
   f:
@@ -522,7 +522,7 @@ import "google/protobuf/any.proto";
 option go_package="tenfyzhong/st2";
 
 // EEEE
-enum Eeee { // EEEE 
+enum Eeee { // EEEE
     // A
     A = 0; // a
 }
@@ -565,7 +565,7 @@ message SampleMessage {
 				return a
 			},
 			wantData: []byte(`// EEEE
-enum Eeee { // EEEE  
+enum Eeee { // EEEE
     A = 0; // a
 }
 
@@ -573,26 +573,26 @@ enum Eeee { // EEEE
 struct Aaa { // aaa
     // a
     1: i32 a, // a
-    2: i64 b, 
-    3: string c, 
+    2: i64 b,
+    3: string c,
 }
 
 struct BbbBB {
-    1: i32 a, 
-    2: i64 b, 
-    3: string c, 
+    1: i32 a,
+    2: i64 b,
+    3: string c,
 }
 
 struct Ccc {
-    1: i32 a, 
-    2: i64 b, 
-    3: string c, 
-    4: Aaa aaa, 
+    1: i32 a,
+    2: i64 b,
+    3: string c,
+    4: Aaa aaa,
 }
 
 struct ErrorStatus {
-    1: string message, 
-    2: list<binary> details, 
+    1: string message,
+    2: list<binary> details,
 }
 
 struct SampleMessage {
@@ -749,41 +749,41 @@ union UUU {
 				a.writer = a.buffer
 				return a
 			},
-			wantData: []byte(`enum EEE { 
-    A = 1;  
-    B = 2; 
+			wantData: []byte(`enum EEE {
+    A = 1;
+    B = 2;
 }
 
 message SS {
-    bool a = 1; 
-    int32 b = 2; 
-    int32 c = 3; 
-    int32 d = 4; 
-    int64 e = 5; 
-    double f = 6; 
-    string g = 7; 
-    bytes h = 8; 
-    map<int32, int32> i = 9; 
-    repeated int32 j = 10; 
-    map<int32, bool> k = 11; 
+    bool a = 1;
+    int32 b = 2;
+    int32 c = 3;
+    int32 d = 4;
+    int64 e = 5;
+    double f = 6;
+    string g = 7;
+    bytes h = 8;
+    map<int32, int32> i = 9;
+    repeated int32 j = 10;
+    map<int32, bool> k = 11;
 }
 
 message AAA {
-    string hello = 1; 
+    string hello = 1;
 }
 
 message BBB {
-    int32 b1 = 1; 
-    int32 b2 = 2; 
-    EEE e = 3; 
-    map<AAA, BBB> mapab = 4; 
-    map<AAA, bool> seta = 5; 
-    repeated BBB listb = 6; 
+    int32 b1 = 1;
+    int32 b2 = 2;
+    EEE e = 3;
+    map<AAA, BBB> mapab = 4;
+    map<AAA, bool> seta = 5;
+    repeated BBB listb = 6;
 }
 
 message UUU {
-    AAA a = 1; 
-    BBB b = 2; 
+    AAA a = 1;
+    BBB b = 2;
 }
 
 `),
@@ -831,8 +831,8 @@ const (
 type Aaa struct { // comment aaa inline
 	// comment Aaa a
 	A  []int32 // comment Aaa a inline
-	B  int64   
-	C  *string 
+	B  int64
+	C  *string
 	MM map[int]string
 }
 
@@ -861,9 +861,9 @@ type SampleMessage struct {
 				a.writer = a.buffer
 				return a
 			},
-			wantData: []byte(`enum Eeee { 
-    EEEA = 0; // comment EEEA Eeee inline 
-    EEEB = 1; // a 
+			wantData: []byte(`enum Eeee {
+    EEEA = 0; // comment EEEA Eeee inline
+    EEEB = 1; // a
     EEEC = 3; // a
 }
 
@@ -872,27 +872,27 @@ type SampleMessage struct {
 message Aaa {
     // comment Aaa a
     repeated int32 a = 1; // comment Aaa a inline
-    int64 b = 2; 
-    string c = 3; 
-    map<int64, string> mm = 4; 
+    int64 b = 2;
+    string c = 3;
+    map<int64, string> mm = 4;
 }
 
 message BbbBB {
-    int32 a = 1; 
-    int64 b = 2; 
-    string c = 3; 
+    int32 a = 1;
+    int64 b = 2;
+    string c = 3;
 }
 
 message Ccc {
-    int32 a = 1; 
-    int64 b = 2; 
-    string c = 3; 
-    Aaa aaa = 4; 
+    int32 a = 1;
+    int64 b = 2;
+    string c = 3;
+    Aaa aaa = 4;
 }
 
 message ErrorStatus {
-    string message = 1; 
-    repeated protobuf.Any details = 2; 
+    string message = 1;
+    repeated protobuf.Any details = 2;
 }
 
 message SampleMessage {
@@ -943,8 +943,8 @@ const (
 type Aaa struct { // comment aaa inline
 	// comment Aaa a
 	A  []int32 // comment Aaa a inline
-	B  int64   
-	C  *string 
+	B  int64
+	C  *string
 	MM map[int]string
 }
 
@@ -973,9 +973,9 @@ type SampleMessage struct {
 				a.writer = a.buffer
 				return a
 			},
-			wantData: []byte(`enum Eeee { 
-    EEEA = 0; // comment EEEA Eeee inline 
-    EEEB = 1; // a 
+			wantData: []byte(`enum Eeee {
+    EEEA = 0; // comment EEEA Eeee inline
+    EEEB = 1; // a
     EEEC = 3; // a
 }
 
@@ -984,27 +984,27 @@ type SampleMessage struct {
 struct Aaa {
     // comment Aaa a
     1: list<i32> a, // comment Aaa a inline
-    2: i64 b, 
-    3: string c, 
-    4: map<i64, string> mm, 
+    2: i64 b,
+    3: string c,
+    4: map<i64, string> mm,
 }
 
 struct BbbBB {
-    1: i32 a, 
-    2: i64 b, 
-    3: string c, 
+    1: i32 a,
+    2: i64 b,
+    3: string c,
 }
 
 struct Ccc {
-    1: i32 a, 
-    2: i64 b, 
-    3: string c, 
-    4: Aaa aaa, 
+    1: i32 a,
+    2: i64 b,
+    3: string c,
+    4: Aaa aaa,
 }
 
 struct ErrorStatus {
-    1: string message, 
-    2: list<protobuf.Any> details, 
+    1: string message,
+    2: list<protobuf.Any> details,
 }
 
 struct SampleMessage {

@@ -1,6 +1,7 @@
 package st2
 
 import (
+	"fmt"
 	"io"
 	"strconv"
 
@@ -31,6 +32,9 @@ func (p ProtoParser) Parse(reader io.Reader) ([]*Struct, error) {
 	for _, pb := range got.ProtoBody {
 		v := newProtoVisitor(p.ctx)
 		pb.Accept(v)
+		if v.err != nil {
+			return nil, v.err
+		}
 		if v.Struct != nil {
 			res = append(res, v.Struct)
 		}
@@ -41,11 +45,18 @@ func (p ProtoParser) Parse(reader io.Reader) ([]*Struct, error) {
 type protoVisitor struct {
 	Struct *Struct
 	ctx    Context
+	err    error
 }
 
 func newProtoVisitor(ctx Context) *protoVisitor {
 	return &protoVisitor{
 		ctx: ctx,
+	}
+}
+
+func (v *protoVisitor) setError(err error) {
+	if v.err == nil {
+		v.err = err
 	}
 }
 
@@ -67,7 +78,11 @@ func (v *protoVisitor) VisitEnum(e *parser.Enum) bool {
 }
 
 func (v *protoVisitor) VisitEnumField(f *parser.EnumField) bool {
-	number, _ := strconv.ParseInt(f.Number, 10, 32)
+	number, err := strconv.ParseInt(f.Number, 10, 32)
+	if err != nil {
+		v.setError(fmt.Errorf("invalid enum field number %s: %w", f.Number, err))
+		return false
+	}
 	v.Struct.Members = append(v.Struct.Members, &Member{
 		Field:   f.Ident,
 		Type:    v.Struct.Type,
@@ -86,7 +101,11 @@ func (v *protoVisitor) VisitExtensions(e *parser.Extensions) bool {
 }
 
 func (v *protoVisitor) VisitField(f *parser.Field) bool {
-	fieldNumber, _ := strconv.ParseInt(f.FieldNumber, 10, 64)
+	fieldNumber, err := strconv.ParseInt(f.FieldNumber, 10, 64)
+	if err != nil {
+		v.setError(fmt.Errorf("invalid field number %s: %w", f.FieldNumber, err))
+		return false
+	}
 	v.Struct.Members = append(v.Struct.Members, &Member{
 		Field: f.FieldName,
 		Type: func() Type {
@@ -114,7 +133,11 @@ func (v *protoVisitor) VisitImport(i *parser.Import) bool {
 }
 
 func (v *protoVisitor) VisitMapField(f *parser.MapField) bool {
-	fieldNumber, _ := strconv.ParseInt(f.FieldNumber, 10, 64)
+	fieldNumber, err := strconv.ParseInt(f.FieldNumber, 10, 64)
+	if err != nil {
+		v.setError(fmt.Errorf("invalid map field number %s: %w", f.FieldNumber, err))
+		return false
+	}
 	v.Struct.Members = append(v.Struct.Members, &Member{
 		Field: f.MapName,
 		Type: &MapType{
