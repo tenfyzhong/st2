@@ -25,6 +25,7 @@ jobs:
     needs: tag
     name: release
     with:
+      go-version: "1.26.10"
       bin-path: "./cmd/st2"
       command: "st2"
       build-option: "-ldflags \"-X 'github.com/tenfyzhong/st2/cmd/st2/config.Version=${{ needs.tag.outputs.version }}'\""

@@ -149,5 +149,4 @@ func (p ThriftParser) type2Type(t *parser.Type) Type {
 			Name: t.Name,
 		}
 	}
-	return nil
 }

@@ -1,6 +1,8 @@
 name: go
 on:
-  pull_request_target:
+  pull_request:
+    branches: [ "main" ]
+  push:
     branches: [ "main" ]
 
 jobs:
@@ -8,5 +10,33 @@ jobs:
     uses: tenfyzhong/workflows/.github/workflows/go-build-test.yml@main
     with:
       path: "."
+      go-version: "1.26.10"
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  cli-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      GOTOOLCHAIN: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v6
+        with:
+          go-version: "1.26.10"
+      - name: Install clipboard build dependency
+        run: sudo apt-get update && sudo apt-get install -y libx11-dev
+      - name: Verify patched compiler
+        run: test "$(go env GOVERSION)" = go1.26.10
+      - name: Test all packages
+        run: go test -mod=readonly -race ./...
+      - name: Vet
+        run: go vet -mod=readonly ./...
+      - name: Rebuild and verify CLI
+        run: |
+          go build -mod=readonly -trimpath -o /tmp/st2 ./cmd/st2
+          go version -m /tmp/st2
+          test "$(go version -m /tmp/st2 | head -n 1 | awk '{print $2}')" = go1.26.10
+          /tmp/st2 --help
+          printf '{"hello":"world"}\n' | /tmp/st2 --src json --dst go | grep 'Hello string'

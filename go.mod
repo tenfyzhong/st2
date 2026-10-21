@@ -2,6 +2,8 @@ module github.com/tenfyzhong/st2
 
 go 1.25.0
 
+toolchain go1.26.10
+
 require (
 	github.com/basgys/goxml2json v1.1.0
 	github.com/cloudwego/thriftgo v0.2.4
