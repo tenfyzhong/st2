@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-test:
-    uses: tenfyzhong/workflows/.github/workflows/go-build-test.yml@468e08546cefd77d8f6ec41402afce1d9bbd8c72 # patched Go compiler
+    uses: tenfyzhong/workflows/.github/workflows/go-build-test.yml@main
     with:
       path: "."
       go-version: "1.26.10"
