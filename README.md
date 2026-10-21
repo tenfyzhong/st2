@@ -29,8 +29,15 @@ brew install st2
 You can download the release of `st2` from the [GitHub releases](https://github.com/tenfyzhong/st2/releases).  
 
 #### build from source
+Use Go 1.26.10 or a newer patched supported Go toolchain. CI and future
+release builds use Go 1.26.10 for the standard-library fix in
+[GO-2026-6809](https://pkg.go.dev/vuln/GO-2026-6809), without raising the
+library's Go language version. Previously installed binaries and consumer
+applications must be rebuilt with a patched compiler; a library update alone
+does not patch their embedded standard library.
+
 ```bash
-go install github.com/tenfyzhong/st2/cmd/st2@latest
+GOTOOLCHAIN=go1.26.10 go install github.com/tenfyzhong/st2/cmd/st2@latest
 ```
 
 ### Usage
